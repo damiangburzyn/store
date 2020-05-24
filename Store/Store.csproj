@@ -1,0 +1,68 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TypeScriptToolsVersion>3.8</TypeScriptToolsVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="client-app\src\components\AddProduct.vue" />
+    <None Remove="client-app\src\components\AdminPanel\Categories.vue" />
+    <None Remove="client-app\src\components\AdminPanel\DeliveryOptions.vue" />
+    <None Remove="client-app\src\components\AdminPanel\Editors\CategoryEditor.vue" />
+    <None Remove="client-app\src\components\AdminPanel\Products.vue" />
+    <None Remove="client-app\src\components\ProductBaseCard.vue" />
+    <None Remove="client-app\src\store\api.ts" />
+    <None Remove="client-app\src\store\error.ts" />
+    <None Remove="client-app\src\store\modelsData.ts" />
+    <None Remove="client-app\src\store\Modules\Models.d.ts" />
+    <None Remove="client-app\src\store\Modules\Users.ts" />
+    <None Remove="client-app\src\views\AdminPanel.vue" />
+    <None Remove="client-app\src\views\Login.vue" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="client-app\src\components\AddProduct.vue" />
+    <Content Include="client-app\src\components\AdminPanel\DeliveryOptions.vue" />
+    <Content Include="client-app\src\components\AdminPanel\Editors\CategoryEditor.vue" />
+    <Content Include="client-app\src\components\AdminPanel\Products.vue" />
+    <Content Include="client-app\src\components\AdminPanel\Categories.vue" />
+    <Content Include="client-app\src\views\AdminPanel.vue" />
+    <Content Include="client-app\src\views\Login.vue" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Store.Contracts\Store.Contracts.csproj" />
+    <ProjectReference Include="..\Store.Data.EF\Store.Data.EF.csproj" />
+    <ProjectReference Include="..\Store.Serices\Store.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="client-app\src\components\ProductBaseCard.vue" />
+    <TypeScriptCompile Include="client-app\src\store\api.ts" />
+    <TypeScriptCompile Include="client-app\src\store\error.ts" />
+    <TypeScriptCompile Include="client-app\src\store\modelsData.ts" />
+    <TypeScriptCompile Include="client-app\src\store\Modules\Users.ts" />
+    <TypeScriptCompile Include="client-app\src\store\models.d.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="client-app\src\NewFolder\" />
+  </ItemGroup>
+
+
+</Project>
