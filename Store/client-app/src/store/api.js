@@ -94,10 +94,11 @@ export function Products(categoryId, page, pageSize) {
     });
 }
 export var CategoryService = {
+    controller: "categories",
     Get: function (id) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, api.get("category/" + id)];
+                return [2 /*return*/, api.get(this.controller + "/" + id)];
             });
         });
     },
@@ -106,7 +107,7 @@ export var CategoryService = {
             var resp;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, api.get("category/main")];
+                    case 0: return [4 /*yield*/, api.get(this.controller + "/main")];
                     case 1:
                         resp = _a.sent();
                         return [2 /*return*/, resp];
@@ -119,7 +120,7 @@ export var CategoryService = {
             var resp;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, api.get("category/subcategories/" + parentCategoryId)];
+                    case 0: return [4 /*yield*/, api.get(this.controller + "/subcategories/" + parentCategoryId)];
                     case 1:
                         resp = _a.sent();
                         return [2 /*return*/, resp];
@@ -131,7 +132,7 @@ export var CategoryService = {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, api.post("category", { category: params })];
+                    case 0: return [4 /*yield*/, api.post("" + this.controller, params)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -141,7 +142,7 @@ export var CategoryService = {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, api.put("category", { category: params })];
+                    case 0: return [4 /*yield*/, api.put("" + this.controller, params)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -151,7 +152,7 @@ export var CategoryService = {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, api.delete("category/" + id)];
+                    case 0: return [4 /*yield*/, api.delete(this.controller + "/" + id)];
                     case 1: return [2 /*return*/, _a.sent()];
                 }
             });

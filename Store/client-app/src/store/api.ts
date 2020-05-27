@@ -83,30 +83,31 @@ export async function Products(categoryId: number, page: number, pageSize: numbe
 
 
 export const CategoryService = {
+     controller : "categories",
 
     async Get(id: number) {
-        return api.get(`category/${id}`);
+        return api.get(`${this.controller}/${id}`);
     },
 
     async  MainCategiories() {
-        const resp = await api.get("category/main")
+        const resp = await api.get(`${this.controller}/main`)
         return resp;
     },
 
     async  SubCategiories(parentCategoryId: number) {
-        const resp = await api.get(`category/subcategories/${parentCategoryId}`)
+        const resp = await api.get(`${this.controller}/subcategories/${parentCategoryId}`)
         return resp;
     },
 
     async create(params: Category) {
-        return await api.post("category", { category: params });
+        return await api.post(`${this.controller}`, params );
     },
 
     async update(params: Category) {
-        return await api.put("category", { category: params });
+        return await api.put(`${this.controller}`,params );
     },
 
     async destroy(id: number) {
-        return await api.delete(`category/${id}`);
+        return await api.delete(`${this.controller}/${id}`);
     }
 }

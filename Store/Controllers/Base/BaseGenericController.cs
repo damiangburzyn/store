@@ -27,11 +27,13 @@ namespace Store.Controllers
     where TEntity : class, IBaseEntity
     {
         public readonly IBaseService<TEntity> _service;
+        public readonly IMediaService _mediaService;
 
-        public BaseController(IOptions<AppSettings> settings, ILocalPageData pageData, IMapper mapper, IBaseService<TEntity> service)
+        public BaseController(IOptions<AppSettings> settings, ILocalPageData pageData, IMapper mapper, IBaseService<TEntity> service, IMediaService mediaService)
             : base(settings, pageData, mapper)
         {
             _service = service;
+            _mediaService = mediaService;
         }
 
 
@@ -66,7 +68,7 @@ namespace Store.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult<TViewModel>> Create(TViewModel viewModel)
+        public virtual async Task<ActionResult<TViewModel>> Create(TViewModel viewModel)
         {
             var model = Mapper.Map<TEntity>(viewModel);
             var result = await _service.Add(model);
@@ -75,7 +77,7 @@ namespace Store.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<TViewModel>> Update(TViewModel viewModel)
+        public virtual async Task<ActionResult<TViewModel>> Update(TViewModel viewModel)
         {
             var model = Mapper.Map<TEntity>(viewModel);
             var result = await _service.Update(model);

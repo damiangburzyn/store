@@ -101,8 +101,8 @@ namespace Store
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
                 options.SlidingExpiration = true;
             });
-
-            ServicesInjector.RegisterServices(services);
+            
+            ServicesInjector.RegisterServices(services, Configuration);
         }
 
         private void AddJWTAuthentication(IServiceCollection services)

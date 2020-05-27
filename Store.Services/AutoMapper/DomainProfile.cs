@@ -48,6 +48,7 @@ namespace GC5.Application.AutoMapper
 
 
             CreateMap<Category, CategoryViewModel>()
+                .ForMember(a=>a.Logo, opt=>opt.MapFrom(s =>new ImageViewModel() { Name= s.Logo }))
                 .ReverseMap();
 
             CreateMap<GalleryImage, GalleryImageViewModel>()

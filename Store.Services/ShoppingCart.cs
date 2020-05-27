@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Store.Data.EF.Entities;
 using System.Collections.Generic;
 
-namespace Store.Serices
+namespace Store.Services
 {
     public  class ShoppingCart
     {

@@ -37,7 +37,7 @@
                     <v-select v-model="SelectedParentCategory"
                               :hint="`${SelectedParentCategory.Text}, ${SelectedParentCategory.Value}`"
                               :items="SelectCategories"
-                              item-text="Kategoria nadrzędna"
+                              item-text="Text"
                               item-value="Value"
                               label="Select"
                               persistent-hint
@@ -48,11 +48,16 @@
                 <v-divider></v-divider>
 
                 <v-card-actions>
-                    <v-spacer></v-spacer>
                     <v-btn color="primary"
                            text
                            @click="dialog = false">
-                        I accept
+                        Anuluj
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn color="primary"
+                           text
+                           @click="Save()">
+                        Zapisz
                     </v-btn>
                 </v-card-actions>
             </v-card>
@@ -87,7 +92,7 @@
 
 
         async  Save() {
-            if (this.Item != null && this.Item?.Id != 0) {
+            if (this.Item != null && this.Item?.Id === 0) {
                 await CategoryService.create(this.Item);
             }
             else {
@@ -115,18 +120,18 @@
             return cat
         }
 
-        onFilePicked(e: any) {
-            const files = e.target.files
-            if (files[0] !== undefined) {
-                this.Item.Logo.Name = files[0].name
+        onFilePicked(file: File) {
+            let self = this;
+            if (file !== undefined) {
+                self.Item.Logo.Name = file.name
                 if (this.Item.Logo.Name.lastIndexOf('.') <= 0) {
                     return
                 }
                 const fr = new FileReader()
-                fr.readAsDataURL(files[0])
+                fr.readAsDataURL(file)
                 fr.addEventListener('load', () => {
-                    this.Item.Logo.Url = fr.result as string || '';
-                    this.Item.Logo.Data = files[0] // this is an image file that can be sent to server...
+                    self.Item.Logo.Data = fr.result as string || '';
+                    self.Item.Logo.Url = file.name // this is an image file that can be sent to server...
                 })
             } else {
                 this.Item.Logo.Name = '';

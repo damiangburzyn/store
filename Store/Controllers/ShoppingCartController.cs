@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Store.Contracts.ViewModel;
-using Store.Serices;
+using Store.Services;
 using AutoMapper;
 using Microsoft.Extensions.Options;
 using Store.Contracts;

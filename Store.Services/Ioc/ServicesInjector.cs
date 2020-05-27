@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-
+using AutoMapper.Configuration;
 using GC5.Application.Utils;
 
 using Microsoft.AspNetCore.Hosting;
@@ -13,15 +13,19 @@ using Store.Data.Database;
 using Store.Data.EF.Repositories.Base;
 using Store.Services;
 using System.Reflection;
+using Microsoft.Extensions.Configuration;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
+using Store.Services.Ioc;
 
 namespace GC5.IoC
 {
     public class ServicesInjector
     {
-        public static void RegisterServices(IServiceCollection services)
+        public static void RegisterServices(IServiceCollection services, Microsoft.Extensions.Configuration.IConfiguration configuration)
         {
 
+
+            var mediaType =  configuration.GetValue<EMediaService>("ServiceType:MediaService");
 
 
             services.AddResponseCaching();
@@ -47,11 +51,11 @@ namespace GC5.IoC
             services.AddSingleton<ILocalPageData, LocalPageData>();
 
             //TODO: dorobić odpowiedni warunek na podstawie konfiguracji
-            if (false)
+            if (mediaType == EMediaService.AzureMediaservice)
             {
                 services.AddScoped<IMediaService, AzureMediaService>();
             }
-            if (true)
+            if (mediaType == EMediaService.FileMediaService)
             { services.AddScoped<IMediaService, FileSystemMediaService>(); }
 
 

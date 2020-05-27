@@ -8,7 +8,7 @@ using System.Text;
 using Store.Contracts.ViewModel.Shopping;
 using System.Text.Encodings.Web;
 
-namespace Store.Serices
+namespace Store.Services
 {
    public class ShoppingCartService
     {

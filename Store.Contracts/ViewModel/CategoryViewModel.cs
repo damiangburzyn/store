@@ -8,18 +8,24 @@ namespace Store.Contracts.ViewModel
 {
     public class CategoryViewModel : BaseViewModel
     {
+        public CategoryViewModel()
+        {
+            Logo = new ImageViewModel();
+        }
+
         public int SortOrder { get; set; }
-        public virtual string Name { get; set; }
+        
+        public  string Name { get; set; }
+       
         public string ShortName { get; set; }
-        [MediaFile(relatedProperty: "LogoData")]
-        public string Logo { get; set; }
-        [Media]
-        public string LogoData { get; set; }
+       
+        public ImageViewModel Logo { get; set; }
+      
         public long? ParentCategoryId { get; set; }
 
-        public virtual CategoryViewModel ParentCategory { get; set; }
+        public  CategoryViewModel ParentCategory { get; set; }
 
-        public virtual ICollection<CategoryViewModel> SubCategories { get; set; }
+        public  ICollection<CategoryViewModel> SubCategories { get; set; }
 
         private ICollection<ProductCategoryViewModel> ProductCategories { get; } = new List<ProductCategoryViewModel>();
 

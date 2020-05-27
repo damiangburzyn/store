@@ -48,7 +48,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Store.Contracts\Store.Contracts.csproj" />
     <ProjectReference Include="..\Store.Data.EF\Store.Data.EF.csproj" />
-    <ProjectReference Include="..\Store.Serices\Store.Services.csproj" />
+    <ProjectReference Include="..\Store.Services\Store.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
