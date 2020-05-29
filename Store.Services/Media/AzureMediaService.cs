@@ -33,7 +33,7 @@ namespace Store.Services
             }
 
 
-            public async Task<bool> DeleteMedia(BaseViewModel model, string partialPath = "")
+            public async Task<bool> DeleteMedia(ContentViewModel model, string partialPath = "")
         {
             var mediaFileProps = model.GetType().GetProperties().Where(
                 prop => Attribute.IsDefined(prop, typeof(MediaFileAttribute))).ToList();
@@ -55,7 +55,7 @@ namespace Store.Services
             return true;
         }
 
-        public  async Task<bool> DeleteMovie(BaseViewModel model, string partialPath = "")
+        public  async Task<bool> DeleteMovie(ContentViewModel model, string partialPath = "")
         {
             var mediaMovieProps = model.GetType().GetProperties().Where(
                 prop => Attribute.IsDefined(prop, typeof(MovieAttribute))).ToList();
@@ -77,7 +77,7 @@ namespace Store.Services
             return true;
         }
 
-        public  async Task<bool> SaveMedia(BaseViewModel model, string partialPath = "", string propertyName = "", params string[] oldMedia)
+        public  async Task<bool> SaveMedia(ContentViewModel model, string partialPath = "", string propertyName = "", params string[] oldMedia)
         {
             var mediaDataProps = model.GetType().GetProperties().Where(
                 prop => Attribute.IsDefined(prop, typeof(MediaAttribute))).ToList();

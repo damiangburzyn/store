@@ -10,13 +10,13 @@ namespace Store.Contracts
 {
     public interface IMediaService : IDisposable
     {
-        Task<bool> SaveMedia(BaseViewModel model, string partialPath = "", string propertyName = "", params string[] oldMedia);
+        Task<bool> SaveMedia(ContentViewModel model, string partialPath = "", string propertyName = "", params string[] oldMedia);
 
-        Task<bool> DeleteMedia(BaseViewModel model, string partialPath = "");
+        Task<bool> DeleteMedia(ContentViewModel model, string partialPath = "");
 
         Task<bool> UploadMedia(IFormFile media, string partialPath = "", params string[] oldMedia);
 
-        Task<bool> DeleteMovie(BaseViewModel model, string partialPath = "");
+        Task<bool> DeleteMovie(ContentViewModel model, string partialPath = "");
 
         Task<MemoryStream> GetStreamMedia(string partialPath, string fileName);
     }

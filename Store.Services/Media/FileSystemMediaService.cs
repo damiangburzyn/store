@@ -21,7 +21,7 @@ namespace Store.Services
 
         ConfigurationStorage Config;
 
-        public  async Task<bool> DeleteMedia(BaseViewModel model, string partialPath = "")
+        public  async Task<bool> DeleteMedia(ContentViewModel model, string partialPath = "")
         {
             var path = Path.Combine(Config.Storage, partialPath);
 
@@ -50,7 +50,7 @@ namespace Store.Services
             return true;
         }
 
-        public async Task<bool> DeleteMovie(BaseViewModel model, string partialPath = "")
+        public async Task<bool> DeleteMovie(ContentViewModel model, string partialPath = "")
         {
             var path = Path.Combine(Config.Storage, partialPath);
 
@@ -85,7 +85,7 @@ namespace Store.Services
             throw new NotImplementedException();
         }
 
-        public  async Task<bool> SaveMedia(BaseViewModel model, string partialPath = "", string propertyName = "", params string[] oldMedia)
+        public  async Task<bool> SaveMedia(ContentViewModel model, string partialPath = "", string propertyName = "", params string[] oldMedia)
         {
             var path = Path.Combine(Config.Storage, partialPath);
 

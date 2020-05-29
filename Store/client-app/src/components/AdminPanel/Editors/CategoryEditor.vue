@@ -5,13 +5,13 @@
     <div class="text-center">
         <v-dialog v-model="Show"
                   width="500">
-            <template v-slot:activator="{ on }">
+            <!--<template v-slot:activator="{ on }">
                 <v-btn color="red lighten-2"
                        dark
                        v-on="on">
                     Click Me
                 </v-btn>
-            </template>
+            </template>-->
 
             <v-card>
                 <v-card-title class="headline grey lighten-2"
@@ -50,7 +50,7 @@
                 <v-card-actions>
                     <v-btn color="primary"
                            text
-                           @click="dialog = false">
+                           @click="Show = false">
                         Anuluj
                     </v-btn>
                     <v-spacer></v-spacer>
@@ -67,16 +67,18 @@
 
 
 <script lang="ts">
-    import { Component, Prop, Vue } from 'vue-property-decorator';
+    import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
     import { SelectItem } from '@/store/models';
     import { Category} from '@/store/modelsData';
     import { CategoryService } from "@/store/api";
     @Component
     export default class CategoryEditor extends Vue {
         private msg!: string;
-        @Prop(Number) readonly CategoryId!:number ;
+        @Prop(Number) readonly CategoryId!: number;
+        @Prop(Boolean) readonly IsShow!: boolean;
         private Item: Category = this.GetEmpty();
-        public Show = false;
+        public Show = this.IsShow;
+        public LocalCatId= this.CategoryId;
         public ImageRules: [string | boolean |any] = [
             (value: string|boolean|any) => !value || value.size < 2000000 || 'Avatar size should be less than 2 MB!',
         ];
@@ -101,6 +103,19 @@
         }
 
 
+       async LoadItem() {
+
+            if (this.CategoryId == 0) {
+                this.Item = this.GetEmpty();
+            }
+            else {
+
+                var data = await CategoryService.Get(this.CategoryId);
+                this.Item = data;
+            }
+
+
+        }
         GetEmpty(): Category {
 
             const cat: Category = {
@@ -113,7 +128,7 @@
                     Url: '',
                     Data: '',
                 },
-                ParentCategoryId: 0,
+                ParentCategoryId: null,
                 SubCategories: []
             };
 
@@ -138,6 +153,31 @@
                 this.Item.Logo.Data = '';
                 this.Item.Logo.Url = '';
             }
+        }
+
+        // dialog ma możliwość lokalnej zmiany property
+        @Watch('Show')
+        onPropertyChanged(value: boolean, oldValue: boolean) {
+            if (value == false) {
+                this.closeDialog();
+            }
+            else {
+
+                this.LoadItem();
+            }
+
+            alert("CategoryId changed");
+        }
+       
+        closeDialog() {
+            this.$emit("dialog-closed");
+        }
+
+        ///gdy zmienia się property przez parenta
+        @Watch('IsShow')
+        onPropertyChangedtwo(value: boolean, oldValue: boolean) {
+            this.Show = value;
+            alert("IsShow changed");
         }
 
         get currentTitle() {

@@ -86,8 +86,21 @@ export const CategoryService = {
      controller : "categories",
 
     async Get(id: number) {
-        return api.get(`${this.controller}/${id}`);
+        const res = await api.get(`${this.controller}/${id}`).then(
+            (r) => {
+                return r;
+            });
+        return res.data as Category;
     },
+
+    async  Tree() {
+        const res = await api.get(`${this.controller}/tree`).then(
+            (r) => {
+                return r;
+            });
+        return res.data as Category[];      
+    },
+
 
     async  MainCategiories() {
         const resp = await api.get(`${this.controller}/main`)

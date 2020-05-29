@@ -101,7 +101,7 @@ namespace Store
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
                 options.SlidingExpiration = true;
             });
-            
+            services.Configure<ConfigurationStorage>(Configuration.GetSection("ConfigurationStorage"));
             ServicesInjector.RegisterServices(services, Configuration);
         }
 

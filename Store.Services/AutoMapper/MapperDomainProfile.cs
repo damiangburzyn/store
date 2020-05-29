@@ -8,9 +8,9 @@ using Store.Data.Entities.Identity;
 
 namespace GC5.Application.AutoMapper
 {
-    public class DomainProfile : Profile
+    public class MapperDomainProfile : Profile
     {
-        public DomainProfile()
+        public MapperDomainProfile()
         {
             CreateMap<ApplicationUser, ApplicationUserViewModel>()
                 .ReverseMap();
@@ -48,8 +48,11 @@ namespace GC5.Application.AutoMapper
 
 
             CreateMap<Category, CategoryViewModel>()
-                .ForMember(a=>a.Logo, opt=>opt.MapFrom(s =>new ImageViewModel() { Name= s.Logo }))
-                .ReverseMap();
+                .ForMember(a=>a.Logo, opt=>opt.MapFrom(s =>new ContentViewModel() { Name= s.Logo }))
+                .ForMember(a => a.SubCategories, opt => opt.Ignore())
+                .ForMember(a => a.ParentCategory, opt => opt.Ignore())
+                .ReverseMap().ForMember(a=>a.Logo, opt=>opt.MapFrom(s=>s.Logo.Name??null ))
+                ;
 
             CreateMap<GalleryImage, GalleryImageViewModel>()
                 .ReverseMap();

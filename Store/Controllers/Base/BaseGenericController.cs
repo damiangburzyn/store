@@ -38,31 +38,67 @@ namespace Store.Controllers
 
 
 
-        // DELETE: api/categories/5
+        // DELETE: api/controller/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(long id)
+        public virtual async Task<ActionResult> Delete(long id)
         {
-            var todoItem = await _service.GetById(id);
+            Func<Task<ActionResult>> func = async () =>
+            {
+                var todoItem = await _service.GetById(id);
             if (todoItem == null)
             {
                 return NotFound();
             }
             await _service.Remove(id);
             return Ok();
+            };
+
+            return await this.WrapExceptionAsync(async () =>
+            {
+                return await func();
+            });
         }
+
+        // Get: api/controller
+        [HttpGet()]
+        public virtual async Task<ActionResult<TViewModel>> List()
+        {
+            Func<Task<ActionResult>> func = async () =>
+            {
+                var result = await _service.GetAll();              
+                var vm = Mapper.Map<TViewModel>(result);
+                return Ok(vm);
+            };
+
+            return await this.WrapExceptionAsync(async () =>
+            {
+                return await func();
+            });
+        }
+
+
 
         // Get: api/categories/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TViewModel>> Get(long id)
+        public virtual async Task<ActionResult<TViewModel>> Get(long id)
         {
-            var todoItem = await _service.GetById(id);
-            if (todoItem == null)
+            Func<Task<ActionResult>> func = async () =>
             {
-                return NotFound();
-            }
-            var result = await _service.GetById(id);
-            var vm = Mapper.Map<TViewModel>(result);
-            return Ok(vm);
+                var result = await _service.GetById(id);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+               
+                var vm = Mapper.Map<TViewModel>(result);
+                return Ok(vm);
+            };
+
+            return await this.WrapExceptionAsync(async () =>
+            {
+                return await func();
+            });
+
         }
 
 
@@ -70,19 +106,34 @@ namespace Store.Controllers
         [HttpPost]
         public virtual async Task<ActionResult<TViewModel>> Create(TViewModel viewModel)
         {
-            var model = Mapper.Map<TEntity>(viewModel);
-            var result = await _service.Add(model);
-            var vm = Mapper.Map<TViewModel>(result);
-            return Ok(vm);
+            Func<Task<ActionResult>> func = async () =>
+            {
+                var model = Mapper.Map<TEntity>(viewModel);
+                var result = await _service.Add(model);
+                var vm = Mapper.Map<TViewModel>(result);
+                return Ok(vm);
+            };
+
+            return await this.WrapExceptionAsync(async () =>
+            {
+                return await func();
+            });
         }
 
         [HttpPut]
         public virtual async Task<ActionResult<TViewModel>> Update(TViewModel viewModel)
         {
-            var model = Mapper.Map<TEntity>(viewModel);
-            var result = await _service.Update(model);
-            var vm = Mapper.Map<TViewModel>(result);
-            return Ok(vm);
+            Func<Task<ActionResult>> func = async () =>
+            {
+                var model = Mapper.Map<TEntity>(viewModel);
+                var result = await _service.Update(model);
+                var vm = Mapper.Map<TViewModel>(result);
+                return Ok(vm);
+            };
+            return await this.WrapExceptionAsync(async () =>
+            {
+                return await func();
+            });
         }
     }
 }

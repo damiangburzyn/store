@@ -55,6 +55,7 @@ namespace Store.Controllers
             string token = HttpContext.Session.GetString("token");
             string userIdStr = HttpContext.Session.GetString("userId");
             var user = await _userManager.FindByIdAsync(userIdStr);
+            if (user != null) {
             var userRoles = await _userManager.GetRolesAsync(user);
             var profile = new ProfileViewModel()
             {
@@ -65,7 +66,9 @@ namespace Store.Controllers
                 LastName = user.LastName,
                 Id = user.Id
             };
-            return Ok(profile);
+              return Ok(profile);
+            }
+            return Ok();
         }
 
 

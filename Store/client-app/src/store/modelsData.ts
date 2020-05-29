@@ -6,7 +6,7 @@ export class Category {
     Name: string;
     ShortName: string;
     Logo: Image;
-    ParentCategoryId: number | undefined;
+    ParentCategoryId: number | null|undefined;
     SubCategories: Array<Category | undefined>
 
     constructor() {
@@ -14,7 +14,7 @@ export class Category {
         this.SortOrder = 0;
         this.Name = '';
         this.ShortName = "";
-        this.ParentCategoryId = 0;
+        this.ParentCategoryId = null;
         this.Logo = { Data: "", Name: "", Url: "" };
         this.SubCategories = [];
       

@@ -10,7 +10,7 @@ namespace Store.Contracts.ViewModel
     {
         public CategoryViewModel()
         {
-            Logo = new ImageViewModel();
+            Logo = new ContentViewModel();
         }
 
         public int SortOrder { get; set; }
@@ -19,7 +19,7 @@ namespace Store.Contracts.ViewModel
        
         public string ShortName { get; set; }
        
-        public ImageViewModel Logo { get; set; }
+        public ContentViewModel Logo { get; set; }
       
         public long? ParentCategoryId { get; set; }
 
