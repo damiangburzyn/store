@@ -23,7 +23,6 @@ using Store.Contracts;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using GC5.IoC;
-using System.Web.Helpers;
 using Microsoft.AspNetCore.Antiforgery;
 using GC5.Application.Extensions;
 using Microsoft.Extensions.Logging;
