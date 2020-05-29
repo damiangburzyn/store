@@ -1,4 +1,4 @@
-<template>
+﻿<template>
     <div>
 
         <v-btn color="blue lighten-2"
@@ -9,10 +9,25 @@
         <CategoryEditor :IsShow="IsEditorEnabled" :CategoryId="SelectedCategoryId" @dialog-closed="onEditorClosed" />
         <br />
         <v-treeview :items="Items"
-                    :item-children="SubCategories"
-                    :item-key="Id"
-                    :item-text="Name"
-                    ></v-treeview>
+                    item-children="subCategories"
+                    item-key="id"
+                    item-text="name">
+
+            <template v-slot:label="{ item, open }">
+                {{item.name}}
+                <v-btn color="blue lighten-2"
+                       dark
+                       v-on:click="AddEditor">
+                    Edytuj
+                </v-btn>
+                <v-btn color="blue lighten-2"
+                       dark
+                       v-on:click="AddEditor">
+                    Usuń
+                </v-btn>
+            </template>
+
+        </v-treeview>
 
     </div>
    
@@ -33,13 +48,13 @@
 
         IsEditorEnabled= false;
         SelectedCategoryId = 0;
-        Items: Category[] = [];
+        Items: Array<Category> = [] ;
 
 
         async LoadTree() {
            const self = this;
            var categories = await CategoryService.Tree()
-           self.Items = categories;
+          self.Items=  categories;
         }
 
         EditorCompleted() {
