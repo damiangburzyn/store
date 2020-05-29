@@ -10,11 +10,11 @@ namespace Store.Contracts.Authentication
    public  class AuthenticationModel
     {
         [Required]
-        [JsonPropertyName("email")]
+        [JsonProperty("email")]
         public string UserName { get; set; }
 
         [Required]
-        [JsonPropertyName("password")]
+        [JsonProperty("password")]
         public string Password { get; set; }
     }
 }

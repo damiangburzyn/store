@@ -47,7 +47,7 @@ namespace Store
             IdentityInjector.RegisterServices(services, Configuration);
 
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(); 
             // connect vue app - middleware  
             services.AddSpaStaticFiles(options => options.RootPath = "client-app/dist");
 
