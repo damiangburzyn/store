@@ -21,7 +21,7 @@
 
                 <v-card-text>
                     <v-text-field label="Nazwa"
-                                  v-model="Item.Name"></v-text-field>
+                                  v-model="Item.name"></v-text-field>
                     <span class="caption grey--text text--darken-1">
                         This is the email you will use to login to your Vuetify account
                     </span>
@@ -94,7 +94,7 @@
 
 
         async  Save() {
-            if (this.Item != null && this.Item?.Id === 0) {
+            if (this.Item != null && this.Item?.id === 0) {
                 await CategoryService.create(this.Item);
             }
             else {
@@ -119,17 +119,17 @@
         GetEmpty(): Category {
 
             const cat: Category = {
-                Id: 0,
-                Name: '',
-                ShortName: '',
-                SortOrder: 0,
-                Logo: {
-                    Name: '',
-                    Url: '',
-                    Data: '',
+                id: 0,
+                name: '',
+                shortName: '',
+                sortOrder: 0,
+                logo: {
+                    name: '',
+                    url: '',
+                    data: '',
                 },
-                ParentCategoryId: null,
-                SubCategories: []
+                parentCategoryId: null,
+                subCategories: []
             };
 
             return cat
@@ -138,35 +138,31 @@
         onFilePicked(file: File) {
             let self = this;
             if (file !== undefined) {
-                self.Item.Logo.Name = file.name
-                if (this.Item.Logo.Name.lastIndexOf('.') <= 0) {
+                self.Item.logo.name = file.name
+                if (this.Item.logo.name.lastIndexOf('.') <= 0) {
                     return
                 }
                 const fr = new FileReader()
                 fr.readAsDataURL(file)
                 fr.addEventListener('load', () => {
-                    self.Item.Logo.Data = fr.result as string || '';
-                    self.Item.Logo.Url = file.name // this is an image file that can be sent to server...
+                    self.Item.logo.data = fr.result as string || '';
+                    self.Item.logo.url = file.name // this is an image file that can be sent to server...
                 })
             } else {
-                this.Item.Logo.Name = '';
-                this.Item.Logo.Data = '';
-                this.Item.Logo.Url = '';
+                this.Item.logo.name = '';
+                this.Item.logo.data = '';
+                this.Item.logo.url = '';
             }
         }
 
         // dialog ma możliwość lokalnej zmiany property
         @Watch('Show')
-        onPropertyChanged(value: boolean, oldValue: boolean) {
+        onPropertyShowChanged(value: boolean, oldValue: boolean) {
             if (value == false) {
                 this.closeDialog();
             }
-            else {
-
-                this.LoadItem();
-            }
-
-            alert("CategoryId changed");
+         
+            alert("Show changed");
         }
        
         closeDialog() {
@@ -175,13 +171,24 @@
 
         ///gdy zmienia się property przez parenta
         @Watch('IsShow')
-        onPropertyChangedtwo(value: boolean, oldValue: boolean) {
+        onPropertyIsShowChanged(value: boolean, oldValue: boolean) {
             this.Show = value;
             alert("IsShow changed");
         }
 
+        @Watch('CategoryId')
+        onPropertyCategoryIdChanged(value: number, oldValue: number) {
+            this.LocalCatId = value;
+            this.LoadItem();
+            alert("CategoryId changed");
+           
+        }
+
+
+
+
         get currentTitle() {
-            if (this.Item.Id === 0) {
+            if (this.Item.id === 0) {
                 return "Utwórz nowy"
             }
             else

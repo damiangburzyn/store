@@ -18,9 +18,9 @@ export interface SelectItem<T> {
 }
 
 export interface Image {
-    Name: string,
-    Url: string,
-    Data: string,
+    name: string,
+    url: string,
+    data: string,
 }
 
 

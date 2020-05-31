@@ -1,12 +1,12 @@
 var Category = /** @class */ (function () {
     function Category() {
-        this.Id = 0;
-        this.SortOrder = 0;
-        this.Name = '';
-        this.ShortName = "";
-        this.ParentCategoryId = null;
-        this.Logo = { Data: "", Name: "", Url: "" };
-        this.SubCategories = [];
+        this.id = 0;
+        this.sortOrder = 0;
+        this.name = '';
+        this.shortName = "";
+        this.parentCategoryId = null;
+        this.logo = { data: "", name: "", url: "" };
+        this.subCategories = [];
     }
     return Category;
 }());
