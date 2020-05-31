@@ -22,10 +22,9 @@
                 <v-card-text>
                     <v-text-field label="Nazwa"
                                   v-model="Item.name"></v-text-field>
-                    <span class="caption grey--text text--darken-1">
-                        This is the email you will use to login to your Vuetify account
-                    </span>
+                    <!--v-bind:src="Item.logo.url"-->
 
+                    <v-img v-bind:src="Item.logo.url" aspect-ratio="1.7" contain></v-img>
 
                     <v-file-input :rules="ImageRules"
                                   accept="image/png, image/jpeg, image/bmp"
@@ -144,9 +143,10 @@
                 }
                 const fr = new FileReader()
                 fr.readAsDataURL(file)
-                fr.addEventListener('load', () => {
+                fr.addEventListener('load', (e) => {
                     self.Item.logo.data = fr.result as string || '';
-                    self.Item.logo.url = file.name // this is an image file that can be sent to server...
+                    self.Item.logo.url = URL.createObjectURL(file);  // this is an image file that can be sent to server...
+                    console.log(e);
                 })
             } else {
                 this.Item.logo.name = '';
@@ -160,9 +160,7 @@
         onPropertyShowChanged(value: boolean, oldValue: boolean) {
             if (value == false) {
                 this.closeDialog();
-            }
-         
-            alert("Show changed");
+            }       
         }
        
         closeDialog() {
@@ -173,15 +171,13 @@
         @Watch('IsShow')
         onPropertyIsShowChanged(value: boolean, oldValue: boolean) {
             this.Show = value;
-            alert("IsShow changed");
+           
         }
 
         @Watch('CategoryId')
         onPropertyCategoryIdChanged(value: number, oldValue: number) {
             this.LocalCatId = value;
-            this.LoadItem();
-            alert("CategoryId changed");
-           
+            this.LoadItem(); 
         }
 
 
