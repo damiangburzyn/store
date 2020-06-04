@@ -87,7 +87,7 @@ import users from '@/store/Modules/Users';
 export default class AppNavbar extends Vue {
     get username() {
         return users.username;
-    };
+    }
     get isAdmin() {
         return users.isAdmin;
     }

@@ -16,9 +16,9 @@ export default class Products extends Vue {
     ProductEdit: Product|null = null;
 
     SaveProduct() {
-        let t = 19 / 0;
+     
         console.log(this.ProductEdit);
         this.ProductEdit = {} as Product;
-    };
+    }
 }
 </script>

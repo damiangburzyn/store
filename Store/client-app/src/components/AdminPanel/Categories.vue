@@ -6,7 +6,7 @@
                v-on:click="AddNew">
             Dodaj
         </v-btn>
-        <CategoryEditor :IsShow="IsEditorEnabled" :CategoryId="SelectedCategoryId" @dialog-closed="onEditorClosed" />
+        <CategoryEditor :IsShow="IsEditorEnabled" :CategoryId="SelectedCategoryId" :Categories="Items" @dialog-closed="onEditorClosed" />
         <ConfirmationDialog :IsShow="IsRemoveConfirmation"
                             :Message="RemoveMessage" @Confirm="RemoveConfirmed" @Cancel="RemoveCanceled" />
 
@@ -16,7 +16,7 @@
                     item-key="id"
                     item-text="name">
 
-            <template v-slot:label="{ item, open }">
+            <template v-slot:label="{ item}">
                 {{item.name}}
 
                 <v-btn x-small class="button-mini" color="blue lighten-2" fab dark
@@ -61,47 +61,39 @@
 
         IsEditorEnabled = false;
         IsRemoveConfirmation = false;
-        ToRemove: number = 0;
+        ToRemove = 0;
         SelectedCategoryId = 0;
         Items: Array<Category> = [];
         RemoveMessage = "Czy na pewno chcesz usunąć kategorię? Dane zostaną trwale usunięte";
 
-        async LoadTree() {
-            const self = this;
-            var categories = await CategoryService.Tree()
-            self.Items = categories;
+        async LoadTree() {      
+            const categories = await CategoryService.Tree()
+            this.Items = categories;
         }
 
         EditorCompleted() {
-            const self = this;
-            self.IsEditorEnabled = false;
+            this.IsEditorEnabled = false;
         }
 
-        AddNew() {
-            const self = this;
-            self.SelectedCategoryId = 0;
-            self.IsEditorEnabled = true;
+        AddNew() {           
+            this.SelectedCategoryId = 0;
+            this.IsEditorEnabled = true;
         }
 
-        Edit(id: number) {
-            const self = this;
-            self.SelectedCategoryId = id;
-            self.IsEditorEnabled = true;
+        Edit(id: number) {            
+            this.SelectedCategoryId = id;
+            this.IsEditorEnabled = true;
         }
 
-        Remove(id: number) {
-            const self = this;
-            self.SelectedCategoryId = id;
-            self.IsEditorEnabled = true;
+        Remove(id: number) {          
+            this.SelectedCategoryId = id;
+            this.IsEditorEnabled = true;
         }
 
-
-        onEditorClosed(value: any) {
-
+        onEditorClosed() {
             this.IsEditorEnabled = false;
             this.SelectedCategoryId = 0;
         }
-
 
         confirmRemove(id: number) {
             this.ToRemove = id;
@@ -116,8 +108,6 @@
         RemoveCanceled() {
             this.IsRemoveConfirmation = false;
         }
-
-
 
         async  created() {
             await this.LoadTree();

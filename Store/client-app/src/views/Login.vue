@@ -42,7 +42,7 @@ export default class Login extends Vue {
     errorMessage = ""
 
    async login(){
-      let either =   await users.login({ 
+      const either =   await users.login({ 
         email :this.email,
           password: this.password,
       })
