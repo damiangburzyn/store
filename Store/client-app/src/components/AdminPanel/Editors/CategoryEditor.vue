@@ -136,8 +136,8 @@
         public Show = this.IsShow;
         public LocalCatId = this.CategoryId;
         public ParentCategoryName: string = '';
-        public ImageRules: [string | boolean |any] = [
-            (value: string|boolean|any) => !value || value.size < 2000000 || 'Image size should be less than 2 MB!',
+        public ImageRules: [Function] = [
+            (value: File) => !value || value.size < 2000000 || 'Image size should be less than 2 MB!',
         ];
         public SelectCategories: SelectItem<number>[] = [
             { Text: "Category1", Value: 1 },
@@ -146,8 +146,6 @@
         ];
 
         SelectedParentCategory: SelectItem<number | null> = { Text: "----------", Value: null }
-
-
 
 
         async  Save() {
@@ -159,7 +157,6 @@
             }
         }
 
-
        async LoadItem() {
 
             if (this.CategoryId == 0) {
@@ -169,10 +166,12 @@
             else {
 
                 var data = await CategoryService.Get(this.CategoryId);
+                if (data.logo === null) {
+                    data.logo = this.getEmptyLogo();
+                }
+
                 this.Item = data;
             }
-
-
         }
 
        getEmptyLogo() :Image {
@@ -181,7 +180,6 @@
                url: '',
                data: '',
            };
-
              return img;
         }
 
@@ -195,7 +193,6 @@
                 parentCategoryId: null,
                 subCategories: []
             };
-
             return cat
         }
 
@@ -257,9 +254,6 @@
             this.LocalCatId = value;
             this.LoadItem(); 
         }
-
-
-
 
         get currentTitle() {
             if (this.Item.id === 0) {

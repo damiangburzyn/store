@@ -30,10 +30,12 @@ namespace GC5.IoC
 
             services.AddResponseCaching();
             services.AddMemoryCache();
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            services.AddSingleton<StorageHelper, StorageHelper>();
+            services.AddAutoMapper((x)=> { },Assembly.GetExecutingAssembly());
             // repositories
             services.AddScoped<IRepository, Repository>();
 

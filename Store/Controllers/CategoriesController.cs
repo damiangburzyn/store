@@ -20,11 +20,14 @@ namespace Store.Controllers
     public class CategoriesController : BaseController<Category, CategoryViewModel>
     {
         private readonly ICategoryService categoryService;
-      public  CategoriesController(
-            IOptions<AppSettings> settings, ILocalPageData pageData, IMapper mapper, ICategoryService categoryService, IMediaService mediaService)
+        private readonly StorageHelper storageHelper;
+
+        public  CategoriesController(
+            IOptions<AppSettings> settings, ILocalPageData pageData, IMapper mapper, ICategoryService categoryService, IMediaService mediaService, StorageHelper storageHelper)
              : base(settings, pageData, mapper, categoryService, mediaService)
         {
             this.categoryService = categoryService;
+            this.storageHelper = storageHelper;
         }
 
 
@@ -62,9 +65,9 @@ namespace Store.Controllers
         { 
            
 
-            var model = Mapper.Map<Category>(viewModel);
-           await _mediaService.SaveMedia(viewModel.Logo, Storages.CategoryLogoStorage);
+            var model = Mapper.Map<Category>(viewModel);       
             var result = await _service.Add(model);
+            await _mediaService.SaveMedia(viewModel.Logo, storageHelper.CrateContainer<CategoryViewModel>(viewModel));
             var vm = Mapper.Map<CategoryViewModel>(result);
             return Ok(vm);
         }
@@ -75,8 +78,10 @@ namespace Store.Controllers
             return await this.WrapExceptionAsync(async () =>
             {
             var model = Mapper.Map<Category>(viewModel);
+                var prev = await _service.GetById(viewModel.Id);
             var result = await _service.Update(model);
-            var vm = Mapper.Map<CategoryViewModel>(result);
+                await _mediaService.SaveMedia(viewModel.Logo, storageHelper.CrateContainer<CategoryViewModel>(viewModel), null, prev.Logo );
+                var vm = Mapper.Map<CategoryViewModel>(result);
             return Ok(vm);
             });
         }

@@ -1,6 +1,7 @@
 <template>
     <v-app>
         <AppNavbar></AppNavbar>
+        <br />
         <div id="app">
 
             <div class="container-fluid">
