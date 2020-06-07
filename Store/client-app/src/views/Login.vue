@@ -46,7 +46,9 @@
                                           :rules="emailRules"
                                           outlined
                                           placeholder="Email"></v-text-field>
-                            <v-text-field outlined
+                            <v-text-field :type="'password'"
+                                          v-model="password"
+                                          outlined
                                           placeholder="Hasło"
                                            :rules="passwordRules"
                                           ></v-text-field>
@@ -93,28 +95,34 @@ import users from "@/store/Modules/Users";
 @Component
 export default class Login extends Vue {
     valid = true;
+    runValidate = false;
     email = "";
     password = "";
     errorMessage = "";
-    emailRules: Array<Function> = [
-        (v: string) => !!v || 'E-mail jest wymagany',
-        (v: string) => /.+@.+\..+/.test(v) || 'Wpisz poprawny adres email',
-    ];
+    emailRules: Array<Function>  = [
+                (v: string) => !!v || 'E-mail jest wymagany',
+                (v: string) => /.+@.+\..+/.test(v) || 'Wpisz poprawny adres email',
+            ];
+     
     passwordRules: Array<Function> = [
         (v: string) => !!v || 'Hasło jest wymagane'     
     ];
 
     validate() {
-      return  (this.$refs.form as HTMLFormElement).validate() as boolean;
+        const isValid = (this.$refs.form as HTMLFormElement).validate();
+            return isValid as boolean;
+      
     }
 
     async login() {
-
-        const isValid = this.validate();
+        this.runValidate = true;
+       let isValid =  this.validate();
+       
         if (!isValid)
         {
             return;
         }
+    
 
       const either =   await users.login({ 
         email :this.email,
