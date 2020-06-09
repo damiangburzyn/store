@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using Store.Contracts;
@@ -14,16 +15,20 @@ namespace Store.Services
 {
     public class FileSystemMediaService : IMediaService
     {
-        public FileSystemMediaService(IOptions<ConfigurationStorage> config) 
+
+        public FileSystemMediaService(IOptions<ConfigurationStorage> config,
+           IHostingEnvironment environment)
         {
-            Config = config.Value;
+            this.config = config.Value;
+            _environment = environment;
         }
 
-        ConfigurationStorage Config;
+        ConfigurationStorage config { get; set; }
+        private readonly IHostingEnvironment _environment;
 
-        public  async Task<bool> DeleteMedia(ContentViewModel model, string partialPath = "")
+        public async Task<bool> DeleteMedia(ContentViewModel model, string partialPath = "")
         {
-            var path = Path.Combine(Config.Storage, partialPath);
+            var path = GetPath(partialPath);
 
             var mediaFileProps = model.GetType().GetProperties().Where(
                 prop => Attribute.IsDefined(prop, typeof(MediaFileAttribute))).ToList();
@@ -52,12 +57,12 @@ namespace Store.Services
 
         public async Task<bool> DeleteMovie(ContentViewModel model, string partialPath = "")
         {
-            var path = Path.Combine(Config.Storage, partialPath);
+            var path = GetPath(partialPath);
 
             var mediaMovieProps = model.GetType().GetProperties().Where(
                 prop => Attribute.IsDefined(prop, typeof(MovieAttribute))).ToList();
 
-            foreach(var mediaMovieProp in mediaMovieProps)
+            foreach (var mediaMovieProp in mediaMovieProps)
             {
                 var mediaMovieName = model.GetType().GetProperty(mediaMovieProp.Name).GetValue(model, null) as string;
 
@@ -80,26 +85,26 @@ namespace Store.Services
             return true;
         }
 
-        public  Task<MemoryStream> GetStreamMedia(string partialPath, string fileName)
+        public Task<MemoryStream> GetStreamMedia(string partialPath, string fileName)
         {
             throw new NotImplementedException();
         }
 
-        public  async Task<bool> SaveMedia(ContentViewModel model, string partialPath = "", string propertyName = "", params string[] oldMedia)
+        public async Task<bool> SaveMedia(ContentViewModel model, string partialPath = "", string propertyName = "", params string[] oldMedia)
         {
-            var path = Path.Combine(Config.Storage, partialPath);
+            var path = GetPath(partialPath);
 
             var mediaDataProps = model.GetType().GetProperties().Where(
                 prop => Attribute.IsDefined(prop, typeof(MediaAttribute))).ToList();
 
             var mediaFileProps = model.GetType().GetProperties().Where(
-                prop => Attribute.IsDefined(prop, typeof(MediaFileAttribute)) && (propertyName == "" || prop.Name == propertyName)).ToList();
+                prop => Attribute.IsDefined(prop, typeof(MediaFileAttribute)) && (string.IsNullOrWhiteSpace(propertyName) || prop.Name == propertyName)).ToList();
 
             foreach (var mediaFileProp in mediaFileProps)
             {
                 var relatedProperty = (mediaFileProp.GetCustomAttributes(typeof(MediaFileAttribute), true).First() as MediaFileAttribute).RelatedProperty;
 
-                if(mediaDataProps.Any(p => p.Name == relatedProperty))
+                if (mediaDataProps.Any(p => p.Name == relatedProperty))
                 {
                     var mediaDataProp = mediaDataProps.First(p => p.Name == relatedProperty);
 
@@ -114,7 +119,7 @@ namespace Store.Services
 
                         if (!Directory.Exists(path))
                             await Task.Run(() => Directory.CreateDirectory(path));
-                        
+
 
                         if (oldMedia != null && oldMedia.Length > 0)
                         {
@@ -140,16 +145,16 @@ namespace Store.Services
             return true;
         }
 
-        public  async Task<bool> UploadMedia(IFormFile media, string partialPath = "", params string[] oldMedia)
+        public async Task<bool> UploadMedia(IFormFile media, string partialPath = "", params string[] oldMedia)
         {
             if (media != null && media.Length > 0)
             {
                 var fileName = Path.GetFileName(media.FileName);
 
-                var path = Path.Combine(Config.Storage, partialPath);
+                var path = GetPath(partialPath);
 
                 if (!Directory.Exists(path))
-                    await Task.Run(()=> Directory.CreateDirectory(path));
+                    await Task.Run(() => Directory.CreateDirectory(path));
 
                 if (oldMedia != null && oldMedia.Length > 0)
                 {
@@ -168,13 +173,45 @@ namespace Store.Services
                 {
                     await media.CopyToAsync(fileStream);
                 }
-                
+
             }
 
             return true;
         }
 
-        
+
+
+
+        private string GetPath(params string[] pathElements)
+        {
+            var res = string.Empty;
+            IEnumerable<string> el;
+
+            if (!string.IsNullOrWhiteSpace(config.Storage))
+            {
+                el = pathElements.Prepend(config.Storage);
+            }
+            else
+            {
+                el = pathElements.ToList();
+            }
+            switch (config.StorageType)
+            {
+                case Contracts.Enums.EStorageType.HttpServer:
+                    res = Path.Combine(el.ToArray());
+                    break;
+                case Contracts.Enums.EStorageType.LocalServerWwwRoot:
+                    el = el.Prepend(_environment.WebRootPath);
+                    res = Path.Combine(el.ToArray());
+                    break;
+                default:
+                    break;
+            }
+            return res;
+        }
+
+
+
         public void Dispose()
         {
             GC.SuppressFinalize(this);

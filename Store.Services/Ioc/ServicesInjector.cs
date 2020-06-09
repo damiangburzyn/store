@@ -15,7 +15,8 @@ using Store.Services;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
-using Store.Services.Ioc;
+using GC5.Application.AutoMapper;
+using Store.Contracts.Enums;
 
 namespace GC5.IoC
 {
@@ -25,7 +26,7 @@ namespace GC5.IoC
         {
 
 
-            var mediaType =  configuration.GetValue<EMediaService>("ServiceType:MediaService");
+            var mediaType =  configuration.GetValue<EStorageType>("ConfigurationStorage:StorageType");
 
 
             services.AddResponseCaching();
@@ -35,7 +36,7 @@ namespace GC5.IoC
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddSingleton<StorageHelper, StorageHelper>();
-            services.AddAutoMapper((x)=> { },Assembly.GetExecutingAssembly());
+            services.AddAutoMapper(MapperExpression.MapperDomainProfile(services), Assembly.GetExecutingAssembly());
             // repositories
             services.AddScoped<IRepository, Repository>();
 
@@ -53,11 +54,11 @@ namespace GC5.IoC
             services.AddSingleton<ILocalPageData, LocalPageData>();
 
             //TODO: dorobić odpowiedni warunek na podstawie konfiguracji
-            if (mediaType == EMediaService.AzureMediaservice)
+            if (mediaType == EStorageType.Azure)
             {
                 services.AddScoped<IMediaService, AzureMediaService>();
             }
-            if (mediaType == EMediaService.FileMediaService)
+            if (mediaType == EStorageType.HttpServer || mediaType == EStorageType.LocalServerWwwRoot)
             { services.AddScoped<IMediaService, FileSystemMediaService>(); }
 
 

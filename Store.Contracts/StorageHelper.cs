@@ -20,7 +20,7 @@ namespace Store.Contracts
         {
             string name = GetName<T>();
 
-            return $"{name}/{viewModel.Id}";
+            return $"{name}\\{viewModel.Id}";
         }
 
         private static string GetName<T>() where T : BaseViewModel
@@ -31,17 +31,12 @@ namespace Store.Contracts
         public string GetImageUrl<T>(T viewModel,string imageName ) where T : BaseViewModel
         {
             string name = GetName<T>();
-            var res = string.Empty;
-            //httpserver or storage link
+            var res = string.Empty; 
+            //(httpserver hostuje i storage zapisuje) or storage link np na azure
             if (!string.IsNullOrWhiteSpace(configStorage.Url))
             {
                 res = $"{configStorage.Url}/{name}/{viewModel.Id}/{imageName}";
-            }
-            //local folder
-            else if (!string.IsNullOrWhiteSpace(configStorage.Storage))
-            {
-                res = $"{configStorage.Storage.Replace('\\', '/')}/{name}/{viewModel.Id}/{imageName}";
-            }
+            }         
             //wwwrooot
             else {
                 res = $"{name}/{viewModel.Id}/{imageName}";

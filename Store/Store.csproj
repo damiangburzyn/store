@@ -65,6 +65,7 @@
 
   <ItemGroup>
     <Folder Include="client-app\src\NewFolder\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 

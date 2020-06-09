@@ -4,6 +4,7 @@
 
     <div class="text-center">
         <v-dialog scrollable v-model="Show"
+                  persistent
                   width="500">
             <!--<template v-slot:activator="{ on }">
             <v-btn color="red lighten-2"
@@ -28,32 +29,31 @@
 
                     <v-file-input :rules="ImageRules"
                                   accept="image/png, image/jpeg, image/bmp"
-                                  placeholder="Wybierz obraz"
+                                  :placeholder="imagePlaceHolder()"
                                   @change="onFilePicked"
                                   prepend-icon="mdi-camera"
                                   label="Obraz kategorii">
                     </v-file-input>
 
                     <!--<v-select v-model="SelectedParentCategory"
-    :hint="`${SelectedParentCategory.Text}, ${SelectedParentCategory.Value}`"
-    :items="SelectCategories"
-    item-text="Text"
-    item-value="Value"
-    label="Select"
-    persistent-hint
-    return-object
-    single-line></v-select>-->
+                :hint="`${SelectedParentCategory.Text}, ${SelectedParentCategory.Value}`"
+                :items="SelectCategories"
+                item-text="Text"
+                item-value="Value"
+                label="Select"
+                persistent-hint
+                return-object
+                single-line></v-select>-->
 
 
                     <v-text-field label="Kategoria nadrzędna" readonly
-                                   v-model="ParentCategoryName"
-                                  @click="ShowParentCategoryDialog = true" 
-                                 :clearable="true"
-                                  @click:clear="onParentCategoryDelete()"
-                                  >
-                       
+                                  v-model="ParentCategoryName"
+                                  @click="ShowParentCategoryDialog = true"
+                                  :clearable="true"
+                                  @click:clear="onParentCategoryDelete()">
+
                     </v-text-field>
-                   
+
 
                 </v-card-text>
 
@@ -97,9 +97,9 @@
                                    title="Wybierz"
                                    elevation="0"
                                    v-on:click="setParentCategory(item)">
-                              
-                            </v-btn> 
-                           
+
+                            </v-btn>
+
 
                         </template>
                     </v-treeview>
@@ -112,7 +112,7 @@
                         Anuluj
                     </v-btn>
                     <v-spacer></v-spacer>
-                    
+
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -137,23 +137,30 @@
         public LocalCatId = this.CategoryId;
         public ParentCategoryName: string = '';
         public ImageRules: [Function] = [
-            (value: File) => !value || value.size < 2000000 || 'Image size should be less than 2 MB!',
+            (value: File) => !value || value.size < 2000000 || 'Rozmiar obrazu powinien być poniżej 2 MB!',
         ];
-        public SelectCategories: SelectItem<number>[] = [
-            { Text: "Category1", Value: 1 },
-            { Text: "Category2", Value: 2 },
-            { Text: "Category3", Value: 3 }
-        ];
+        //public SelectCategories: SelectItem<number>[] = [
+        //    { Text: "Category1", Value: 1 },
+        //    { Text: "Category2", Value: 2 },
+        //    { Text: "Category3", Value: 3 }
+        //];
 
         SelectedParentCategory: SelectItem<number | null> = { Text: "----------", Value: null }
 
 
         async  Save() {
-            if (this.Item != null && this.Item?.id === 0) {
-                await CategoryService.create(this.Item);
+
+            try {
+                if (this.Item != null && this.Item?.id === 0) {
+                    await CategoryService.create(this.Item);
+                }
+                else {
+                    await CategoryService.update(this.Item);
+                }
+                this.$emit('saved-item');
             }
-            else {
-                await CategoryService.update(this.Item);
+            catch (ex) {
+                console.error(ex);
             }
         }
 
@@ -172,6 +179,14 @@
 
                 this.Item = data;
             }
+        }
+
+        imagePlaceHolder() {
+            if (this.Item.logo.name !== '') {
+                return this.Item.logo.name;
+
+            }
+            else return 'Wybierz obraz';
         }
 
        getEmptyLogo() :Image {

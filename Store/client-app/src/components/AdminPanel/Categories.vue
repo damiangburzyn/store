@@ -1,44 +1,51 @@
 ﻿<template>
     <div>
+      
+               
+            <br />
 
-        <v-btn color="blue lighten-2"
-               dark
-               v-on:click="AddNew">
-            Dodaj
-        </v-btn>
-        <CategoryEditor :IsShow="IsEditorEnabled" :CategoryId="SelectedCategoryId" :Categories="Items" @dialog-closed="onEditorClosed" />
-        <ConfirmationDialog :IsShow="IsRemoveConfirmation"
-                            :Message="RemoveMessage" @Confirm="RemoveConfirmed" @Cancel="RemoveCanceled" />
-
-        <br />
-        <v-treeview :items="Items"
-                    item-children="subCategories"
-                    item-key="id"
-                    item-text="name">
-
-            <template v-slot:label="{ item}">
-                {{item.name}}
-
-                <v-btn x-small class="button-mini" color="blue lighten-2" fab dark
-                       title="Edytuj"
-                       elevation="0"
-                       v-on:click="Edit(item.id)">
-                    <v-icon class="body-2">mdi-pencil</v-icon>
+            <div class="fullopacity">
+                <v-btn color="blue lighten-2"
+                       dark
+                       right
+                       absolute
+                       v-on:click="AddNew">
+                    Dodaj
                 </v-btn>
+                <CategoryEditor :IsShow="IsEditorEnabled" :CategoryId="SelectedCategoryId" :Categories="Items" @dialog-closed="onEditorClosed" @saved-item="onEditorSaved" />
+                <ConfirmationDialog :IsShow="IsRemoveConfirmation"
+                                    :Message="RemoveMessage" @Confirm="RemoveConfirmed" @Cancel="RemoveCanceled" />
+
+                <br />
+                <v-treeview :items="Items"
+                            item-children="subCategories"
+                            item-key="id"
+                            item-text="name">
+
+                    <template v-slot:label="{ item}">
+                        {{item.name}}
+
+                        <v-btn x-small class="button-mini" color="blue lighten-2" fab dark
+                               title="Edytuj"
+                               elevation="0"
+                               v-on:click="Edit(item.id)">
+                            <v-icon class="body-2">mdi-pencil</v-icon>
+                        </v-btn>
 
 
-                &nbsp;
-                <v-btn x-small  class="button-mini" color="blue lighten-2" fab dark
-                       title="Usuń"
-                       elevation="0"
-                       v-on:click="confirmRemove(item.Id)">
-                    <v-icon class="body-2">mdi-delete-forever-outline</v-icon>
-                </v-btn>
+                        &nbsp;
+                        <v-btn x-small class="button-mini" color="blue lighten-2" fab dark
+                               title="Usuń"
+                               elevation="0"
+                               v-on:click="confirmRemove(item.Id)">
+                            <v-icon class="body-2">mdi-delete-forever-outline</v-icon>
+                        </v-btn>
 
-            </template>
+                    </template>
 
-        </v-treeview>
-
+                </v-treeview>
+            </div>
+   
     </div>
 
 </template>
@@ -71,9 +78,7 @@
             this.Items = categories;
         }
 
-        EditorCompleted() {
-            this.IsEditorEnabled = false;
-        }
+   
 
         AddNew() {           
             this.SelectedCategoryId = 0;
@@ -94,6 +99,13 @@
             this.IsEditorEnabled = false;
             this.SelectedCategoryId = 0;
         }
+
+       async onEditorSaved() {
+           await this.LoadTree();
+           this.onEditorClosed();
+
+        }
+
 
         confirmRemove(id: number) {
             this.ToRemove = id;
@@ -124,4 +136,12 @@
         height: 20px !important;
         font-size: 15px !important;
     }
+
+  /*  .card-trasparent {
+        opacity:0.12;
+    }
+
+    .fullopacity {
+    opacity:1;
+    }*/
 </style>

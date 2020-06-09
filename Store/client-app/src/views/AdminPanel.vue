@@ -24,8 +24,10 @@
             </v-col>
 
             <v-col sm="10">
-                <component v-bind:is="dynamicComponent"></component>
-
+                <v-card>
+                    <!--color="#b3d4fc"-->
+                    <component v-bind:is="dynamicComponent"></component>
+                </v-card>
             </v-col>
         </v-row>
 

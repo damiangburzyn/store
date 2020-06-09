@@ -22,7 +22,7 @@ namespace Store.Controllers
         private readonly ICategoryService categoryService;
         private readonly StorageHelper storageHelper;
 
-        public  CategoriesController(
+        public CategoriesController(
             IOptions<AppSettings> settings, ILocalPageData pageData, IMapper mapper, ICategoryService categoryService, IMediaService mediaService, StorageHelper storageHelper)
              : base(settings, pageData, mapper, categoryService, mediaService)
         {
@@ -48,8 +48,8 @@ namespace Store.Controllers
                 {
                     var item = vm[i];
                     item.SubCategories = vm.Where(a => a.ParentCategoryId == item.Id).ToList();
-                }   
-                 vm = vm.Where(a => a.ParentCategoryId == null).ToList();
+                }
+                vm = vm.Where(a => a.ParentCategoryId == null).ToList();
                 return Ok(vm);
             };
 
@@ -62,10 +62,8 @@ namespace Store.Controllers
 
         [HttpPost]
         public override async Task<ActionResult<CategoryViewModel>> Create(CategoryViewModel viewModel)
-        { 
-           
-
-            var model = Mapper.Map<Category>(viewModel);       
+        {
+            var model = Mapper.Map<Category>(viewModel);
             var result = await _service.Add(model);
             await _mediaService.SaveMedia(viewModel.Logo, storageHelper.CrateContainer<CategoryViewModel>(viewModel));
             var vm = Mapper.Map<CategoryViewModel>(result);
@@ -73,16 +71,19 @@ namespace Store.Controllers
         }
 
         [HttpPut]
-        public override  async Task<ActionResult<CategoryViewModel>> Update(CategoryViewModel viewModel)
+        public override async Task<ActionResult<CategoryViewModel>> Update(CategoryViewModel viewModel)
         {
             return await this.WrapExceptionAsync(async () =>
             {
-            var model = Mapper.Map<Category>(viewModel);
-                var prev = await _service.GetById(viewModel.Id);
-            var result = await _service.Update(model);
-                await _mediaService.SaveMedia(viewModel.Logo, storageHelper.CrateContainer<CategoryViewModel>(viewModel), null, prev.Logo );
+              
+                var model = await _service.GetById(viewModel.Id);
+
+                var prevLogo = model.Logo;
+                Mapper.Map<CategoryViewModel,Category>(viewModel,model);
+                var result = await _service.Update(model);
+                await _mediaService.SaveMedia(viewModel.Logo, storageHelper.CrateContainer<CategoryViewModel>(viewModel), null, prevLogo);
                 var vm = Mapper.Map<CategoryViewModel>(result);
-            return Ok(vm);
+                return Ok(vm);
             });
         }
 

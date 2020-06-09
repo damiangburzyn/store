@@ -108,7 +108,8 @@ namespace Store.Services
             {
                 entity.ParentCategory = null;
             }
-           
+
+            Repository.Attach(entity,EntityState.Modified);
             Repository.Update(entity);
             await Repository.SaveChangesAsync();
             return entity;

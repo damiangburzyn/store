@@ -136,6 +136,8 @@ namespace Store
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IAntiforgery antiforgery, ILoggerFactory loggerFactory)
         {
+
+            app.UseStaticFiles();
             SingleLogger.Factory = loggerFactory;
             app.Use(next => context =>
             {
