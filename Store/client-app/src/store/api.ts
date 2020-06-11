@@ -82,7 +82,7 @@ export async function Products(categoryId: number, page: number, pageSize: numbe
 }
 
 
-export const CategoryService = {
+export const categoryService = {
      controller : "categories",
 
     async Get(id: number) {
@@ -126,7 +126,7 @@ export const CategoryService = {
 }
 
 
-export const ProductService = {
+export const productService = {
     controller: "products",
 
     async Get(id: number) {
@@ -137,14 +137,13 @@ export const ProductService = {
         return res.data as Product;
     },
 
-   
-
-    async Find() {
-        const res = await api.get(`${this.controller}/find`).then(
+  
+    async find(page: number, rowsPerPage: number, query: string|null = null ) {
+        const res = await api.get(`${this.controller}/search?page=${page}&perPage=${rowsPerPage}@query=${query}&sort=SortOrder|asc'`).then(
             (r) => {
                 return r;
             });
-        return res.data as Product;
+        return res.data as Product[];
     },
 
 

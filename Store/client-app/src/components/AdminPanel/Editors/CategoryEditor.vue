@@ -124,7 +124,7 @@
     import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
     import { SelectItem, Content } from '@/store/models';
     import { Category} from '@/store/modelsData';
-    import { CategoryService } from "@/store/api";
+    import { categoryService } from "@/store/api";
     @Component
     export default class CategoryEditor extends Vue {
         private msg!: string;
@@ -152,10 +152,10 @@
 
             try {
                 if (this.Item != null && this.Item?.id === 0) {
-                    await CategoryService.create(this.Item);
+                    await categoryService.create(this.Item);
                 }
                 else {
-                    await CategoryService.update(this.Item);
+                    await categoryService.update(this.Item);
                 }
                 this.$emit('saved-item');
             }
@@ -172,7 +172,7 @@
             }
             else {
 
-                var data = await CategoryService.Get(this.CategoryId);
+                var data = await categoryService.Get(this.CategoryId);
                 if (data.logo === null) {
                     data.logo = this.getEmptyLogo();
                 }

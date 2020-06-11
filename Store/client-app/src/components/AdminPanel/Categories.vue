@@ -56,7 +56,7 @@
     import CategoryEditor from "@/components/AdminPanel/Editors/CategoryEditor.vue"
     import ConfirmationDialog from "@/components/AdminPanel/Editors/ConfirmationDialog.vue"
 
-    import { CategoryService } from "@/store/api";
+    import { categoryService } from "@/store/api";
     import { Category } from '@/store/modelsData';
     @Component({
         components: {
@@ -74,7 +74,7 @@
         RemoveMessage = "Czy na pewno chcesz usunąć kategorię? Dane zostaną trwale usunięte";
 
         async LoadTree() {      
-            const categories = await CategoryService.Tree()
+            const categories = await categoryService.Tree()
             this.Items = categories;
         }
 

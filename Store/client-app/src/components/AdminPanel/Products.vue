@@ -2,6 +2,10 @@
     <v-data-table :headers="headers"
                   :items="desserts"
                   sort-by="calories"
+                  :items-per-page="tableProps.rowsPerPage"
+                  :page="tableProps.pageNo"
+                  @update:page="onPageChange"
+                  @update:items-per-page="onItemsPerPageChange"
                   class="elevation-1">
         <template v-slot:top>
             <v-toolbar flat color="white">
@@ -56,7 +60,7 @@ import { Product } from '@/store/models';
     import ProductEditor from "@/components/AdminPanel/Editors/ProductEditor.vue"
     import ConfirmationDialog from "@/components/AdminPanel/Editors/ConfirmationDialog.vue"
 
-    import { ProductService } from "@/store/api";
+    import { productService } from "@/store/api";
     import { Category } from '@/store/modelsData';
     @Component({
         components: {
@@ -66,7 +70,14 @@ import { Product } from '@/store/models';
     })
 export default class Products extends Vue {
   private msg!: string;
-        ProductEdit: Product | null = null;
+        productEdit: Product | null = null;
+        products: Product[] = [];
+        tableProps = {
+            rowsPerPage:10,
+            pageNo: 1,
+            total: 0
+        };
+        queryString: string = '';
         headers = [
 
             {
@@ -80,10 +91,17 @@ export default class Products extends Vue {
             { text: 'Actions', value: 'actions', sortable: false },
         ];
 
-    SaveProduct() {
+    saveProduct() {
      
-        console.log(this.ProductEdit);
-        this.ProductEdit = {} as Product;
-    }
+        console.log(this.productEdit);
+        this.productEdit = {} as Product;
+        }
+        onItemsPerPageChange(itemsPerPage :number) { }
+        onPageChange(page: number) { }
+
+        async search() {
+         const res =    await productService.find(this.tableProps.pageNo, this.tableProps.rowsPerPage, this.queryString)
+            this.products = res;
+        }
 }
 </script>
