@@ -1,5 +1,5 @@
 ﻿import axios from 'axios'
-import { UserLogin, Profile } from '@/store/Models';
+import { UserLogin, Profile, Product } from '@/store/Models';
 import {Category } from '@/store/ModelsData';
 import { ok, err, Either } from '@/store/error';
 
@@ -118,6 +118,44 @@ export const CategoryService = {
 
     async update(params: Category) {
         return await api.put(`${this.controller}`,params );
+    },
+
+    async destroy(id: number) {
+        return await api.delete(`${this.controller}/${id}`);
+    }
+}
+
+
+export const ProductService = {
+    controller: "products",
+
+    async Get(id: number) {
+        const res = await api.get(`${this.controller}/${id}`).then(
+            (r) => {
+                return r;
+            });
+        return res.data as Product;
+    },
+
+   
+
+    async Find() {
+        const res = await api.get(`${this.controller}/find`).then(
+            (r) => {
+                return r;
+            });
+        return res.data as Product;
+    },
+
+
+
+
+    async create(params: Product) {
+        return await api.post(`${this.controller}`, params);
+    },
+
+    async update(params: Product) {
+        return await api.put(`${this.controller}`, params);
     },
 
     async destroy(id: number) {

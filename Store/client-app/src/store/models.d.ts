@@ -1,13 +1,14 @@
 ﻿export interface Product {
-    Id: Number,
-    IsBestseller: Boolean,
-    Name: String,
-    CurrentPrice: Number,
-    PreviousPrice: Number,
-    Description: String,
-    Image: String,
-    Images: Array<String>,
-    Count: Number   
+    id: Number,
+    isBestseller: Boolean,
+    name: String,
+    currentPrice: Number,
+    previousPrice: Number,
+    description: String,
+    count: Number   
+    images: Array<Content>,
+    movies: Array<Content>,
+
 }
 
 
@@ -17,7 +18,7 @@ export interface SelectItem<T> {
     Text: string,
 }
 
-export interface Image {
+export interface Content {
     name: string,
     url: string,
     data: string,

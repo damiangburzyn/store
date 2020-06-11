@@ -182,4 +182,67 @@ export var CategoryService = {
         });
     }
 };
+export var ProductService = {
+    controller: "products",
+    Get: function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var res;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, api.get(this.controller + "/" + id).then(function (r) {
+                            return r;
+                        })];
+                    case 1:
+                        res = _a.sent();
+                        return [2 /*return*/, res.data];
+                }
+            });
+        });
+    },
+    Find: function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var res;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, api.get(this.controller + "/find").then(function (r) {
+                            return r;
+                        })];
+                    case 1:
+                        res = _a.sent();
+                        return [2 /*return*/, res.data];
+                }
+            });
+        });
+    },
+    create: function (params) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, api.post("" + this.controller, params)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    },
+    update: function (params) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, api.put("" + this.controller, params)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    },
+    destroy: function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, api.delete(this.controller + "/" + id)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    }
+};
 //# sourceMappingURL=api.js.map

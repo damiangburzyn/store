@@ -122,7 +122,7 @@
 
 <script lang="ts">
     import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-    import { SelectItem, Image } from '@/store/models';
+    import { SelectItem, Content } from '@/store/models';
     import { Category} from '@/store/modelsData';
     import { CategoryService } from "@/store/api";
     @Component
@@ -189,8 +189,8 @@
             else return 'Wybierz obraz';
         }
 
-       getEmptyLogo() :Image {
-           const img: Image = {
+        getEmptyLogo(): Content {
+            const img: Content = {
                name: '',
                url: '',
                data: '',

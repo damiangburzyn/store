@@ -37,6 +37,22 @@ namespace Store.Controllers
         }
 
 
+        [HttpGet("find")]
+        public virtual async Task<IActionResult> Find(string query, string culture = null, bool withCount = false, int? page = null, int? pageSize = null)
+        {
+            return await this.WrapExceptionAsync(async () =>
+            {
+                var stringProps = typeof(TEntity).GetProperties().Where(prop =>
+                    prop.PropertyType == query.GetType());
+
+                var result = await _service.Find(q => stringProps.Any(p =>
+                    (p.GetValue(q, null) as string).Contains(query)));
+
+                return Ok(Mapper.Map<ICollection<TViewModel>>(result));
+            });
+        }
+
+
 
         // DELETE: api/controller/5
         [HttpDelete("{id}")]

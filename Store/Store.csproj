@@ -6,11 +6,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="client-app\src\NewFolder\**" />
+    <Content Remove="client-app\src\NewFolder\**" />
+    <EmbeddedResource Remove="client-app\src\NewFolder\**" />
+    <None Remove="client-app\src\NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="client-app\src\components\AddProduct.vue" />
     <None Remove="client-app\src\components\AdminPanel\Categories.vue" />
     <None Remove="client-app\src\components\AdminPanel\DeliveryOptions.vue" />
     <None Remove="client-app\src\components\AdminPanel\Editors\CategoryEditor.vue" />
     <None Remove="client-app\src\components\AdminPanel\Editors\ConfirmationDialog.vue" />
+    <None Remove="client-app\src\components\AdminPanel\Editors\ProductEditor.vue" />
     <None Remove="client-app\src\components\AdminPanel\Products.vue" />
     <None Remove="client-app\src\components\ProductBaseCard.vue" />
     <None Remove="client-app\src\store\api.ts" />
@@ -25,6 +33,7 @@
   <ItemGroup>
     <Content Include="client-app\src\components\AddProduct.vue" />
     <Content Include="client-app\src\components\AdminPanel\DeliveryOptions.vue" />
+    <Content Include="client-app\src\components\AdminPanel\Editors\ProductEditor.vue" />
     <Content Include="client-app\src\components\AdminPanel\Editors\ConfirmationDialog.vue" />
     <Content Include="client-app\src\components\AdminPanel\Editors\CategoryEditor.vue" />
     <Content Include="client-app\src\components\AdminPanel\Products.vue" />
@@ -64,7 +73,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="client-app\src\NewFolder\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

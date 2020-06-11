@@ -1,11 +1,11 @@
-﻿import { Image} from '@/store/models';
+﻿import { Content} from '@/store/models';
 
 export class Category {
     id: number;
     sortOrder: number | undefined;
     name: string;
     shortName: string;
-    logo: Image;
+    logo: Content;
     parentCategoryId: number | null|undefined;
     subCategories: Array<Category | undefined>
 
