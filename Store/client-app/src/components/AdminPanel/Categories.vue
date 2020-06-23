@@ -1,51 +1,70 @@
 ﻿<template>
     <div>
-      
-               
+        <div class="fullopacity">
+            <v-row>
+                <v-col class="d-flex flex-row-reverse"
+                       color="grey lighten-2"
+                       flat
+                       tile>
+                    <v-btn color="blue lighten-2"
+                           class="mr-3"
+                           dark
+                           v-on:click="addNew">
+                        Dodaj
+                    </v-btn>
+                </v-col>
+            </v-row>
+            <CategoryEditor :IsShow="isEditorEnabled" :CategoryId="selectedCategoryId" :Categories="items" @dialog-closed="onEditorClosed" @saved-item="onEditorSaved" />
+            <ConfirmationDialog :IsShow="isRemoveConfirmation"
+                                :Message="removeMessage" @Confirm="removeConfirmed" @Cancel="removeCanceled" />
+
             <br />
 
-            <div class="fullopacity">
-                <v-btn color="blue lighten-2"
-                       dark
-                       right
-                       absolute
-                       v-on:click="AddNew">
-                    Dodaj
-                </v-btn>
-                <CategoryEditor :IsShow="IsEditorEnabled" :CategoryId="SelectedCategoryId" :Categories="Items" @dialog-closed="onEditorClosed" @saved-item="onEditorSaved" />
-                <ConfirmationDialog :IsShow="IsRemoveConfirmation"
-                                    :Message="RemoveMessage" @Confirm="RemoveConfirmed" @Cancel="RemoveCanceled" />
+            <!--<v-dialog v-model="isEditorEnabled" max-width="500px">
+                <template v-slot:activator="{ on, attrs }">
+                    <v-btn color="primary"
+                           dark
+                           class="mb-2"
+                           v-bind="attrs"
+                           v-on="on">New Item</v-btn>
+                </template>
+                <v-card>
+                    <CategoryEditor :IsShow="isEditorEnabled" :CategoryId="selectedCategoryId" :Categories="items" @dialog-closed="onEditorClosed" @saved-item="onEditorSaved" />
+                </v-card>
+            </v-dialog>-->
 
-                <br />
-                <v-treeview :items="Items"
-                            item-children="subCategories"
-                            item-key="id"
-                            item-text="name">
-
-                    <template v-slot:label="{ item}">
-                        {{item.name}}
-
-                        <v-btn x-small class="button-mini" color="blue lighten-2" fab dark
-                               title="Edytuj"
-                               elevation="0"
-                               v-on:click="Edit(item.id)">
-                            <v-icon class="body-2">mdi-pencil</v-icon>
-                        </v-btn>
+            <v-treeview :items="items"
+                        item-children="subCategories"
+                        item-key="id"
+                        item-text="name">
 
 
-                        &nbsp;
-                        <v-btn x-small class="button-mini" color="blue lighten-2" fab dark
-                               title="Usuń"
-                               elevation="0"
-                               v-on:click="confirmRemove(item.Id)">
-                            <v-icon class="body-2">mdi-delete-forever-outline</v-icon>
-                        </v-btn>
 
-                    </template>
 
-                </v-treeview>
-            </div>
-   
+                <template v-slot:label="{ item}">
+                    {{item.name}}
+
+                    <v-btn x-small class="button-mini" color="blue lighten-2" fab dark
+                           title="Edytuj"
+                           elevation="0"
+                           v-on:click="edit(item.id)">
+                        <v-icon class="body-2">mdi-pencil</v-icon>
+                    </v-btn>
+
+
+                    &nbsp;
+                    <v-btn x-small class="button-mini" color="blue lighten-2" fab dark
+                           title="Usuń"
+                           elevation="0"
+                           v-on:click="confirmRemove(item.Id)">
+                        <v-icon class="body-2">mdi-delete-forever-outline</v-icon>
+                    </v-btn>
+
+                </template>
+
+            </v-treeview>
+        </div>
+
     </div>
 
 </template>
@@ -66,59 +85,56 @@
     })
     export default class Categories extends Vue {
 
-        IsEditorEnabled = false;
-        IsRemoveConfirmation = false;
-        ToRemove = 0;
-        SelectedCategoryId = 0;
-        Items: Array<Category> = [];
-        RemoveMessage = "Czy na pewno chcesz usunąć kategorię? Dane zostaną trwale usunięte";
+        isEditorEnabled = false;
+        isRemoveConfirmation = false;
+        toRemove = 0;
+        selectedCategoryId = 0;
+        items: Array<Category> = [];
+        removeMessage = "Czy na pewno chcesz usunąć kategorię? Dane zostaną trwale usunięte";
 
-        async LoadTree() {      
+        async LoadTree() {
             const categories = await categoryService.Tree()
-            this.Items = categories;
+            this.items = categories;
         }
 
-   
 
-        AddNew() {           
-            this.SelectedCategoryId = 0;
-            this.IsEditorEnabled = true;
+
+        addNew() {
+            this.selectedCategoryId = 0;
+            this.isEditorEnabled = true;
         }
 
-        Edit(id: number) {            
-            this.SelectedCategoryId = id;
-            this.IsEditorEnabled = true;
+        edit(id: number) {
+            this.selectedCategoryId = id;
+            this.isEditorEnabled = true;
         }
 
-        Remove(id: number) {          
-            this.SelectedCategoryId = id;
-            this.IsEditorEnabled = true;
+       async Remove(id: number) {
+         await   categoryService.destroy(id);
         }
 
         onEditorClosed() {
-            this.IsEditorEnabled = false;
-            this.SelectedCategoryId = 0;
+            this.isEditorEnabled = false;
+            this.selectedCategoryId = 0;
         }
 
-       async onEditorSaved() {
-           await this.LoadTree();
-           this.onEditorClosed();
-
+        async onEditorSaved() {
+            await this.LoadTree();
+            this.onEditorClosed();
         }
-
 
         confirmRemove(id: number) {
-            this.ToRemove = id;
-            this.IsRemoveConfirmation = true;
+            this.toRemove = id;
+            this.isRemoveConfirmation = true;
         }
 
-        RemoveConfirmed() {
-
-            this.IsRemoveConfirmation = false;
+        removeConfirmed() {
+            this.Remove(this.toRemove);
+            this.isRemoveConfirmation = false;
         }
 
-        RemoveCanceled() {
-            this.IsRemoveConfirmation = false;
+        removeCanceled() {
+            this.isRemoveConfirmation = false;
         }
 
         async  created() {
@@ -130,14 +146,14 @@
 
 
 
-<style >
+<style>
     .button-mini {
         width: 20px !important;
         height: 20px !important;
         font-size: 15px !important;
     }
 
-  /*  .card-trasparent {
+    /*  .card-trasparent {
         opacity:0.12;
     }
 

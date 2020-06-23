@@ -93,7 +93,7 @@ export function Products(categoryId, page, pageSize) {
         });
     });
 }
-export var CategoryService = {
+export var categoryService = {
     controller: "categories",
     Get: function (id) {
         return __awaiter(this, void 0, void 0, function () {
@@ -182,7 +182,7 @@ export var CategoryService = {
         });
     }
 };
-export var ProductService = {
+export var productService = {
     controller: "products",
     Get: function (id) {
         return __awaiter(this, void 0, void 0, function () {
@@ -199,12 +199,13 @@ export var ProductService = {
             });
         });
     },
-    Find: function () {
+    search: function (page, rowsPerPage, query) {
+        if (query === void 0) { query = null; }
         return __awaiter(this, void 0, void 0, function () {
             var res;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, api.get(this.controller + "/find").then(function (r) {
+                    case 0: return [4 /*yield*/, api.get(this.controller + "/search?page=" + page + "&perPage=" + rowsPerPage + "@query=" + query + "&sort=SortOrder|asc'").then(function (r) {
                             return r;
                         })];
                     case 1:

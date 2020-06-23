@@ -127,14 +127,14 @@
     import { categoryService } from "@/store/api";
     @Component
     export default class CategoryEditor extends Vue {
-        private msg!: string;
+       
         @Prop(Number) readonly CategoryId!: number;
         @Prop(Boolean) readonly IsShow!: boolean;
         @Prop() readonly Categories!: Array<Category>;
         public ShowParentCategoryDialog = false;
         private Item: Category = this.getEmptyCategory();
         public Show = this.IsShow;
-        public LocalCatId = this.CategoryId;
+       
         public ParentCategoryName: string = '';
         public ImageRules: [Function] = [
             (value: File) => !value || value.size < 2000000 || 'Rozmiar obrazu powinien być poniżej 2 MB!',
@@ -222,11 +222,11 @@
                 }
                 const fr = new FileReader()
                 fr.readAsDataURL(file)
-                fr.addEventListener('load', (e) => {
+                //fr.addEventListener('load', (e) => {
                     self.Item.logo.data = fr.result as string || '';
                     self.Item.logo.url = URL.createObjectURL(file);  // this is an image file that can be sent to server...
-                    console.log(e);
-                })
+                    //console.log(e);
+                //})
             } else {
                 this.Item.logo.name = '';
                 this.Item.logo.data = '';
@@ -266,7 +266,6 @@
 
         @Watch('CategoryId')
         onPropertyCategoryIdChanged(value: number, oldValue: number) {
-            this.LocalCatId = value;
             this.LoadItem(); 
         }
 

@@ -82,9 +82,7 @@ namespace Store.Data.EF.Migrations
                     Name = table.Column<string>(nullable: true),
                     ShortName = table.Column<string>(nullable: true),
                     Logo = table.Column<string>(nullable: true),
-                    Colour = table.Column<string>(nullable: true),
-                    ParentCategoryId = table.Column<long>(nullable: true),
-                    Alias = table.Column<string>(nullable: true)
+                    ParentCategoryId = table.Column<long>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -95,6 +93,22 @@ namespace Store.Data.EF.Migrations
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DeliveryMethod",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreateDate = table.Column<DateTime>(nullable: false),
+                    ModifyDate = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Description = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DeliveryMethod", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -183,6 +197,7 @@ namespace Store.Data.EF.Migrations
                     CurrentPrice = table.Column<decimal>(nullable: false),
                     PreviousPrice = table.Column<decimal>(nullable: false),
                     Description = table.Column<string>(nullable: true),
+                    Count = table.Column<int>(nullable: false),
                     ConnectedProdIds = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -452,6 +467,36 @@ namespace Store.Data.EF.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ProductDeliveryMethod",
+                columns: table => new
+                {
+                    Id = table.Column<long>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CreateDate = table.Column<DateTime>(nullable: false),
+                    ModifyDate = table.Column<DateTime>(nullable: false),
+                    DeliveryId = table.Column<long>(nullable: false),
+                    ProductId = table.Column<long>(nullable: false),
+                    MaxCountInPackage = table.Column<int>(nullable: false),
+                    Price = table.Column<decimal>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductDeliveryMethod", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductDeliveryMethod_DeliveryMethod_DeliveryId",
+                        column: x => x.DeliveryId,
+                        principalTable: "DeliveryMethod",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductDeliveryMethod_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProductFile",
                 columns: table => new
                 {
@@ -587,13 +632,6 @@ namespace Store.Data.EF.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Categories_Alias",
-                table: "Categories",
-                column: "Alias",
-                unique: true,
-                filter: "[Alias] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Categories_ParentCategoryId",
                 table: "Categories",
                 column: "ParentCategoryId");
@@ -639,6 +677,16 @@ namespace Store.Data.EF.Migrations
                 name: "IX_ProductCategory_CategoryId_ProductId",
                 table: "ProductCategory",
                 columns: new[] { "CategoryId", "ProductId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductDeliveryMethod_DeliveryId",
+                table: "ProductDeliveryMethod",
+                column: "DeliveryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductDeliveryMethod_ProductId",
+                table: "ProductDeliveryMethod",
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductFile_FileId",
@@ -690,6 +738,9 @@ namespace Store.Data.EF.Migrations
                 name: "ProductCategory");
 
             migrationBuilder.DropTable(
+                name: "ProductDeliveryMethod");
+
+            migrationBuilder.DropTable(
                 name: "ProductFile");
 
             migrationBuilder.DropTable(
@@ -709,6 +760,9 @@ namespace Store.Data.EF.Migrations
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "DeliveryMethod");
 
             migrationBuilder.DropTable(
                 name: "File");

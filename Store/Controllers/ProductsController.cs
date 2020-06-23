@@ -36,19 +36,47 @@ namespace Store.Controllers
 
 
 
-        [HttpGet("find")]
-        public virtual async Task<IActionResult> Find(string query, string culture = null, bool withCount = false, int? page = null, int? pageSize = null)
+        [HttpGet("search")]
+        public override async Task<IActionResult> Search(string query, string culture = null, bool withCount = false, int? page = null, int? pageSize = null)
         {
             return await this.WrapExceptionAsync(async () =>
             {
-           
-
-                var result = await productService.Find();
-
-                return Ok(Mapper.Map<ICollection<ProductViewModel>>(result));
+          
+                var result = await productService.Search();
+                var vm = Mapper.Map<DataTableSearchViewModel<ProductViewModel>>(result);
+                return Ok(vm);
             });
         }
 
+
+
+
+        //[HttpPost]
+        //public override async Task<ActionResult<CategoryViewModel>> Create(CategoryViewModel viewModel)
+        //{
+        //    var model = Mapper.Map<Category>(viewModel);
+        //    var result = await _service.Add(model);
+        //    await _mediaService.SaveMedia(viewModel.Logo, storageHelper.CrateContainer<CategoryViewModel>(viewModel));
+        //    var vm = Mapper.Map<CategoryViewModel>(result);
+        //    return Ok(vm);
+        //}
+
+        //[HttpPut]
+        //public override async Task<ActionResult<CategoryViewModel>> Update(CategoryViewModel viewModel)
+        //{
+        //    return await this.WrapExceptionAsync(async () =>
+        //    {
+
+        //        var model = await _service.GetById(viewModel.Id);
+
+        //        var prevLogo = model.Logo;
+        //        Mapper.Map<CategoryViewModel, Category>(viewModel, model);
+        //        var result = await _service.Update(model);
+        //        await _mediaService.SaveMedia(viewModel.Logo, storageHelper.CrateContainer<CategoryViewModel>(viewModel), null, prevLogo);
+        //        var vm = Mapper.Map<CategoryViewModel>(result);
+        //        return Ok(vm);
+        //    });
+        //}
 
 
     }

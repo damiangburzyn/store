@@ -37,8 +37,8 @@ namespace Store.Controllers
         }
 
 
-        [HttpGet("find")]
-        public virtual async Task<IActionResult> Find(string query, string culture = null, bool withCount = false, int? page = null, int? pageSize = null)
+        [HttpGet("search")]
+        public virtual async Task<IActionResult> Search(string query, string culture = null, bool withCount = false, int? page = null, int? pageSize = null)
         {
             return await this.WrapExceptionAsync(async () =>
             {

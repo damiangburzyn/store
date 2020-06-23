@@ -11,4 +11,19 @@ var Category = /** @class */ (function () {
     return Category;
 }());
 export { Category };
+var DataTableSearchViewModel = /** @class */ (function () {
+    function DataTableSearchViewModel() {
+        this.total = 0;
+        this.perPage = 0;
+        this.currentPage = 0;
+        this.lastPage = 0;
+        this.from = 0;
+        this.to = 0;
+        this.nextPageUrl = '';
+        this.prevPageUrl = '';
+        this.data = [];
+    }
+    return DataTableSearchViewModel;
+}());
+export { DataTableSearchViewModel };
 //# sourceMappingURL=ModelsData.js.map

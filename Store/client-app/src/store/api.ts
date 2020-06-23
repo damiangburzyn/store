@@ -1,6 +1,6 @@
 ﻿import axios from 'axios'
 import { UserLogin, Profile, Product } from '@/store/Models';
-import {Category } from '@/store/ModelsData';
+import { Category, DataTableSearchViewModel } from '@/store/ModelsData';
 import { ok, err, Either } from '@/store/error';
 
 
@@ -138,12 +138,12 @@ export const productService = {
     },
 
   
-    async find(page: number, rowsPerPage: number, query: string|null = null ) {
+    async search(page: number, rowsPerPage: number, query: string|null = null ) {
         const res = await api.get(`${this.controller}/search?page=${page}&perPage=${rowsPerPage}@query=${query}&sort=SortOrder|asc'`).then(
             (r) => {
                 return r;
             });
-        return res.data as Product[];
+        return res.data as DataTableSearchViewModel<Product>;
     },
 
 

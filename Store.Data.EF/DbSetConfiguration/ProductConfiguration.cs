@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Store.Data.EF.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
+using Store.Data.EF.Extensions;
 
 namespace Store.Data.EF.DbSetConfiguration
 {
@@ -11,6 +12,9 @@ namespace Store.Data.EF.DbSetConfiguration
         internal static void GetConfiguration(this EntityTypeBuilder<Product> entityBuilder)
         {
             entityBuilder.AddBaseEntityBuilder();
+
+            entityBuilder.Property(x => x.CurrentPrice).HasPrecision(9, 2);
+            entityBuilder.Property(x => x.PreviousPrice).HasPrecision(9, 2);
 
             entityBuilder.Property(x => x.ConnectedProdIds)
                 .HasConversion(v => string.Join(",", v),

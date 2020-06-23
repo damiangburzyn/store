@@ -70,13 +70,13 @@ namespace GC5.IoC
 
             //EF data services
             services.AddScoped<ICategoryService, CategoryService>();
-         
-            
-            
+            services.AddScoped<IProductService, ProductService>();
+
+
             //services.AddScoped<INewsService, NewsService>();
             //services.AddScoped<IPartnerService, PartnerService>();
             //services.AddScoped<IGalleryService, GalleryService>();
-            //services.AddScoped<IProductService, ProductService>();
+
             //services.AddScoped<IProductFileService, ProductFileService>();
             //services.AddScoped<ICertificateService, CertificateService>();
             //services.AddScoped<IPropertyService, PropertyService>();
@@ -110,7 +110,7 @@ namespace GC5.IoC
             // identity
             //services.AddScoped<IApplicationUsersService, ApplicationUsersService>();
             //services.AddScoped<IAcceptancesService, AcceptancesService>();
-          
+
         }
     }
 }

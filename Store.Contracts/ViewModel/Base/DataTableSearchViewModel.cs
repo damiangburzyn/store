@@ -5,27 +5,30 @@ namespace Store.Contracts.ViewModel
 {
     public class DataTableSearchViewModel<T>
     {
+        [JsonProperty("total")]
         public int Total { get; set; }
 
-        [JsonProperty("per_page")]
+        [JsonProperty("perPage")]
         public int PerPage { get; set; }
 
-        [JsonProperty("current_page")]
+        [JsonProperty("currentPage")]
         public int CurrentPage { get; set; }
 
-        [JsonProperty("last_page")]
+        [JsonProperty("lastPage")]
         public int LastPage { get; set; }
-
+      
+        [JsonProperty("from")]
         public int From { get; set; }
-
+      
+        [JsonProperty("to")]
         public int To { get; set; }
 
-        [JsonProperty("next_page_url")]
+        [JsonProperty("nextPageUrl")]
         public string NextPageUrl { get; set; }
 
-        [JsonProperty("prev_page_url")]
+        [JsonProperty("prevPageUrl")]
         public string PrevPageUrl { get; set; }
-
+        [JsonProperty("data")]
         public ICollection<T> Data { get; set; }
     }
 }

@@ -45,10 +45,12 @@
                             <v-text-field v-model="email" v-on:keyup.enter="login"
                                           :rules="emailRules"
                                           outlined
+                                          @keyup.enter="login()"
                                           placeholder="Email"></v-text-field>
                             <v-text-field :type="'password'"
                                           v-model="password"
                                           outlined
+                                           @keyup.enter="login()"
                                           placeholder="Hasło"
                                            :rules="passwordRules"
                                           ></v-text-field>

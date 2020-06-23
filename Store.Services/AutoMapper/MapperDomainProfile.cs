@@ -103,6 +103,11 @@ namespace GC5.Application.AutoMapper
                 x.CreateMap<ProductFile, ProductFileViewModel>()
                    .ReverseMap();
 
+
+               x. CreateMap(typeof(DataTableSearchViewModel<>), typeof(DataTableSearchViewModel<>));
+
+                //x.CreateMap<DataTableSearchViewModel, DataTableSearchViewModel>()
+                // .ReverseMap();
                 //  CreateMap(typeof(DataTableSearchViewModel<>), typeof(HtmlResultViewModel)).ForMember(nameof(HtmlResultViewModel.HtmlResult), opt=> opt.Ignore());
             };
         }
