@@ -14,24 +14,25 @@
                            inset
                            vertical></v-divider>
                 <v-spacer></v-spacer>
-                <v-dialog v-model="isEditorEnabled" max-width="500px">
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn color="primary"
-                               dark
-                               class="mb-2"
-                               v-bind="attrs"
-                               v-on="on">New Item</v-btn>
-                    </template>
-                    <v-card>
-                        <ProductEditor  :productId="selectedProductId" @dialog-closed="onEditorClosed" @saved-item="onEditorSaved"></ProductEditor>
-                    </v-card>
-                </v-dialog>
+
+
+                <v-btn color="blue lighten-2"
+                       class="mr-3"
+                       dark
+                       v-on:click="addNew">
+                    Dodaj
+                </v-btn>
+
+                <v-card>
+                    <ProductEditor :isShow="isEditorEnabled" :productId="selectedProductId" @dialog-closed="onEditorClosed" @saved-item="onEditorSaved"></ProductEditor>
+                </v-card>
+
             </v-toolbar>
         </template>
         <template v-slot:item.actions="{ item }">
             <v-icon small
                     class="mr-2"
-                    @click="editItem(item.id)">
+                    @click="edit(item.id)">
                 mdi-pencil
             </v-icon>
             <v-icon small
@@ -75,7 +76,7 @@ export default class Products extends Vue {
         isEditorEnabled = false;
         
         msg!: string;
-        selectedProductId: Number | null = null;
+        selectedProductId = 0;
         products: Product[] = [];
         tableProps = {
             rowsPerPage:10,
@@ -115,6 +116,8 @@ export default class Products extends Vue {
            await this.search();
         }
 
+    
+
         onEditorClosed() {
             this.isEditorEnabled = false;
             this.selectedProductId = 0;
@@ -127,6 +130,11 @@ export default class Products extends Vue {
 
         async remove(id: number) {
             await productService.destroy(id);
+        }
+
+        addNew() {
+            this.selectedProductId = 0;
+            this.isEditorEnabled = true;
         }
 
         edit(id: number) {

@@ -9,7 +9,6 @@ namespace Store.Data.EF.Entities
     public class File : BaseEntity
     { 
         public string FileName { get; set; }
-        public long CategoryId { get; set; }
       
         private ICollection<ProductFile> ProductFiles { get; } = new List<ProductFile>();
 

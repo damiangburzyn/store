@@ -26,23 +26,17 @@ namespace Store.Services
         ConfigurationStorage config { get; set; }
         private readonly IHostingEnvironment _environment;
 
-        public async Task<bool> DeleteMedia(ContentViewModel model, string partialPath = "")
+        public async Task<bool> DeleteMedia(string mediaFileName, string partialPath = "")
         {
             var path = GetPath(partialPath);
 
-            var mediaFileProps = model.GetType().GetProperties().Where(
-                prop => Attribute.IsDefined(prop, typeof(MediaFileAttribute))).ToList();
-
-            foreach (var mediaFileProp in mediaFileProps)
-            {
-                var mediaFileName = model.GetType().GetProperty(mediaFileProp.Name).GetValue(model, null) as string;
+          
 
                 if (!string.IsNullOrWhiteSpace(mediaFileName))
                 {
                     if (!Directory.Exists(path))
                     {
                         await Task.Run(() => Directory.CreateDirectory(path));
-                        break;
                     }
 
                     var pathToFile = Path.Combine(path, mediaFileName);
@@ -50,7 +44,7 @@ namespace Store.Services
                     if (File.Exists(pathToFile))
                         await Task.Run(() => File.Delete(pathToFile));
                 }
-            }
+            
 
             return true;
         }

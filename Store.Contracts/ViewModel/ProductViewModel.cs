@@ -19,7 +19,7 @@ namespace Store.Contracts.ViewModel
 
         public int Count { get; set; }
 
-        public virtual ICollection<GalleryImageViewModel> Images { get; set; }
+        public virtual IList<ContentViewModel> Images { get; set; }
 
         public virtual ICollection<MovieViewModel> Movies { get; set; }
 
@@ -28,9 +28,9 @@ namespace Store.Contracts.ViewModel
         public long[] ConnectedProdIds { get; set; }
 
 
-        public ICollection<ProductFileViewModel> ProductFiles { get; } = new List<ProductFileViewModel>();
 
-        public IEnumerable<FileViewModel> Attachements => ProductFiles.OrderBy(pf => pf.SortOrder).Select(e => e.File);
+
+        public IList<ContentViewModel> Attachements { get; set; } = new List<ContentViewModel>();
 
      
 

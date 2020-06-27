@@ -12,7 +12,7 @@ namespace Store.Contracts
     {
         Task<bool> SaveMedia(ContentViewModel model, string partialPath = "", string propertyName = "", params string[] oldMedia);
 
-        Task<bool> DeleteMedia(ContentViewModel model, string partialPath = "");
+        Task<bool> DeleteMedia(string mediaFileName, string partialPath = "");
 
         Task<bool> UploadMedia(IFormFile media, string partialPath = "", params string[] oldMedia);
 

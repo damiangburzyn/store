@@ -33,15 +33,9 @@ namespace Store.Services
             }
 
 
-            public async Task<bool> DeleteMedia(ContentViewModel model, string partialPath = "")
+            public async Task<bool> DeleteMedia(string mediaFileName, string partialPath = "")
         {
-            var mediaFileProps = model.GetType().GetProperties().Where(
-                prop => Attribute.IsDefined(prop, typeof(MediaFileAttribute))).ToList();
-
-            foreach (var mediaFileProp in mediaFileProps)
-            {
-                var mediaFileName = model.GetType().GetProperty(mediaFileProp.Name).GetValue(model, null) as string;
-
+         
                 if (!string.IsNullOrWhiteSpace(mediaFileName))
                 {
                     var path = Path.Combine(partialPath, mediaFileName);
@@ -50,7 +44,7 @@ namespace Store.Services
                     if (!result)
                         return result;
                 }
-            }
+            
 
             return true;
         }

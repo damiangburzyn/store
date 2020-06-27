@@ -19,7 +19,7 @@ namespace Store.Data.EF.Entities
         public string Description { get; set; }
         public int Count { get; set; }
 
-        public virtual ICollection<GalleryImage> Images { get; set; }
+        public virtual IList<GalleryImage> Images { get; set; } = new List<GalleryImage>();
 
         public virtual ICollection<Movie> Movies { get; set; }
 
@@ -29,9 +29,9 @@ namespace Store.Data.EF.Entities
         public long[] ConnectedProdIds { get; set; }
 
 
-        public ICollection<ProductFile> ProductFiles { get; } = new List<ProductFile>();
+        public IList<ProductFile> ProductFiles { get; } = new List<ProductFile>();
 
-        public IEnumerable<File> Attachements => ProductFiles.OrderBy(pf => pf.SortOrder).Select(e => e.File);
+      
 
      
 

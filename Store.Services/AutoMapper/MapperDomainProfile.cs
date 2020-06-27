@@ -87,7 +87,77 @@ namespace GC5.Application.AutoMapper
                      .ReverseMap();
 
                 x.CreateMap<Product, ProductViewModel>()
-                    .ReverseMap();
+                 .AfterMap((s, d) =>
+                 {
+                     foreach (var item in s.ProductFiles)
+                     {
+                         d.Attachements.Add(new ContentViewModel()
+                         {
+                             Name = item.File.FileName,
+                             Url = storageHelper.GetImageUrl(d, item.File.FileName)
+                         });
+                     }
+
+                     foreach (var item in s.Images)
+                     {
+                         d.Attachements.Add(new ContentViewModel()
+                         {
+                             Name = item.Name,
+                             Url = storageHelper.GetImageUrl(d, item.Name)
+                         });
+                     }
+                 })
+                    .ReverseMap().AfterMap((s, d) =>
+                    {
+
+                        foreach (var item in s.Images)
+                        {
+                            if (!d.Images.All(a => a.Name == item.Name))
+                            {
+                                d.Images.Add(new GalleryImage()
+                                {
+                                    ProductId = s.Id,
+                                    Name= item.Name
+                                }); ;
+                            }
+                        }
+
+                        for (int i = 0; i < d.Images.Count; i++)
+                        {
+                            var item = d.Images[i];
+                            if (!s.Images.All(a => a.Name == item.Name))
+                            {
+                                d.Images.Remove(item);
+                            }
+                        }
+
+
+
+                        foreach (var item in s.Attachements)
+                        {
+                            if (!d.ProductFiles.All(a => a.File.FileName == item.Name))
+                            {
+                                d.ProductFiles.Add(new ProductFile()
+                                {
+                                    ProductId = s.Id,
+                                    File = new File() { FileName = item.Name, }
+
+                                }); ;
+                            }
+                        }
+
+                        for (int i = 0; i < d.ProductFiles.Count; i++)
+                        {
+                            var item = d.ProductFiles[i];
+                            if (!s.Attachements.All(a => a.Name == item.File.FileName))
+                            {
+                                d.ProductFiles.Remove(item);
+                            }
+                        }
+
+
+
+                    });
 
 
                 x.CreateMap<Movie, MovieViewModel>()
@@ -104,7 +174,7 @@ namespace GC5.Application.AutoMapper
                    .ReverseMap();
 
 
-               x. CreateMap(typeof(DataTableSearchViewModel<>), typeof(DataTableSearchViewModel<>));
+                x.CreateMap(typeof(DataTableSearchViewModel<>), typeof(DataTableSearchViewModel<>));
 
                 //x.CreateMap<DataTableSearchViewModel, DataTableSearchViewModel>()
                 // .ReverseMap();

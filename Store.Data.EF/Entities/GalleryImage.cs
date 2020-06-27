@@ -12,5 +12,10 @@ namespace Store.Data.EF.Entities
         public int SortOrder { get; set; }
 
         public bool IsSpecial { get; set; }
-   }
+
+        public long ProductId { get; set; }
+
+
+        public virtual Product Product { get; set; }
+    }
 }
