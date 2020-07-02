@@ -177,5 +177,17 @@ namespace Store.Controllers
             });
         }
 
+
+        public async Task<IActionResult> LogOff()
+        {
+            var userId = (await     _userManager.GetUserAsync(HttpContext.User)).Id;
+
+            await _signInManager.SignOutAsync();
+
+
+
+            return Ok(new { Url = Url.Action(nameof(UserController.Login), "Users") });
+        }
+
     }
 }

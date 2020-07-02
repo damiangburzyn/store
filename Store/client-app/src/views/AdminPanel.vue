@@ -26,8 +26,8 @@
             <v-col sm="10">
                 <v-card>
                     <!--color="#b3d4fc"-->
-                    <!--<component v-bind:is="dynamicComponent"></component>-->
-                    <Products/>
+                    <component v-bind:is="dynamicComponent"></component>
+                  
                 </v-card>
             </v-col>
         </v-row>

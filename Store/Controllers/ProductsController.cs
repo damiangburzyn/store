@@ -56,6 +56,7 @@ namespace Store.Controllers
         {
             var model = Mapper.Map<Product>(viewModel);
             var result = await _service.Add(model);
+            viewModel.Id = result.Id;
             foreach (var item in viewModel.Attachements)
             {
                 await _mediaService.SaveMedia(item, storageHelper.CrateContainer<ProductViewModel>(viewModel));

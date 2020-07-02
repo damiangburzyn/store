@@ -65,6 +65,7 @@ namespace Store.Controllers
         {
             var model = Mapper.Map<Category>(viewModel);
             var result = await _service.Add(model);
+            viewModel.Id = result.Id;
             await _mediaService.SaveMedia(viewModel.Logo, storageHelper.CrateContainer<CategoryViewModel>(viewModel));
             var vm = Mapper.Map<CategoryViewModel>(result);
             return Ok(vm);

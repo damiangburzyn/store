@@ -17,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 using GC5.Application.AutoMapper;
 using Store.Contracts.Enums;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace GC5.IoC
 {
@@ -31,8 +32,8 @@ namespace GC5.IoC
 
             services.AddResponseCaching();
             services.AddMemoryCache();
-            
 
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddSingleton<StorageHelper, StorageHelper>();
