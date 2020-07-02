@@ -21,6 +21,14 @@ namespace Store.Services
           //  categoriesRepository = cRepository;
         }
 
+        public override async Task<Product> GetById(long id, Func<IQueryable<Product>, IQueryable<Product>> includeAction = null)
+        {
+            var images = await Repository.Find<GalleryImage>(x => x.ProductId == id);
+            var res =   await  Repository.GetById<Product>(id, includeAction);
+            res.Images = images.ToList();
+            return res;
+        }
+
         public async Task<ICollection<Category>> MainCategories()
         {
             var cat =  await Repository.Find<Category>(predicate: (a) => a.ParentCategoryId == null);

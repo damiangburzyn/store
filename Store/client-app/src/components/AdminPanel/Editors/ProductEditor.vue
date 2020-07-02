@@ -38,7 +38,10 @@
 
                 <v-file-input :rules="imageRules"
                               accept="image/png, image/jpeg, image/bmp"
-                              :placeholder="imagePlaceHolder()"
+                              :placeholder="imagePlaceHolder()"    
+                              @click:clear="onImagesClear"
+                             hide-input
+                              update:error="onImagesupdateError"
                               @change="onFilePicked"
                               multiple
                               prepend-icon="mdi-camera"
@@ -124,6 +127,7 @@
         private item: Product = this.getEmptyProduct();
         public show = this.isShow;
 
+     
         // public ParentCategoryName: string = '';
         // public ImageRules: [Function] = [
         //     (value: File) => !value || value.size < 2000000 || 'Rozmiar obrazu powinien być poniżej 2 MB!',
@@ -195,6 +199,16 @@
             return prod
         }
 
+
+      
+        onImagesupdateError(e: any) {
+            console.log(e);
+        }
+
+        onImagesClear() {
+            this.item.images = [];
+        }
+
         onFilePicked(files: File[]) {
             let self = this;
 
@@ -211,6 +225,19 @@
                     fr.addEventListener('load', (e) => {
                         image.data = fr.result as string || '';
                         image.url = URL.createObjectURL(file);  // this is an image file that can be sent to server...
+
+
+                        self.item.images.forEach(image => {
+
+                            if (image.name === file.name) {
+                                var index = self.item.images.indexOf(image);
+                                if (index !== -1) self.item.images.splice(index, 1);
+                            }
+
+                        }) 
+
+
+
                         self.item.images.push(image);
                     })
                 }

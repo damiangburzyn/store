@@ -87,6 +87,8 @@ namespace GC5.Application.AutoMapper
                      .ReverseMap();
 
                 x.CreateMap<Product, ProductViewModel>()
+                 .ForMember(a => a.Images, opt => opt.Ignore())
+                 .ForMember(a => a.Attachements, opt => opt.Ignore())
                  .AfterMap((s, d) =>
                  {
                      foreach (var item in s.ProductFiles)
@@ -100,19 +102,22 @@ namespace GC5.Application.AutoMapper
 
                      foreach (var item in s.Images)
                      {
-                         d.Attachements.Add(new ContentViewModel()
+                         d.Images.Add(new ContentViewModel()
                          {
                              Name = item.Name,
                              Url = storageHelper.GetImageUrl(d, item.Name)
                          });
                      }
                  })
-                    .ReverseMap().AfterMap((s, d) =>
+                    .ReverseMap()
+                      .ForMember(a => a.Images, opt => opt.Ignore())
+                      .ForMember(a => a.ProductFiles, opt => opt.Ignore())
+                    .AfterMap((s, d) =>
                     {
 
                         foreach (var item in s.Images)
                         {
-                            if (!d.Images.All(a => a.Name == item.Name))
+                            if (!d.Images.Any(a => a.Name == item.Name))
                             {
                                 d.Images.Add(new GalleryImage()
                                 {
@@ -125,7 +130,7 @@ namespace GC5.Application.AutoMapper
                         for (int i = 0; i < d.Images.Count; i++)
                         {
                             var item = d.Images[i];
-                            if (!s.Images.All(a => a.Name == item.Name))
+                            if (!s.Images.Any(a => a.Name == item.Name))
                             {
                                 d.Images.Remove(item);
                             }
@@ -135,7 +140,7 @@ namespace GC5.Application.AutoMapper
 
                         foreach (var item in s.Attachements)
                         {
-                            if (!d.ProductFiles.All(a => a.File.FileName == item.Name))
+                            if (!d.ProductFiles.Any(a => a.File.FileName == item.Name))
                             {
                                 d.ProductFiles.Add(new ProductFile()
                                 {
@@ -149,7 +154,7 @@ namespace GC5.Application.AutoMapper
                         for (int i = 0; i < d.ProductFiles.Count; i++)
                         {
                             var item = d.ProductFiles[i];
-                            if (!s.Attachements.All(a => a.Name == item.File.FileName))
+                            if (!s.Attachements.Any(a => a.Name == item.File.FileName))
                             {
                                 d.ProductFiles.Remove(item);
                             }

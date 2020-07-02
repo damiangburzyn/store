@@ -222,11 +222,11 @@
                 }
                 const fr = new FileReader()
                 fr.readAsDataURL(file)
-                //fr.addEventListener('load', (e) => {
+                fr.addEventListener('load', (e) => {
                     self.Item.logo.data = fr.result as string || '';
                     self.Item.logo.url = URL.createObjectURL(file);  // this is an image file that can be sent to server...
                     //console.log(e);
-                //})
+                })
             } else {
                 this.Item.logo.name = '';
                 this.Item.logo.data = '';

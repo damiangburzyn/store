@@ -17,34 +17,34 @@ namespace Store.Services
     {
 
         public FileSystemMediaService(IOptions<ConfigurationStorage> config,
-           IHostingEnvironment environment)
+           IWebHostEnvironment environment)
         {
             this.config = config.Value;
             _environment = environment;
         }
 
         ConfigurationStorage config { get; set; }
-        private readonly IHostingEnvironment _environment;
+        private readonly IWebHostEnvironment _environment;
 
         public async Task<bool> DeleteMedia(string mediaFileName, string partialPath = "")
         {
             var path = GetPath(partialPath);
 
-          
 
-                if (!string.IsNullOrWhiteSpace(mediaFileName))
+
+            if (!string.IsNullOrWhiteSpace(mediaFileName))
+            {
+                if (!Directory.Exists(path))
                 {
-                    if (!Directory.Exists(path))
-                    {
-                        await Task.Run(() => Directory.CreateDirectory(path));
-                    }
-
-                    var pathToFile = Path.Combine(path, mediaFileName);
-
-                    if (File.Exists(pathToFile))
-                        await Task.Run(() => File.Delete(pathToFile));
+                    await Task.Run(() => Directory.CreateDirectory(path));
                 }
-            
+
+                var pathToFile = Path.Combine(path, mediaFileName);
+
+                if (File.Exists(pathToFile))
+                    await Task.Run(() => File.Delete(pathToFile));
+            }
+
 
             return true;
         }
@@ -119,9 +119,12 @@ namespace Store.Services
                         {
                             foreach (var oldFile in oldMedia)
                             {
-                                var pathForDel = Path.Combine(path, oldFile);
-                                if (File.Exists(pathForDel))
-                                    await Task.Run(() => File.Delete(pathForDel));
+                                if (oldFile != null)
+                                {
+                                    var pathForDel = Path.Combine(path, oldFile);
+                                    if (File.Exists(pathForDel))
+                                        await Task.Run(() => File.Delete(pathForDel));
+                                }
                             }
                         }
 

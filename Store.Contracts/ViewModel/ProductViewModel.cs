@@ -19,7 +19,7 @@ namespace Store.Contracts.ViewModel
 
         public int Count { get; set; }
 
-        public virtual IList<ContentViewModel> Images { get; set; }
+        public virtual IList<ContentViewModel> Images { get; set; } = new List<ContentViewModel>();
 
         public virtual ICollection<MovieViewModel> Movies { get; set; }
 
