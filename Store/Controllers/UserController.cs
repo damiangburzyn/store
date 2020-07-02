@@ -181,7 +181,8 @@ namespace Store.Controllers
         public async Task<IActionResult> LogOff()
         {
             var userId = (await     _userManager.GetUserAsync(HttpContext.User)).Id;
-
+             HttpContext.Session.SetString("token" ,"");
+          HttpContext.Session.SetString("userId", "");
             await _signInManager.SignOutAsync();
 
 
