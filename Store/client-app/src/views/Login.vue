@@ -6,8 +6,8 @@
 
             <div class="col-md-6 ">
 
-         
-              
+
+
                 <fieldset class="form-group">
                     <input v-model="email" v-on:keyup.enter="login" class="form-control form-control-lg" type="text" placeholder="Email">
                 </fieldset>
@@ -22,7 +22,7 @@
                 <button @click="login()" class="btn btn-lg btn-primary pull-xs-right bg-info">
                     Zaloguj
                 </button>
-            
+
             </div>
         </div>-->
 
@@ -30,13 +30,9 @@
         <v-row no-gutters>
             <v-col cols="12"
                    sm="4">
-               
             </v-col>
-
             <v-col cols="12"
                    sm="4">
-
-
                 <v-form ref="form"
                         v-model="valid"
                         lazy-validation>
@@ -50,10 +46,9 @@
                             <v-text-field :type="'password'"
                                           v-model="password"
                                           outlined
-                                           @keyup.enter="login()"
+                                          @keyup.enter="login()"
                                           placeholder="Hasło"
-                                           :rules="passwordRules"
-                                          ></v-text-field>
+                                          :rules="passwordRules"></v-text-field>
                             <span v-if="typeof(errorMessage)!= 'undefined'&& errorMessage !== '' " class="alert text-danger" role="alert">
                                 {{errorMessage}}
                             </span>
@@ -62,8 +57,7 @@
                         <v-card-actions>
                             <v-layout row>
                                 <v-flex justify-center>
-                                    <v-btn 
-                                           color="cyan lighten-4"
+                                    <v-btn color="cyan lighten-4"
                                            primary
                                            @click="login()">
                                         Zaloguj
@@ -72,73 +66,63 @@
                             </v-layout>
                         </v-card-actions>
                     </v-card>
-                 </v-form>
-
+                </v-form>
             </v-col>
             <v-col cols="12"
                    sm="4">
-              
             </v-col>
         </v-row>
-
-
-      
-
-
     </div>
 
 </template>
 <script lang="ts">
     import { Vue, Component } from "vue-property-decorator";
-   
-//import UserLogin from "@/store/models";
-import users from "@/store/Modules/Users";
 
-@Component
-export default class Login extends Vue {
-    valid = true;
-    runValidate = false;
-    email = "";
-    password = "";
-    errorMessage = "";
-    emailRules: Array<Function>  = [
-                (v: string) => !!v || 'E-mail jest wymagany',
-                (v: string) => /.+@.+\..+/.test(v) || 'Wpisz poprawny adres email',
-            ];
-     
-    passwordRules: Array<Function> = [
-        (v: string) => !!v || 'Hasło jest wymagane'     
-    ];
+    //import UserLogin from "@/store/models";
+    import users from "@/store/Modules/Users";
 
-    validate() {
-        const isValid = (this.$refs.form as HTMLFormElement).validate();
+    @Component
+    export default class Login extends Vue {
+        valid = true;
+        runValidate = false;
+        email = "";
+        password = "";
+        errorMessage = "";
+        emailRules: Array<Function> = [
+            (v: string) => !!v || 'E-mail jest wymagany',
+            (v: string) => /.+@.+\..+/.test(v) || 'Wpisz poprawny adres email',
+        ];
+
+        passwordRules: Array<Function> = [
+            (v: string) => !!v || 'Hasło jest wymagane'
+        ];
+
+        validate() {
+            const isValid = (this.$refs.form as HTMLFormElement).validate();
             return isValid as boolean;
-      
-    }
 
-    async login() {
-        this.runValidate = true;
-       let isValid =  this.validate();
-       
-        if (!isValid)
-        {
-            return;
         }
-    
 
-      const either =   await users.login({ 
-        email :this.email,
-          password: this.password,
-      })
-       if (either.isError()) {
-           this.errorMessage = either.value as string;
-       }
-       else {
-           this.errorMessage = "";
-           this.$router.push('/');
-       }
+        async login() {
+            this.runValidate = true;
+            const isValid = this.validate();
+            if (!isValid) {
+                return;
+            }
+
+            const either = await users.login({
+                email: this.email,
+                password: this.password,
+            })
+            if (either.isError()) {
+                this.errorMessage = either.value as string;
+            }
+            else {
+                this.errorMessage = "";
+                this.$router.push('/');
+            }
+        }
     }
-}
 </script>
 
 <style lang="scss">

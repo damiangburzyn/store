@@ -2,7 +2,7 @@
 import store from "@/store";
 import { Profile, UserLogin } from "@/store/Models";
 import { Either } from '@/store/error';
-import { loginUser, setJWT, getProfile } from "../api";
+import { loginUser, setJWT, getProfile, antiforgery } from "../api";
 
 
 
@@ -20,18 +20,18 @@ enum UserRoles {
 })
 
 class UsersModule extends VuexModule {
-    profile: Profile | null =null;
+    profile: Profile | null = null;
 
-    @Mutation setProfileEither(eitherProfile: Either<Profile | undefined, string>)   {
+    @Mutation setProfileEither(eitherProfile: Either<Profile | undefined, string>) {
         if (eitherProfile.isOk()) {
             this.profile = eitherProfile.value as Profile;
-        }       
+        }
     }
 
-    @Mutation async setProfile(profile: Profile ) {
-        
-            this.profile =  profile;
-        
+    @Mutation async setProfile(profile: Profile) {
+
+        this.profile = profile;
+
     }
 
 
@@ -45,27 +45,29 @@ class UsersModule extends VuexModule {
         this.profile?.roles?.forEach((role) => {
             if (role === adminRoleName) {
                 isAdmin = true;
-            }       
+            }
         })
         return isAdmin;
     }
 
     @Action({ commit: "setProfileEither" })
-    async login(loginPass: UserLogin): Promise<Either<Profile | undefined, string>>  {
-        const userEither = await loginUser(loginPass);  
+    async login(loginPass: UserLogin): Promise<Either<Profile | undefined, string>> {
+        const userEither = await loginUser(loginPass);
         if (userEither.isOk()) {
             const token = (userEither.value as Profile).token;
-            setJWT(token)
+            setJWT(token);
+            await antiforgery();
         }
-    return userEither;
+        return userEither;
     }
 
     @Action({ commit: "setProfile" })
-    async getProfile(): Promise<Profile| null> {
+    async getProfile(): Promise<Profile | null> {
         const user = await getProfile();
         if (user !== null) {
             const token = user.token;
-            setJWT(token)
+            setJWT(token);
+            await antiforgery();
         }
         return user;
     }

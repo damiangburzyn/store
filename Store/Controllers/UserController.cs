@@ -55,18 +55,19 @@ namespace Store.Controllers
             string token = HttpContext.Session.GetString("token");
             string userIdStr = HttpContext.Session.GetString("userId");
             var user = await _userManager.FindByIdAsync(userIdStr);
-            if (user != null) {
-            var userRoles = await _userManager.GetRolesAsync(user);
-            var profile = new ProfileViewModel()
+            if (user != null)
             {
-                Token = token,
-                Roles = userRoles,
-                UserName = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Id = user.Id
-            };
-              return Ok(profile);
+                var userRoles = await _userManager.GetRolesAsync(user);
+                var profile = new ProfileViewModel()
+                {
+                    Token = token,
+                    Roles = userRoles,
+                    UserName = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Id = user.Id
+                };
+                return Ok(profile);
             }
             return Ok();
         }
@@ -83,7 +84,7 @@ namespace Store.Controllers
 
                 await _signInManager.SignOutAsync();
 
-             
+
                 return Unauthorized();
             }
 
@@ -92,10 +93,10 @@ namespace Store.Controllers
 
 
 
-      //  [ValidateAntiForgeryToken]
+        //  [ValidateAntiForgeryToken]
         [HttpPost("login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromBody]  AuthenticationModel model)
+        public async Task<IActionResult> Login([FromBody] AuthenticationModel model)
         {
             return await this.WrapExceptionAsync(async () =>
             {
@@ -180,13 +181,10 @@ namespace Store.Controllers
 
         public async Task<IActionResult> LogOff()
         {
-            var userId = (await     _userManager.GetUserAsync(HttpContext.User)).Id;
-             HttpContext.Session.SetString("token" ,"");
-          HttpContext.Session.SetString("userId", "");
+            var userId = (await _userManager.GetUserAsync(HttpContext.User)).Id;
+            HttpContext.Session.SetString("token", "");
+            HttpContext.Session.SetString("userId", "");
             await _signInManager.SignOutAsync();
-
-
-
             return Ok(new { Url = Url.Action(nameof(UserController.Login), "Users") });
         }
 

@@ -42,6 +42,34 @@ export async function getProfile(): Promise<Profile | null> {
 
 
 
+export function getCookie(name: string) {
+    const value = "; " + document.cookie;
+    const parts = value.split("; " + name + "=");
+
+    if (parts.length == 2) {
+        const part = parts.pop();
+        if (part) {
+            return part.split(";").shift();
+        }
+    }
+}
+
+
+
+export async function antiforgery() {
+    const resp = await api.get('/antiforgery').then(
+        (r) => {
+            console.log(r.headers["set-cookies"]);
+            const antiforgeryToken = getCookie("XSRF-REQUEST-TOKEN");
+            api.defaults.headers.common['X-XSRF-TOKEN'] = antiforgeryToken; 
+ 
+        });    
+}
+   
+
+
+
+
 export async function loginUser(userSubmit: UserLogin): Promise<Either<Profile | undefined, string>> {
     try {
 

@@ -44,7 +44,7 @@
 
             <v-btn-toggle 
                           tile
-                          color="deep-purple accent-3"
+                          color="blue accent-3"
                           group>
                 <v-btn to="/">
                     Home
@@ -55,11 +55,11 @@
                 </v-btn>
 
             </v-btn-toggle>
-            <v-divider vertical></v-divider>
+            <!--<v-divider vertical></v-divider>-->
             <v-spacer></v-spacer>
             <v-btn-toggle 
                           tile
-                          color="deep-purple accent-3"
+                          color="blue accent-3"
                           group>
 
 
@@ -168,6 +168,10 @@ export default class AppNavbar extends Vue {
     }
 
     .v-btn {
-        text-transform: none !important;
+        text-transform: none !important;    
+    }
+
+    .v-btn-toggle--group > .v-btn.v-btn {
+        margin: 0px !important;
     }
 </style>

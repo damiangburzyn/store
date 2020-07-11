@@ -43,7 +43,7 @@ namespace Store.Controllers
             Func<Task<ActionResult>> func = async () =>
             {
                 var result = await _service.GetAll();
-                var vm = Mapper.Map<List<CategoryViewModel>>(result);
+                var vm = Mapper.Map<List<CategoryViewModel>>(result.ToList());
                 for (int i = 0; i < vm.Count; i++)
                 {
                     var item = vm[i];

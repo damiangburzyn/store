@@ -1,5 +1,5 @@
 ﻿<template>
-    <v-container>
+  
 
         <v-row>
             <v-col sm="2">
@@ -36,7 +36,7 @@
         
 
 
-    </v-container>
+
 </template>
 <script lang="ts">
 import {Vue, Component} from "vue-property-decorator";
@@ -47,7 +47,7 @@ import {Vue, Component} from "vue-property-decorator";
     import  Products  from '@/components/AdminPanel/Products.vue';
     import Categories from '@/components/AdminPanel/Categories.vue';
     import  DeliveryOptions from '@/components/AdminPanel/DeliveryOptions.vue';
-
+    import Orders from '@/components/AdminPanel/Orders.vue';
 
     interface PanelItem {
         title: string;
@@ -61,7 +61,8 @@ import {Vue, Component} from "vue-property-decorator";
         components : {
             Products: Products,
             Categories: Categories,
-            DeliveryOptions: DeliveryOptions
+            DeliveryOptions: DeliveryOptions,
+            Orders: Orders
         },})
 export default class AdminPanel extends Vue {
     
@@ -70,7 +71,8 @@ export default class AdminPanel extends Vue {
     items: Array<PanelItem>=[
         { title: 'Kategorie', icon: 'mdi-view-dashboard', isActive: true , component: 'Categories' },
         { title: 'Produkty', icon: 'mdi-image', isActive: false, component: 'Products' },
-        { title: 'Opcje dostawy', icon: 'mdi-help-box', isActive: false, component:  'DeliveryOptions'},
+        { title: 'Opcje dostawy', icon: 'mdi-help-box', isActive: false, component: 'DeliveryOptions' },
+        { title: 'Zamówienia', icon: 'mdi-help-box', isActive: false, component: 'Orders' },
     ];
     color = 'blue';
     colors = [
