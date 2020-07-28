@@ -20,6 +20,18 @@ export class Category {
     }
 }
 
+export class DeliveryMethod {
+    id: number;
+    name: string;
+    description: string;
+    constructor() {
+        this.id = 0;
+        this.name = '';
+        this.description = '';
+    }
+
+}
+
 
 
 export class DataTableSearchViewModel<T>{

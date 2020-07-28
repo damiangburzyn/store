@@ -42,7 +42,10 @@ namespace Store
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
+            services.AddAntiforgery(options => {
+                options.HeaderName = "X-XSRF-TOKEN";
+                options.Cookie.HttpOnly = true;
+                });
             IdentityInjector.RegisterServices(services, Configuration);
 
 

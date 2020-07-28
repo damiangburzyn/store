@@ -4,6 +4,7 @@
                   :items="products"
                   :items-per-page="tableProps.rowsPerPage"
                   :page="tableProps.pageNo"
+                  :server-items-length="tableProps.total"
                   @update:page="onPageChange"
                   @update:items-per-page="onItemsPerPageChange"
                   class="elevation-1">
@@ -94,22 +95,28 @@ export default class Products extends Vue {
             { text: 'Bestseller', value: 'isBestseller' },
             { text: 'Ilość sztuk', value: 'count' },
             //{ text: 'Obraz', value: 'image' },
-            { text: 'Actions', value: 'actions', sortable: false },
+            { text: 'Działania', value: 'actions', sortable: false },
         ];
 
-    saveProduct() {
-     
-        console.log(this.selectedProductId);
-      
+      async  onItemsPerPageChange(itemsPerPage: number) {
+          this.tableProps.pageNo = 1;
+          this.tableProps.rowsPerPage = itemsPerPage;
+          await this.search();
         }
-        onItemsPerPageChange(itemsPerPage :number) { }
-        onPageChange(page: number) { }
+     
 
         async search() {
          const res =    await productService.search(this.tableProps.pageNo, this.tableProps.rowsPerPage, this.queryString)
             this.products = res.data;
             this.tableProps.pageNo = res.currentPage;
             this.tableProps.total = res.total;
+        }
+
+        async  onPageChange(page: number) {
+
+            this.tableProps.pageNo = page;
+            await this.search();
+
         }
 
       async  created() {

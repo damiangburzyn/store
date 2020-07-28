@@ -8,7 +8,6 @@ using Microsoft.Extensions.Logging;
 using Store.Data.Database;
 using Store.Data.EF.Entities;
 using Store.Data.Entities.Identity;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Store.IoC
 {

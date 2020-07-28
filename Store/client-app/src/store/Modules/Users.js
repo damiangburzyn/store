@@ -57,11 +57,14 @@ var UsersModule = /** @class */ (function (_super) {
                     case 0: return [4 /*yield*/, loginUser(loginPass)];
                     case 1:
                         userEither = _a.sent();
-                        if (userEither.isOk()) {
-                            token = userEither.value.token;
-                            setJWT(token);
-                        }
-                        return [2 /*return*/, userEither];
+                        if (!userEither.isOk()) return [3 /*break*/, 3];
+                        token = userEither.value.token;
+                        setJWT(token);
+                        return [4 /*yield*/, antiforgery()];
+                    case 2:
+                        _a.sent();
+                        _a.label = 3;
+                    case 3: return [2 /*return*/, userEither];
                 }
             });
         });
@@ -74,12 +77,14 @@ var UsersModule = /** @class */ (function (_super) {
                     case 0: return [4 /*yield*/, getProfile()];
                     case 1:
                         user = _a.sent();
-                        if (user !== null) {
-                            token = user.token;
-                            setJWT(token);
-                           
-                        }
-                        return [2 /*return*/, user];
+                        if (!(user !== null)) return [3 /*break*/, 3];
+                        token = user.token;
+                        setJWT(token);
+                        return [4 /*yield*/, antiforgery()];
+                    case 2:
+                        _a.sent();
+                        _a.label = 3;
+                    case 3: return [2 /*return*/, user];
                 }
             });
         });

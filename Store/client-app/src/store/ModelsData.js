@@ -11,6 +11,15 @@ var Category = /** @class */ (function () {
     return Category;
 }());
 export { Category };
+var DeliveryMethod = /** @class */ (function () {
+    function DeliveryMethod() {
+        this.id = 0;
+        this.name = '';
+        this.description = '';
+    }
+    return DeliveryMethod;
+}());
+export { DeliveryMethod };
 var DataTableSearchViewModel = /** @class */ (function () {
     function DataTableSearchViewModel() {
         this.total = 0;

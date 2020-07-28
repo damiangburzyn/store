@@ -4,6 +4,73 @@ import { ok, err } from '@/store/error';
 export var api = axios.create({
     baseURL: "/api/"
 });
+var ApiBase = /** @class */ (function () {
+    function ApiBase(controller) {
+        this.controller = controller;
+    }
+    ApiBase.prototype.Get = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var res;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, api.get(this.controller + "/" + id).then(function (r) {
+                            return r;
+                        })];
+                    case 1:
+                        res = _a.sent();
+                        return [2 /*return*/, res.data];
+                }
+            });
+        });
+    };
+    ApiBase.prototype.search = function (page, rowsPerPage, query) {
+        if (query === void 0) { query = null; }
+        return __awaiter(this, void 0, void 0, function () {
+            var res;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, api.get(this.controller + "/search?page=" + page + "&pageSize=" + rowsPerPage + "&query=" + query + "&sort=SortOrder|asc'").then(function (r) {
+                            return r;
+                        })];
+                    case 1:
+                        res = _a.sent();
+                        return [2 /*return*/, res.data];
+                }
+            });
+        });
+    };
+    ApiBase.prototype.create = function (params) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, api.post("" + this.controller, params)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    ApiBase.prototype.update = function (params) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, api.put("" + this.controller, params)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    ApiBase.prototype.destroy = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, api.delete(this.controller + "/" + id)];
+                    case 1: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    };
+    return ApiBase;
+}());
 export function setJWT(token) {
     api.defaults.headers.common['Authorization'] = "Bearer " + token;
 }
@@ -57,8 +124,8 @@ export function antiforgery() {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, api.get('/antiforgery').then(function (r) {
                         console.log(r.headers["set-cookies"]);
-                        var cook = getCookie("XSRF-REQUEST-TOKEN");
-                        console.log("cook");
+                        var antiforgeryToken = getCookie("XSRF-REQUEST-TOKEN");
+                        api.defaults.headers.common['X-XSRF-TOKEN'] = antiforgeryToken;
                     })];
                 case 1:
                     resp = _a.sent();
@@ -209,68 +276,6 @@ export var categoryService = {
         });
     }
 };
-export var productService = {
-    controller: "products",
-    Get: function (id) {
-        return __awaiter(this, void 0, void 0, function () {
-            var res;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, api.get(this.controller + "/" + id).then(function (r) {
-                            return r;
-                        })];
-                    case 1:
-                        res = _a.sent();
-                        return [2 /*return*/, res.data];
-                }
-            });
-        });
-    },
-    search: function (page, rowsPerPage, query) {
-        if (query === void 0) { query = null; }
-        return __awaiter(this, void 0, void 0, function () {
-            var res;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, api.get(this.controller + "/search?page=" + page + "&perPage=" + rowsPerPage + "@query=" + query + "&sort=SortOrder|asc'").then(function (r) {
-                            return r;
-                        })];
-                    case 1:
-                        res = _a.sent();
-                        return [2 /*return*/, res.data];
-                }
-            });
-        });
-    },
-    create: function (params) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, api.post("" + this.controller, params)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    },
-    update: function (params) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, api.put("" + this.controller, params)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    },
-    destroy: function (id) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, api.delete(this.controller + "/" + id)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    }
-};
+export var productService = new ApiBase("products");
+export var deliveryMehodService = new ApiBase("deliverymethods");
 //# sourceMappingURL=api.js.map

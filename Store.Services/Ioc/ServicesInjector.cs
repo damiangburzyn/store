@@ -18,6 +18,7 @@ using IConfigurationProvider = AutoMapper.IConfigurationProvider;
 using GC5.Application.AutoMapper;
 using Store.Contracts.Enums;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Store.Data.EF.Entities;
 
 namespace GC5.IoC
 {
@@ -72,8 +73,8 @@ namespace GC5.IoC
             //EF data services
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
-
-
+            services.AddScoped<IDeliveryMethodService, DeliveryMethodService>();
+           
             //services.AddScoped<INewsService, NewsService>();
             //services.AddScoped<IPartnerService, PartnerService>();
             //services.AddScoped<IGalleryService, GalleryService>();

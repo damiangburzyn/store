@@ -1,12 +1,49 @@
 ﻿import axios from 'axios'
 import { UserLogin, Profile, Product } from '@/store/Models';
-import { Category, DataTableSearchViewModel } from '@/store/ModelsData';
+import { Category, DataTableSearchViewModel, DeliveryMethod } from '@/store/ModelsData';
 import { ok, err, Either } from '@/store/error';
 
 
 export const api = axios.create({
     baseURL: "/api/"
 });
+
+class ApiBase<T> {
+    controller: string;
+
+    constructor(controller: string) {
+        this.controller = controller;
+    }
+
+    async Get(id: number) {
+        const res = await api.get(`${this.controller}/${id}`).then(
+            (r) => {
+                return r;
+            });
+        return res.data as T;
+    }
+
+    async search(page: number, rowsPerPage: number, query: string | null = null) {
+        const res = await api.get(`${this.controller}/search?page=${page}&pageSize=${rowsPerPage}&query=${query}&sort=SortOrder|asc'`).then(
+            (r) => {
+                return r;
+            });
+        return res.data as DataTableSearchViewModel<T>;
+    }
+
+    async create(params: T) {
+        return await api.post(`${this.controller}`, params);
+    }
+
+    async update(params: T) {
+        return await api.put(`${this.controller}`, params);
+    }
+
+    async destroy(id: number) {
+        return await api.delete(`${this.controller}/${id}`);
+    }
+
+}
 
 export function setJWT(token: string) {
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`
@@ -15,7 +52,6 @@ export function setJWT(token: string) {
 export function clearJWT() {
     delete api.defaults.headers.common['Authorization']
 }
-
 
 export async function getProfile(): Promise<Profile | null> {
     try {
@@ -154,38 +190,11 @@ export const categoryService = {
 }
 
 
-export const productService = {
-    controller: "products",
+export const productService = new ApiBase<Product>("products")
 
-    async Get(id: number) {
-        const res = await api.get(`${this.controller}/${id}`).then(
-            (r) => {
-                return r;
-            });
-        return res.data as Product;
-    },
-
-  
-    async search(page: number, rowsPerPage: number, query: string|null = null ) {
-        const res = await api.get(`${this.controller}/search?page=${page}&perPage=${rowsPerPage}@query=${query}&sort=SortOrder|asc'`).then(
-            (r) => {
-                return r;
-            });
-        return res.data as DataTableSearchViewModel<Product>;
-    },
+export const deliveryMehodService = new ApiBase<DeliveryMethod>("deliverymethods");
 
 
 
 
-    async create(params: Product) {
-        return await api.post(`${this.controller}`, params);
-    },
 
-    async update(params: Product) {
-        return await api.put(`${this.controller}`, params);
-    },
-
-    async destroy(id: number) {
-        return await api.delete(`${this.controller}/${id}`);
-    }
-}

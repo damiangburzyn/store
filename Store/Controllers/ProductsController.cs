@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Store.Services;
 using Store.Contracts.ViewModel;
 using Store.Data.EF.Entities;
+using System.Linq.Expressions;
 
 namespace Store.Controllers
 {
@@ -42,7 +43,12 @@ namespace Store.Controllers
             return await this.WrapExceptionAsync(async () =>
             {
 
-                var result = await productService.Search();
+                Expression<Func<Product, bool>> predicate = null;
+                if (!string.IsNullOrWhiteSpace(query))
+                {
+                    predicate = x => x.Name.Contains(query);
+                }
+                var result = await productService.Search(page,pageSize, null , predicate);
                 var vm = Mapper.Map<DataTableSearchViewModel<ProductViewModel>>(result);
                 return Ok(vm);
             });
