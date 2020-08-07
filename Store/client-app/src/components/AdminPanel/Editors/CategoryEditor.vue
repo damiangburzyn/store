@@ -172,7 +172,7 @@
             }
             else {
 
-                var data = await categoryService.Get(this.CategoryId);
+                var data = await categoryService.get(this.CategoryId);
                 if (data.logo === null) {
                     data.logo = this.getEmptyLogo();
                 }

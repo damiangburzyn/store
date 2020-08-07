@@ -110,8 +110,8 @@
 <script lang="ts">
     import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
     import { SelectItem, Content } from '@/store/models';
-    import { Product } from '@/store/models';
-    import { productService } from "@/store/api";
+    import { Product } from '@/store/modelsData';
+    import { productService, deliveryMehodService } from "@/store/api";
     @Component
     export default class ProductEditor extends Vue {
         private msg!: string;
@@ -165,7 +165,7 @@
             }
             else {
 
-                var data = await productService.Get(this.productId);
+                var data = await productService.get(this.productId);
                 this.item = data;
             }
         }
@@ -185,18 +185,8 @@
         }
 
         getEmptyProduct(): Product {
-            const prod: Product = {
-                id: 0,
-                name: '',
-                isBestseller: false,
-                currentPrice: 0,
-                previousPrice: 0,
-                description: '',
-                images: [],
-                movies: [],
-                count: 0
-            };
-            return prod
+        
+            return new Product();
         }
 
 
@@ -235,9 +225,6 @@
                             }
 
                         }) 
-
-
-
                         self.item.images.push(image);
                     })
                 }
@@ -251,7 +238,10 @@
             }
         }
 
-
+        setDeliveryMethods()
+        {
+            deliveryMehodService.controller
+        }
 
  
 

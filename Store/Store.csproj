@@ -15,7 +15,7 @@
   <ItemGroup>
     <None Remove="client-app\src\components\AddProduct.vue" />
     <None Remove="client-app\src\components\AdminPanel\Categories.vue" />
-    <None Remove="client-app\src\components\AdminPanel\DeliveryOptions.vue" />
+    <None Remove="client-app\src\components\AdminPanel\DeliveryMethods.vue" />
     <None Remove="client-app\src\components\AdminPanel\Editors\CategoryEditor.vue" />
     <None Remove="client-app\src\components\AdminPanel\Editors\ConfirmationDialog.vue" />
     <None Remove="client-app\src\components\AdminPanel\Editors\DeliveryMethodEditor.vue" />
@@ -34,7 +34,7 @@
 
   <ItemGroup>
     <Content Include="client-app\src\components\AddProduct.vue" />
-    <Content Include="client-app\src\components\AdminPanel\DeliveryOptions.vue" />
+    <Content Include="client-app\src\components\AdminPanel\DeliveryMethods.vue" />
     <Content Include="client-app\src\components\AdminPanel\Editors\DeliveryMethodEditor.vue" />
     <Content Include="client-app\src\components\AdminPanel\Editors\ProductEditor.vue" />
     <Content Include="client-app\src\components\AdminPanel\Editors\ConfirmationDialog.vue" />

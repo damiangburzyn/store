@@ -1,4 +1,4 @@
-import { __awaiter, __generator } from "tslib";
+import { __awaiter, __extends, __generator } from "tslib";
 import axios from 'axios';
 import { ok, err } from '@/store/error';
 export var api = axios.create({
@@ -8,7 +8,7 @@ var ApiBase = /** @class */ (function () {
     function ApiBase(controller) {
         this.controller = controller;
     }
-    ApiBase.prototype.Get = function (id) {
+    ApiBase.prototype.get = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var res;
             return __generator(this, function (_a) {
@@ -187,24 +187,12 @@ export function Products(categoryId, page, pageSize) {
         });
     });
 }
-export var categoryService = {
-    controller: "categories",
-    Get: function (id) {
-        return __awaiter(this, void 0, void 0, function () {
-            var res;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, api.get(this.controller + "/" + id).then(function (r) {
-                            return r;
-                        })];
-                    case 1:
-                        res = _a.sent();
-                        return [2 /*return*/, res.data];
-                }
-            });
-        });
-    },
-    Tree: function () {
+var CategoryService = /** @class */ (function (_super) {
+    __extends(CategoryService, _super);
+    function CategoryService() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    CategoryService.prototype.Tree = function () {
         return __awaiter(this, void 0, void 0, function () {
             var res;
             return __generator(this, function (_a) {
@@ -218,8 +206,8 @@ export var categoryService = {
                 }
             });
         });
-    },
-    MainCategiories: function () {
+    };
+    CategoryService.prototype.MainCategiories = function () {
         return __awaiter(this, void 0, void 0, function () {
             var resp;
             return __generator(this, function (_a) {
@@ -231,8 +219,8 @@ export var categoryService = {
                 }
             });
         });
-    },
-    SubCategiories: function (parentCategoryId) {
+    };
+    CategoryService.prototype.SubCategiories = function (parentCategoryId) {
         return __awaiter(this, void 0, void 0, function () {
             var resp;
             return __generator(this, function (_a) {
@@ -244,38 +232,10 @@ export var categoryService = {
                 }
             });
         });
-    },
-    create: function (params) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, api.post("" + this.controller, params)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    },
-    update: function (params) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, api.put("" + this.controller, params)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    },
-    destroy: function (id) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, api.delete(this.controller + "/" + id)];
-                    case 1: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    }
-};
+    };
+    return CategoryService;
+}(ApiBase));
+export var categoryService = new CategoryService("categories");
 export var productService = new ApiBase("products");
 export var deliveryMehodService = new ApiBase("deliverymethods");
 //# sourceMappingURL=api.js.map

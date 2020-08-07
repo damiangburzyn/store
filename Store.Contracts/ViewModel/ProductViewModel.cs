@@ -23,7 +23,7 @@ namespace Store.Contracts.ViewModel
 
         public virtual ICollection<MovieViewModel> Movies { get; set; }
 
-      
+        public virtual ICollection<ProductDeliveryMethodViewModel> DeliveryMethods { get; set; }
 
         public long[] ConnectedProdIds { get; set; }
 

@@ -13,76 +13,12 @@
                 <v-text-field label="Nazwa"
                               v-model="item.name"></v-text-field>
 
-              
-
-
-
-                <v-text-field label="Cena"
-                              type="'number'"
-                              v-model="item.currentPrice"></v-text-field>
-
-                <v-text-field label="Obnizka z"
-                              v-model="item.previousPrice"></v-text-field>
-
-
                 <v-textarea name="input-7-1"
                             filled
                             v-model="item.description"
                             label="Opis"
                             auto-grow
-                            value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."></v-textarea>
-
-                <v-text-field label="Ilość sztuk"
-                              type="'number'"
-                              v-model="item.count"></v-text-field>
-
-                <v-file-input :rules="imageRules"
-                              accept="image/png, image/jpeg, image/bmp"
-                              :placeholder="imagePlaceHolder()"    
-                              @click:clear="onImagesClear"
-                             hide-input
-                              update:error="onImagesupdateError"
-                              @change="onFilePicked"
-                              multiple
-                              prepend-icon="mdi-camera"
-                              label="Obrazy">
-                </v-file-input>
-
-
-
-
-
-                <v-row>
-                    <v-col v-for="image in item.images"
-                           :key="image.url"
-                           class="d-flex child-flex"
-                           cols="3">
-                        <v-card flat tile class="d-flex">
-                            <v-img :src="image.url"
-                                   :lazy-src="image.url"
-                                   aspect-ratio="1"
-                                   class="grey lighten-2">
-                                <template v-slot:placeholder>
-                                    <v-row class="fill-height ma-0"
-                                           align="center"
-                                           justify="center">
-                                        <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                                    </v-row>
-                                </template>
-
-                                <template v-slot:default>
-                                    <v-row class=" d-flex flex-row-reverse fill-height ma-0">
-
-                                        <v-btn v-on:click="deleteImage(image)" class="mr-1" icon color="grey">
-                                            <v-icon>mdi-close</v-icon>
-                                        </v-btn>
-                                    </v-row>
-                                </template>
-                            </v-img>
-                        </v-card>
-                    </v-col>
-                </v-row>
-
+                            value=""></v-textarea>
 
             </v-card-text>
 
@@ -150,7 +86,7 @@
             }
             else {
 
-                var data = await service.Get(this.itemId);
+                var data = await service.get(this.itemId);
                 this.item = data;
             }
         }
@@ -212,7 +148,7 @@
 
         }
 
-        @Watch('productId')
+        @Watch('itemId')
         onPropertyCategoryIdChanged(value: number, oldValue: number) {
 
             this.loadItem();

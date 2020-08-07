@@ -40,16 +40,33 @@ namespace Store.Controllers
         [HttpGet("search")]
         public virtual async Task<IActionResult> Search(string query, string culture = null, bool withCount = false, int? page = null, int? pageSize = null)
         {
+
+
             return await this.WrapExceptionAsync(async () =>
             {
-                var stringProps = typeof(TEntity).GetProperties().Where(prop =>
-                    prop.PropertyType == query.GetType());
 
-                var result = await _service.Find(q => stringProps.Any(p =>
+                DataTableSearchViewModel<TEntity> result = null;
+                IEnumerable<PropertyInfo> stringProps = null;
+                if (!string.IsNullOrWhiteSpace(query))
+                {
+                    stringProps = typeof(TEntity).GetProperties().Where(prop =>
+                         prop.PropertyType == query.GetType());
+
+
+                    result = await _service.Search( page, pageSize, null,    q => stringProps.Any(p =>
                     (p.GetValue(q, null) as string).Contains(query)));
 
-                return Ok(Mapper.Map<ICollection<TViewModel>>(result));
+                }
+                else {
+
+                    result = await _service.Search(page, pageSize, null);
+
+                }
+
+                var vm = Mapper.Map<DataTableSearchViewModel<TViewModel>>(result);
+                return Ok(vm);
             });
+
         }
 
 

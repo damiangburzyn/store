@@ -37,7 +37,6 @@ namespace Store.Services
 
         public override async Task<Product> Add(Product entity)
         {
-
             await Repository.Add(entity);
 
             await Repository.SaveChangesAsync();
@@ -48,26 +47,11 @@ namespace Store.Services
         public override async Task Remove(long id)
         {
             var entity = await GetById(id);
-
-
-          
-
             if (entity == null)
             {
                 return;
             }
-
-
-            //if (entity != null && entity.SubCategories.Count > 0)
-            //{
-            //    foreach (var category in entity.SubCategories.ToList())
-            //    {
-            //        await Remove(category.Id);
-            //    }
-            //}
-
             Repository.Remove<Category>(entity.Id);
-
             await Repository.SaveChangesAsync();
         }
 

@@ -18,12 +18,12 @@ namespace Store.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DeliveryMethodsController : BaseController<DeliveryMethod, DeliveryMehodViewModel>
+    public class DeliveryMethodsController : BaseController<DeliveryMethod, DeliveryMethodViewModel>
     {
         private IBaseService<DeliveryMethod> deliverMethodService;
 
         public DeliveryMethodsController(
-        IOptions<AppSettings> settings, ILocalPageData pageData, IMapper mapper, IBaseService<DeliveryMethod> deliverMethodService, IMediaService mediaService)
+        IOptions<AppSettings> settings, ILocalPageData pageData, IMapper mapper, IDeliveryMethodService deliverMethodService, IMediaService mediaService)
          : base(settings, pageData, mapper, deliverMethodService, mediaService)
         {
             this.deliverMethodService = deliverMethodService;

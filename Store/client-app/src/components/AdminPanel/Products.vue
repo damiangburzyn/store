@@ -58,7 +58,7 @@
 
 <script lang="ts">
 import { Component,  Vue } from 'vue-property-decorator';
-    import { Product } from '@/store/models';
+    import { Product } from '@/store/modelsData';
     //import DataTableSearchViewModel from '@/store/modelsData';
     import ProductEditor from "@/components/AdminPanel/Editors/ProductEditor.vue"
     import ConfirmationDialog from "@/components/AdminPanel/Editors/ConfirmationDialog.vue"

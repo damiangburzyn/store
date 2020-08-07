@@ -1,6 +1,6 @@
 ﻿import axios from 'axios'
-import { UserLogin, Profile, Product } from '@/store/Models';
-import { Category, DataTableSearchViewModel, DeliveryMethod } from '@/store/ModelsData';
+import { UserLogin, Profile } from '@/store/Models';
+import { Category, DataTableSearchViewModel, DeliveryMethod, Product } from '@/store/ModelsData';
 import { ok, err, Either } from '@/store/error';
 
 
@@ -9,13 +9,13 @@ export const api = axios.create({
 });
 
 class ApiBase<T> {
-    controller: string;
+   private controller: string;
 
     constructor(controller: string) {
         this.controller = controller;
     }
 
-    async Get(id: number) {
+    async get(id: number) {
         const res = await api.get(`${this.controller}/${id}`).then(
             (r) => {
                 return r;
@@ -145,50 +145,28 @@ export async function Products(categoryId: number, page: number, pageSize: numbe
     return resp;
 }
 
-
-export const categoryService = {
-     controller : "categories",
-
-    async Get(id: number) {
-        const res = await api.get(`${this.controller}/${id}`).then(
-            (r) => {
-                return r;
-            });
-        return res.data as Category;
-    },
-
+class CategoryService extends ApiBase<Category>{
     async  Tree() {
         const res = await api.get(`${this.controller}/tree`).then(
             (r) => {
                 return r;
             });
-        return res.data as Category[];      
-    },
-
+        return res.data as Category[];
+    }
 
     async  MainCategiories() {
         const resp = await api.get(`${this.controller}/main`)
         return resp;
-    },
+    }
 
     async  SubCategiories(parentCategoryId: number) {
         const resp = await api.get(`${this.controller}/subcategories/${parentCategoryId}`)
         return resp;
-    },
-
-    async create(params: Category) {
-        return await api.post(`${this.controller}`, params );
-    },
-
-    async update(params: Category) {
-        return await api.put(`${this.controller}`,params );
-    },
-
-    async destroy(id: number) {
-        return await api.delete(`${this.controller}/${id}`);
     }
 }
 
+
+export const categoryService = new CategoryService("categories");
 
 export const productService = new ApiBase<Product>("products")
 

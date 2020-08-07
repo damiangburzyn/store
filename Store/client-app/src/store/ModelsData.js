@@ -20,6 +20,34 @@ var DeliveryMethod = /** @class */ (function () {
     return DeliveryMethod;
 }());
 export { DeliveryMethod };
+var Product = /** @class */ (function () {
+    function Product() {
+        this.images = [];
+        this.movies = [];
+        this.deliveryMethods = [];
+        this.id = 0;
+        this.isBestseller = false;
+        this.name = '';
+        this.currentPrice = 0.00;
+        this.previousPrice = 0.00;
+        this.description = '';
+        this.count = 0;
+    }
+    return Product;
+}());
+export { Product };
+var ProductDeliveryMethod = /** @class */ (function () {
+    function ProductDeliveryMethod() {
+        this.id = 0;
+        this.deliveryId = 0;
+        this.productId = 0;
+        this.maxCountInPackage = 1;
+        this.price = 0.00;
+        this.delivery = new DeliveryMethod();
+    }
+    return ProductDeliveryMethod;
+}());
+export { ProductDeliveryMethod };
 var DataTableSearchViewModel = /** @class */ (function () {
     function DataTableSearchViewModel() {
         this.total = 0;

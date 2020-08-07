@@ -1,4 +1,4 @@
-<template>
+`<template>
     <v-data-table :headers="headers"
                   :items="items"
                   :items-per-page="tableProps.rowsPerPage"
@@ -24,7 +24,7 @@
                 </v-btn>
 
                 <v-card>
-                    <ProductEditor :isShow="isEditorEnabled" :productId="selectedItemId" @dialog-closed="onEditorClosed" @saved-item="onEditorSaved"></ProductEditor>
+                    <DeliveryMethodEditor :isShow="isEditorEnabled" :itemId="selectedItemId" @dialog-closed="onEditorClosed" @saved-item="onEditorSaved"></DeliveryMethodEditor>
                 </v-card>
 
             </v-toolbar>
@@ -58,8 +58,13 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
     import { DeliveryMethod } from '@/store/modelsData';
-    import { deliveryMehodService  as service} from "@/store/api";
-@Component
+    import { deliveryMehodService as service } from "@/store/api";
+    import DeliveryMethodEditor from "@/components/AdminPanel/Editors/DeliveryMethodEditor.vue"
+    @Component({
+        components: {
+            DeliveryMethodEditor: DeliveryMethodEditor
+        },
+    })
 export default class DeliveryMethods extends Vue {
     private msg!: string;
     selectedItemId = 0; 

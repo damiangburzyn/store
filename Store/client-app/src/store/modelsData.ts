@@ -32,7 +32,44 @@ export class DeliveryMethod {
 
 }
 
+export class Product {
+    id: number ;   
+    isBestseller: boolean;
+    name: string;
+    currentPrice: number;
+    previousPrice: number;
+    description: string;
+    count: number ;
+    images: Array<Content> = [];
+    movies: Array<Content> = [];
+    deliveryMethods: Array<ProductDeliveryMethod> = [];
+    constructor() {
+        this.id = 0;
+        this.isBestseller = false;
+        this.name = '';
+        this.currentPrice = 0.00;
+        this.previousPrice = 0.00;
+        this.description = '';
+        this.count = 0;
+    }
+}
 
+export class ProductDeliveryMethod {
+    id: number;
+    deliveryId: number;
+    productId: number;
+    maxCountInPackage: number;
+    price: number;
+    delivery: DeliveryMethod;
+    constructor() {
+        this.id = 0;
+        this.deliveryId = 0;
+        this.productId = 0;
+        this.maxCountInPackage = 1
+        this.price = 0.00;
+        this.delivery = new DeliveryMethod();
+    }
+}
 
 export class DataTableSearchViewModel<T>{
     total: number;
@@ -56,5 +93,5 @@ export class DataTableSearchViewModel<T>{
         this.prevPageUrl = '';
         this.data = [];
     }
-
 }
+

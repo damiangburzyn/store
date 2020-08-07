@@ -174,9 +174,12 @@ namespace GC5.Application.AutoMapper
                 x.CreateMap<Page, PageViewModel>()
                      .ReverseMap();
 
-
                 x.CreateMap<ProductFile, ProductFileViewModel>()
                    .ReverseMap();
+
+                x.CreateMap<DeliveryMethod, DeliveryMethodViewModel>()
+                    .ReverseMap();
+
 
 
                 x.CreateMap(typeof(DataTableSearchViewModel<>), typeof(DataTableSearchViewModel<>));
