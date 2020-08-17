@@ -20,7 +20,8 @@ enum UserRoles {
 })
 
 class UsersModule extends VuexModule {
-    profile: Profile | null = null;
+    profile: Profile | null = null; 
+    isProfileLoaded = false;
 
     @Mutation setProfileEither(eitherProfile: Either<Profile | undefined, string>) {
         if (eitherProfile.isOk()) {
@@ -31,7 +32,7 @@ class UsersModule extends VuexModule {
     @Mutation async setProfile(profile: Profile) {
 
         this.profile = profile;
-
+        this.isProfileLoaded = true;
     }
 
 

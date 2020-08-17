@@ -99,7 +99,7 @@ namespace Store.Controllers
             Func<Task<ActionResult>> func = async () =>
             {
                 var result = await _service.GetAll();              
-                var vm = Mapper.Map<TViewModel>(result);
+                var vm = Mapper.Map<List<TViewModel>>(result);
                 return Ok(vm);
             };
 

@@ -9,7 +9,7 @@ export const api = axios.create({
 });
 
 class ApiBase<T> {
-   private controller: string;
+   protected controller: string;
 
     constructor(controller: string) {
         this.controller = controller;
@@ -21,6 +21,14 @@ class ApiBase<T> {
                 return r;
             });
         return res.data as T;
+    }
+
+    async list() {
+        const res = await api.get(`${this.controller}`).then(
+            (r) => {
+                return r;
+            });
+        return res.data as T[];
     }
 
     async search(page: number, rowsPerPage: number, query: string | null = null) {

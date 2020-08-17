@@ -1,7 +1,7 @@
 import Vue from 'vue'
-import VueRouter, { RouteConfig } from 'vue-router'
+import VueRouter, { RouteConfig, NavigationGuard } from 'vue-router'
 import Home from '../views/Home.vue'
-
+import users from '@/store/Modules/Users';
 
 Vue.use(VueRouter)
 
@@ -37,6 +37,21 @@ Vue.use(VueRouter)
 
 const router = new VueRouter({
     routes
+});
+
+
+
+ router.beforeEach( async (to, from, next) =>  {
+
+    if (!users.isProfileLoaded) {
+        await users.getProfile();
+    }
+
+
+    if (to.path.toLowerCase() == '/adminpanel' && !users.isAdmin) {
+        next('/login')
+    }
+    else next();
 })
 
 export default router

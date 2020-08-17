@@ -1,5 +1,8 @@
 ﻿
-
+export interface SelectModel<T>{
+    item: T | null;
+    isSelected: boolean;
+}
 
 
 export interface SelectItem<T> {

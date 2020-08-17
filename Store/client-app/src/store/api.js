@@ -23,6 +23,21 @@ var ApiBase = /** @class */ (function () {
             });
         });
     };
+    ApiBase.prototype.list = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var res;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, api.get("" + this.controller).then(function (r) {
+                            return r;
+                        })];
+                    case 1:
+                        res = _a.sent();
+                        return [2 /*return*/, res.data];
+                }
+            });
+        });
+    };
     ApiBase.prototype.search = function (page, rowsPerPage, query) {
         if (query === void 0) { query = null; }
         return __awaiter(this, void 0, void 0, function () {

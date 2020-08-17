@@ -94,4 +94,3 @@ export class DataTableSearchViewModel<T>{
         this.data = [];
     }
 }
-

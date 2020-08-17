@@ -2,7 +2,7 @@
 
     <v-dialog v-model="show"
               persistent
-              max-width="500px">
+              max-width="550px">
         <v-card>
             <v-card-title class="headline grey lighten-2"
                           primary-title>
@@ -38,9 +38,9 @@
 
                 <v-file-input :rules="imageRules"
                               accept="image/png, image/jpeg, image/bmp"
-                              :placeholder="imagePlaceHolder()"    
+                              :placeholder="imagePlaceHolder()"
                               @click:clear="onImagesClear"
-                             hide-input
+                              hide-input
                               update:error="onImagesupdateError"
                               @change="onFilePicked"
                               multiple
@@ -86,6 +86,33 @@
 
             </v-card-text>
 
+            <v-card max-height="400" class="overflow-y-auto">
+                <v-card-title class=" grey lighten-2">
+                    Opcje dostawy
+                </v-card-title>
+
+                <v-card-text>
+                    <v-row v-for="sdm in selectDeliveryMethods">
+                        <v-col>
+                            <v-switch v-model="sdm.isSelected"
+                                      :label="sdm.item.delivery.name"></v-switch>
+                        </v-col>
+                        <v-col>
+                            <v-text-field label="Cena"
+                                          type="'number'"
+                                          :disabled="!sdm.isSelected"
+                                          v-model="sdm.item.price"></v-text-field>
+                        </v-col>
+                        <v-col>
+                            <v-text-field label="Max w paczce"
+                                          type="'number'"
+                                          :disabled="!sdm.isSelected"
+                                          v-model="sdm.item.maxCountInPackage"></v-text-field>
+                        </v-col>
+                    </v-row>
+                </v-card-text>
+            </v-card>
+
             <v-divider></v-divider>
 
             <v-card-actions>
@@ -109,8 +136,8 @@
 
 <script lang="ts">
     import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-    import { SelectItem, Content } from '@/store/models';
-    import { Product } from '@/store/modelsData';
+    import { SelectItem, Content, SelectModel } from '@/store/models';
+    import { Product, ProductDeliveryMethod, DeliveryMethod } from '@/store/modelsData';
     import { productService, deliveryMehodService } from "@/store/api";
     @Component
     export default class ProductEditor extends Vue {
@@ -127,7 +154,8 @@
         private item: Product = this.getEmptyProduct();
         public show = this.isShow;
 
-     
+        public selectDeliveryMethods = new Array<SelectModel<ProductDeliveryMethod>>();
+
         // public ParentCategoryName: string = '';
         // public ImageRules: [Function] = [
         //     (value: File) => !value || value.size < 2000000 || 'Rozmiar obrazu powinien być poniżej 2 MB!',
@@ -139,6 +167,10 @@
         // //];
 
         // SelectedParentCategory: SelectItem<number | null> = { Text: "----------", Value: null }
+
+        async created() {
+            this.selectDeliveryMethods = await this.getDeliveryMethods();
+        }
 
 
         async  save() {
@@ -185,12 +217,12 @@
         }
 
         getEmptyProduct(): Product {
-        
+
             return new Product();
         }
 
 
-      
+
         onImagesupdateError(e: any) {
             console.log(e);
         }
@@ -224,7 +256,7 @@
                                 if (index !== -1) self.item.images.splice(index, 1);
                             }
 
-                        }) 
+                        })
                         self.item.images.push(image);
                     })
                 }
@@ -238,29 +270,56 @@
             }
         }
 
-        setDeliveryMethods()
-        {
-            deliveryMehodService.controller
+        async getDeliveryMethods() {
+            let selectDeliveryMethods = new Array<SelectModel<ProductDeliveryMethod>>();
+
+            let self = this;
+            const methods = await deliveryMehodService.list();
+            methods.forEach(method => {
+                const prodDeliveryMethod: ProductDeliveryMethod = {
+                    id: 0,
+                    delivery: method,
+                    deliveryId: method.id,
+                    productId: self.productId,
+                    maxCountInPackage: 0,
+                    price: 0
+                }
+
+                let model: SelectModel<ProductDeliveryMethod> = {
+                    isSelected: false,
+                    item: prodDeliveryMethod,
+                }
+                selectDeliveryMethods.push(model);
+            })
+
+            return selectDeliveryMethods
         }
-
- 
-
-        // setParentCategory(item: Category) {
-        //     this.ParentCategoryName = item.name;
-        //     this.Item.parentCategoryId = item.id;
-        //     this.ShowParentCategoryDialog = false;
-        // }
-
-        // onParentCategoryDelete() {
-        //     this.ParentCategoryName = '';
-        //     this.Item.parentCategoryId =null;
-        // }
 
         // dialog ma możliwość lokalnej zmiany property
         @Watch('show')
-        onPropertyShowChanged(value: boolean, oldValue: boolean) {
+        async  onPropertyShowChanged(value: boolean, oldValue: boolean) {
             if (value == false) {
                 this.closeDialog();
+            }
+            else {
+                let prodDelMethods = await this.getDeliveryMethods();
+                if (this.productId !== 0) {
+
+                    this.item.deliveryMethods.forEach(dm => {
+
+                        prodDelMethods.forEach(pdm => {
+
+                            if (pdm.item?.deliveryId === dm.deliveryId) {
+
+                                pdm.isSelected = true;
+                                pdm.item.id = dm.id;
+                            }
+                        })
+
+                    })
+                }
+
+                this.selectDeliveryMethods = prodDelMethods;
             }
         }
 
@@ -276,9 +335,8 @@
         }
 
         @Watch('productId')
-        onPropertyCategoryIdChanged(value: number, oldValue: number) {
-
-            this.loadItem();
+        async      onPropertyCategoryIdChanged(value: number, oldValue: number) {
+            await this.loadItem();
         }
 
         get currentTitle() {

@@ -73,7 +73,7 @@
                     Panel Administratora
                 </v-btn>
                 
-                <v-btn v-if="username" to="/">
+                <v-btn v-if="username" >
                   Wyloguj: {{username}}
                 </v-btn>
             </v-btn-toggle>

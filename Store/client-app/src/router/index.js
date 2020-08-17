@@ -1,6 +1,8 @@
+import { __awaiter, __generator } from "tslib";
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
+import users from '@/store/Modules/Users';
 Vue.use(VueRouter);
 var routes = [
     {
@@ -30,5 +32,24 @@ var routes = [
 var router = new VueRouter({
     routes: routes
 });
+router.beforeEach(function (to, from, next) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                if (!!users.isProfileLoaded) return [3 /*break*/, 2];
+                return [4 /*yield*/, users.getProfile()];
+            case 1:
+                _a.sent();
+                _a.label = 2;
+            case 2:
+                if (to.path.toLowerCase() == '/adminpanel' && !users.isAdmin) {
+                    next('/login');
+                }
+                else
+                    next();
+                return [2 /*return*/];
+        }
+    });
+}); });
 export default router;
 //# sourceMappingURL=index.js.map

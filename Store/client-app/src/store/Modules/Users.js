@@ -12,6 +12,7 @@ var UsersModule = /** @class */ (function (_super) {
     function UsersModule() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.profile = null;
+        _this.isProfileLoaded = false;
         return _this;
     }
     UsersModule.prototype.setProfileEither = function (eitherProfile) {
@@ -23,6 +24,7 @@ var UsersModule = /** @class */ (function (_super) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 this.profile = profile;
+                this.isProfileLoaded = true;
                 return [2 /*return*/];
             });
         });
