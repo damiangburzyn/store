@@ -57,7 +57,7 @@
 
 <script lang="ts">
 import { Component,  Vue } from 'vue-property-decorator';
-    import { Product } from '@/store/models';
+    import { Product } from '@/store/modelsData';
     //import DataTableSearchViewModel from '@/store/modelsData';
     import ProductEditor from "@/components/AdminPanel/Editors/ProductEditor.vue"
     import ConfirmationDialog from "@/components/AdminPanel/Editors/ConfirmationDialog.vue"
@@ -83,7 +83,7 @@ export default class Orders extends Vue {
             pageNo: 1,
             total: 0
         };
-        queryString: string = '';
+        queryString = '';
         headers = [
 
             {
@@ -102,7 +102,7 @@ export default class Orders extends Vue {
         console.log(this.selectedProductId);
       
         }
-        onItemsPerPageChange(itemsPerPage :number) { }
+        onItemsPerPageChange(itemsPerPage: number) { }
         onPageChange(page: number) { }
 
         async search() {

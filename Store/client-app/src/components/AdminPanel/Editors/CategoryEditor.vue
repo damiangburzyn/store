@@ -66,7 +66,7 @@
                                 item-key="id"
                                 item-text="name">
 
-                        <template v-slot:label="{ item, open }">
+                        <template v-slot:label="{ item }">
                             {{item.name}}
                             <v-btn x-small class="button-mini" color="blue lighten-2" fab dark
                                    title="Wybierz"
@@ -104,8 +104,7 @@
         public ShowParentCategoryDialog = false;
         private Item: Category = this.getEmptyCategory();
         public Show = this.IsShow;
-
-        public ParentCategoryName: string = '';
+        public ParentCategoryName = '';
         public ImageRules: [Function] = [
             (value: File) => !value || value.size < 2000000 || 'Rozmiar obrazu powinien być poniżej 2 MB!',
         ];
@@ -141,12 +140,10 @@
                 this.ParentCategoryName = '';
             }
             else {
-
-                var data = await categoryService.get(this.CategoryId);
+                const data = await categoryService.get(this.CategoryId);
                 if (data.logo === null) {
                     data.logo = this.getEmptyLogo();
                 }
-
                 this.Item = data;
             }
         }
@@ -182,7 +179,7 @@
         }
 
         onFilePicked(file: File) {
-            let self = this;
+            const self = this;
             self.Item.logo = self.getEmptyLogo();
 
             if (file !== undefined) {
@@ -192,7 +189,7 @@
                 }
                 const fr = new FileReader()
                 fr.readAsDataURL(file)
-                fr.addEventListener('load', (e) => {
+                fr.addEventListener('load', () => {
                     self.Item.logo.data = fr.result as string || '';
                     self.Item.logo.url = URL.createObjectURL(file);  // this is an image file that can be sent to server...
                     //console.log(e);
