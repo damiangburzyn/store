@@ -13,7 +13,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="client-app\src\components\AddProduct.vue" />
     <None Remove="client-app\src\components\AdminPanel\Categories.vue" />
     <None Remove="client-app\src\components\AdminPanel\DeliveryMethods.vue" />
     <None Remove="client-app\src\components\AdminPanel\Editors\CategoryEditor.vue" />
@@ -33,7 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="client-app\src\components\AddProduct.vue" />
     <Content Include="client-app\src\components\AdminPanel\DeliveryMethods.vue" />
     <Content Include="client-app\src\components\AdminPanel\Editors\DeliveryMethodEditor.vue" />
     <Content Include="client-app\src\components\AdminPanel\Editors\ProductEditor.vue" />
