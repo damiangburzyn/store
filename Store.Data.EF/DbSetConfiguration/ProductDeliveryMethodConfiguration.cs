@@ -17,7 +17,8 @@ namespace Store.Data.EF.DbSetConfiguration
             entityBuilder.HasOne(a => a.Delivery)
                 .WithMany(d => d.ProductDeliveryMethods).HasForeignKey(a => a.DeliveryId);
 
-           
+            entityBuilder
+              .HasIndex(p => new { p.DeliveryId, p.ProductId }).IsUnique();
         }
     }
 }

@@ -1,19 +1,8 @@
 ﻿<template>
-
-
-
     <div class="text-center">
         <v-dialog scrollable v-model="Show"
                   persistent
                   width="500">
-            <!--<template v-slot:activator="{ on }">
-            <v-btn color="red lighten-2"
-                   dark
-                   v-on="on">
-                Click Me
-            </v-btn>
-        </template>-->
-
             <v-card>
                 <v-card-title class="headline grey lighten-2"
                               primary-title>
@@ -23,8 +12,6 @@
                 <v-card-text>
                     <v-text-field label="Nazwa"
                                   v-model="Item.name"></v-text-field>
-                    <!--v-bind:src="Item.logo.url"-->
-
                     <v-img v-if=" Item.logo !== null && Item.logo.url !== '' " class="align-content-center" v-bind:src="Item.logo.url" aspect-ratio="1.7" contain></v-img>
 
                     <v-file-input :rules="ImageRules"
@@ -34,18 +21,15 @@
                                   prepend-icon="mdi-camera"
                                   label="Obraz kategorii">
                     </v-file-input>
-
                     <!--<v-select v-model="SelectedParentCategory"
-                :hint="`${SelectedParentCategory.Text}, ${SelectedParentCategory.Value}`"
-                :items="SelectCategories"
-                item-text="Text"
-                item-value="Value"
-                label="Select"
-                persistent-hint
-                return-object
-                single-line></v-select>-->
-
-
+                    :hint="`${SelectedParentCategory.Text}, ${SelectedParentCategory.Value}`"
+                    :items="SelectCategories"
+                    item-text="Text"
+                    item-value="Value"
+                    label="Select"
+                    persistent-hint
+                    return-object
+                    single-line></v-select>-->
                     <v-text-field label="Kategoria nadrzędna" readonly
                                   v-model="ParentCategoryName"
                                   @click="ShowParentCategoryDialog = true"
@@ -53,8 +37,6 @@
                                   @click:clear="onParentCategoryDelete()">
 
                     </v-text-field>
-
-
                 </v-card-text>
 
                 <v-divider></v-divider>
@@ -75,16 +57,10 @@
             </v-card>
         </v-dialog>
 
-
-        <v-dialog scrollable v-model="ShowParentCategoryDialog"
-                  width="500">
+        <v-dialog scrollable v-model="ShowParentCategoryDialog" width="500">
             <v-card>
-                <v-card-title class="headline grey lighten-2"
-                              primary-title>
-                    Wybierz kategorię
-                </v-card-title>
+                <v-card-title class="headline grey lighten-2" primary-title> Wybierz kategorię </v-card-title>
                 <v-card-text>
-
                     <v-treeview :items="Categories"
                                 item-children="subCategories"
                                 item-key="id"
@@ -92,19 +68,14 @@
 
                         <template v-slot:label="{ item, open }">
                             {{item.name}}
-
                             <v-btn x-small class="button-mini" color="blue lighten-2" fab dark
                                    title="Wybierz"
                                    elevation="0"
                                    v-on:click="setParentCategory(item)">
-
                             </v-btn>
-
-
                         </template>
                     </v-treeview>
                 </v-card-text>
-
                 <v-card-actions>
                     <v-btn color="primary"
                            text
@@ -112,29 +83,28 @@
                         Anuluj
                     </v-btn>
                     <v-spacer></v-spacer>
-
                 </v-card-actions>
             </v-card>
         </v-dialog>
-    </div>   
+    </div>
 </template>
 
 
 <script lang="ts">
     import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
     import { SelectItem, Content } from '@/store/models';
-    import { Category} from '@/store/modelsData';
+    import { Category } from '@/store/modelsData';
     import { categoryService } from "@/store/api";
     @Component
     export default class CategoryEditor extends Vue {
-       
+
         @Prop(Number) readonly CategoryId!: number;
         @Prop(Boolean) readonly IsShow!: boolean;
         @Prop() readonly Categories!: Array<Category>;
         public ShowParentCategoryDialog = false;
         private Item: Category = this.getEmptyCategory();
         public Show = this.IsShow;
-       
+
         public ParentCategoryName: string = '';
         public ImageRules: [Function] = [
             (value: File) => !value || value.size < 2000000 || 'Rozmiar obrazu powinien być poniżej 2 MB!',
@@ -148,7 +118,7 @@
         SelectedParentCategory: SelectItem<number | null> = { Text: "----------", Value: null }
 
 
-        async  Save() {
+        async Save() {
 
             try {
                 if (this.Item != null && this.Item?.id === 0) {
@@ -164,11 +134,11 @@
             }
         }
 
-       async LoadItem() {
+        async LoadItem() {
 
             if (this.CategoryId == 0) {
                 this.Item = this.getEmptyCategory();
-                this.ParentCategoryName = '';               
+                this.ParentCategoryName = '';
             }
             else {
 
@@ -191,11 +161,11 @@
 
         getEmptyLogo(): Content {
             const img: Content = {
-               name: '',
-               url: '',
-               data: '',
-           };
-             return img;
+                name: '',
+                url: '',
+                data: '',
+            };
+            return img;
         }
 
         getEmptyCategory(): Category {
@@ -242,7 +212,7 @@
 
         onParentCategoryDelete() {
             this.ParentCategoryName = '';
-            this.Item.parentCategoryId =null;
+            this.Item.parentCategoryId = null;
         }
 
         // dialog ma możliwość lokalnej zmiany property
@@ -250,9 +220,9 @@
         onPropertyShowChanged(value: boolean, oldValue: boolean) {
             if (value == false) {
                 this.closeDialog();
-            }       
+            }
         }
-       
+
         closeDialog() {
             this.$emit("dialog-closed");
         }
@@ -261,12 +231,12 @@
         @Watch('IsShow')
         onPropertyIsShowChanged(value: boolean, oldValue: boolean) {
             this.Show = value;
-           
+
         }
 
         @Watch('CategoryId')
         onPropertyCategoryIdChanged(value: number, oldValue: number) {
-            this.LoadItem(); 
+            this.LoadItem();
         }
 
         get currentTitle() {

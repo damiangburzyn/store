@@ -17,8 +17,7 @@ namespace Store.Data.Database
         private readonly ApplicationDbContext _dbContext;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
-      //  private readonly ILogger _logger;
-
+        // private readonly ILogger _logger;
         //  private readonly ConfigurationKeys _configurationKeys;
 
         public SeedManager(
@@ -26,16 +25,16 @@ namespace Store.Data.Database
             ApplicationDbContext dbContext,
             UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationRole> roleManager
-            //,ILogger logger
-          //  IOptions<ConfigurationKeys> configurationKeys
+            // ILogger logger
+            // IOptions<ConfigurationKeys> configurationKeys
             )
         {
             _memoryCache = memoryCache;
             _dbContext = dbContext;
             _userManager = userManager;
             _roleManager = roleManager;
-          //  _logger = logger;
-        //    _configurationKeys = configurationKeys.Value;
+          // _logger = logger;
+          // _configurationKeys = configurationKeys.Value;
         }
 
         public async Task Run()
@@ -43,7 +42,7 @@ namespace Store.Data.Database
             _dbContext.Database.Migrate();
 
             InitialApplicationIdentitySeed.Run(_dbContext, _userManager, _roleManager
-            //    , _logger
+            //, _logger
                 );
         }
     }

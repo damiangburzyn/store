@@ -8,7 +8,6 @@ namespace Store.Data.EF.Entities
     {
         public string Name { get; set; }
         public string  Description { get; set; }
-
         public virtual ICollection<ProductDeliveryMethod> ProductDeliveryMethods { get; set; }
     }
 }

@@ -10,9 +10,7 @@ namespace Store.Contracts.ViewModel
     { 
         public string FileName { get; set; }  
         private ICollection<ProductFileViewModel> ProductFiles { get; } = new List<ProductFileViewModel>();
-
         public IEnumerable<ProductViewModel> Products => ProductFiles.Select(cm => cm.Product);
-
         public int SortOrder { get; set; }
     }
 }

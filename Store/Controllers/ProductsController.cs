@@ -30,13 +30,6 @@ namespace Store.Controllers
             this.storageHelper = storageHelper;
         }
 
-
-
-
-
-
-
-
         [HttpGet("search")]
         public override async Task<IActionResult> Search(string query, string culture = null, bool withCount = false, int? page = null, int? pageSize = null)
         {
@@ -53,9 +46,6 @@ namespace Store.Controllers
                 return Ok(vm);
             });
         }
-
-
-
 
         [HttpPost]
         public override async Task<ActionResult<ProductViewModel>> Create(ProductViewModel viewModel)
@@ -99,7 +89,6 @@ namespace Store.Controllers
                 Mapper.Map<ProductViewModel, Product>(viewModel, model);
                 var result = await _service.Update(model);
 
-
                 var partialPath = storageHelper.CrateContainer<ProductViewModel>(viewModel);
 
                 foreach (var item in viewModel.Attachements)
@@ -129,12 +118,10 @@ namespace Store.Controllers
                     }
                 }
 
-
                 var vm = Mapper.Map<ProductViewModel>(result);
                 return Ok(vm);
             });
         }
-
 
     }
 }

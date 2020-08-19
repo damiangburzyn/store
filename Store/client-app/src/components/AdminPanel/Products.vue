@@ -86,7 +86,6 @@ export default class Products extends Vue {
         };
         queryString: string = '';
         headers = [
-
             {
                 text: 'Nazwa', align: 'start',
                 sortable: false, value: 'name' },

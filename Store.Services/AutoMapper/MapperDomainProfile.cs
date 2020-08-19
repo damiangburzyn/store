@@ -62,6 +62,7 @@ namespace GC5.Application.AutoMapper
 
 
                 x.CreateMap<Category, CategoryViewModel>()
+                .ForMember(a=>a.Products, opt=> opt.Ignore())
                     .ForMember(a => a.Logo, opt => opt.MapFrom(s => new ContentViewModel() { Name = s.Logo }))
                     .ForMember(a => a.SubCategories, opt => opt.Ignore())
                     .ForMember(a => a.ParentCategory, opt => opt.Ignore())
@@ -89,6 +90,7 @@ namespace GC5.Application.AutoMapper
                 x.CreateMap<Product, ProductViewModel>()
                  .ForMember(a => a.Images, opt => opt.Ignore())
                  .ForMember(a => a.Attachements, opt => opt.Ignore())
+                 .ForMember(a => a.Categories, opt => opt.Ignore())
                  .AfterMap((s, d) =>
                  {
                      foreach (var item in s.ProductFiles)
@@ -180,9 +182,14 @@ namespace GC5.Application.AutoMapper
                 x.CreateMap<DeliveryMethod, DeliveryMethodViewModel>()
                     .ReverseMap();
 
-
+                x.CreateMap<ProductDeliveryMethod, ProductDeliveryMethodViewModel>()
+                    .ReverseMap();
 
                 x.CreateMap(typeof(DataTableSearchViewModel<>), typeof(DataTableSearchViewModel<>));
+
+
+                x.CreateMap<ProductCategory, ProductCategoryViewModel>()
+                   .ReverseMap();
 
                 //x.CreateMap<DataTableSearchViewModel, DataTableSearchViewModel>()
                 // .ReverseMap();

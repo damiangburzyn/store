@@ -8,9 +8,7 @@ namespace Store.Contracts.ViewModel
     {
         public string PageName { get; set; }
         public  string Title { get; set; }
-
         public  string Description { get; set; }
-
         public  string Keys { get; set; }
     }
 }

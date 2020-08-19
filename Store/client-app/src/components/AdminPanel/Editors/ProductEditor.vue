@@ -10,12 +10,9 @@
             </v-card-title>
 
             <v-card-text>
-                <v-text-field label="Nazwa"
-                              v-model="item.name"></v-text-field>
+                <v-text-field label="Nazwa" v-model="item.name"></v-text-field>
 
                 <v-switch v-model="item.isBestseller" :label="`Bestseller`"></v-switch>
-
-
 
                 <v-text-field label="Cena"
                               type="'number'"
@@ -23,7 +20,6 @@
 
                 <v-text-field label="Obnizka z"
                               v-model="item.previousPrice"></v-text-field>
-
 
                 <v-textarea name="input-7-1"
                             filled
@@ -47,11 +43,6 @@
                               prepend-icon="mdi-camera"
                               label="Obrazy">
                 </v-file-input>
-
-
-
-
-
                 <v-row>
                     <v-col v-for="image in item.images"
                            :key="image.url"
@@ -82,15 +73,12 @@
                         </v-card>
                     </v-col>
                 </v-row>
-
-
             </v-card-text>
 
             <v-card max-height="400" class="overflow-y-auto">
                 <v-card-title class=" grey lighten-2">
                     Opcje dostawy
                 </v-card-title>
-
                 <v-card-text>
                     <v-row v-for="sdm in selectDeliveryMethods">
                         <v-col>
@@ -153,20 +141,7 @@
         // public ShowParentCategoryDialog = false;
         private item: Product = this.getEmptyProduct();
         public show = this.isShow;
-
-        public selectDeliveryMethods = new Array<SelectModel<ProductDeliveryMethod>>();
-
-        // public ParentCategoryName: string = '';
-        // public ImageRules: [Function] = [
-        //     (value: File) => !value || value.size < 2000000 || 'Rozmiar obrazu powinien być poniżej 2 MB!',
-        // ];
-        // //public SelectCategories: SelectItem<number>[] = [
-        // //    { Text: "Category1", Value: 1 },
-        // //    { Text: "Category2", Value: 2 },
-        // //    { Text: "Category3", Value: 3 }
-        // //];
-
-        // SelectedParentCategory: SelectItem<number | null> = { Text: "----------", Value: null }
+        public selectDeliveryMethods = new Array<SelectModel<ProductDeliveryMethod>>();    
 
         async created() {
             this.selectDeliveryMethods = await this.getDeliveryMethods();
@@ -174,6 +149,16 @@
 
 
         async  save() {
+
+            let selectedDeliveryMethods = new Array<ProductDeliveryMethod>();
+            this.selectDeliveryMethods.forEach((select) => {
+                if (select.isSelected && select.item != null)
+                {
+                        selectedDeliveryMethods.push(select.item);    
+                }
+            })
+
+            this.item.deliveryMethods = selectedDeliveryMethods;
 
             try {
                 if (this.item != null && this.item?.id === 0) {

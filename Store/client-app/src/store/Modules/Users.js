@@ -33,7 +33,7 @@ var UsersModule = /** @class */ (function (_super) {
         get: function () {
             return this.profile && this.profile.userName || null;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Object.defineProperty(UsersModule.prototype, "isAdmin", {
@@ -48,7 +48,7 @@ var UsersModule = /** @class */ (function (_super) {
             });
             return isAdmin;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     UsersModule.prototype.login = function (loginPass) {

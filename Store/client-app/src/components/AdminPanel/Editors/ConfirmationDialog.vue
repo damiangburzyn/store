@@ -1,14 +1,9 @@
 ﻿<template>
-
-
-
     <div class="text-center">
         <v-dialog v-model="Show"
-                  width="400">
-        
+                  width="400">        
             <v-card>
-                <v-card-title class="headline grey lighten-2"
-                              primary-title>
+                <v-card-title class="headline grey lighten-2"  primary-title>
                     {{ currentTitle }}
                 </v-card-title>
 
@@ -45,10 +40,8 @@
         private msg!: string;
         @Prop(Boolean) readonly IsShow!: boolean;   
         @Prop(String) readonly Message!: string;    
+        public Show = this.IsShow;       
 
-        public Show = this.IsShow;
-       
-     
         Confirm() {
 
               this.$emit("Confirm");
@@ -57,8 +50,6 @@
         Cancel() {
             this.$emit("Cancel");
         }
-
-     
 
         // dialog ma możliwość lokalnej zmiany property
         @Watch('Show')

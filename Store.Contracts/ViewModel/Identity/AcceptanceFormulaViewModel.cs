@@ -10,9 +10,7 @@ namespace Store.Contracts.ViewModel
 
         }
         public string JsonText { get; set; }
-
         public long AcceptanceTypeId { get; set; }
-
         public ICollection<AcceptanceViewModel> Acceptances { get; private set; } = new HashSet<AcceptanceViewModel>();
 
      
