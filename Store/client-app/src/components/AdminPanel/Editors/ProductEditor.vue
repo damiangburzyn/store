@@ -1,131 +1,192 @@
 ﻿<template>
+    <div>
+        <v-dialog v-model="show"
+                  persistent
+                  max-width="550px">
+            <v-card>
+                <v-card-title class="headline grey lighten-2"
+                              primary-title>
+                    {{ currentTitle }}
+                </v-card-title>
 
-    <v-dialog v-model="show"
-              persistent
-              max-width="550px">
-        <v-card>
-            <v-card-title class="headline grey lighten-2"
-                          primary-title>
-                {{ currentTitle }}
-            </v-card-title>
+                <v-card-text>
+                    <v-text-field label="Nazwa" v-model="item.name"></v-text-field>
 
-            <v-card-text>
-                <v-text-field label="Nazwa" v-model="item.name"></v-text-field>
+                    <v-switch v-model="item.isBestseller" :label="`Bestseller`"></v-switch>
 
-                <v-switch v-model="item.isBestseller" :label="`Bestseller`"></v-switch>
+                    <v-text-field label="Cena"
+                                  type="'number'"
+                                  v-model="item.currentPrice"></v-text-field>
 
-                <v-text-field label="Cena"
-                              type="'number'"
-                              v-model="item.currentPrice"></v-text-field>
+                    <v-text-field label="Obnizka z"
+                                  v-model="item.previousPrice"></v-text-field>
 
-                <v-text-field label="Obnizka z"
-                              v-model="item.previousPrice"></v-text-field>
+                    <v-textarea name="input-7-1"
+                                filled
+                                v-model="item.description"
+                                label="Opis"
+                                auto-grow
+                                value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."></v-textarea>
 
-                <v-textarea name="input-7-1"
-                            filled
-                            v-model="item.description"
-                            label="Opis"
-                            auto-grow
-                            value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."></v-textarea>
+                    <v-text-field label="Ilość sztuk"
+                                  type="'number'"
+                                  v-model="item.count"></v-text-field>
 
-                <v-text-field label="Ilość sztuk"
-                              type="'number'"
-                              v-model="item.count"></v-text-field>
+                    <v-file-input :rules="imageRules"
+                                  accept="image/png, image/jpeg, image/bmp"
+                                  :placeholder="imagePlaceHolder()"
+                                  @click:clear="onImagesClear"
+                                  hide-input
+                                  update:error="onImagesupdateError"
+                                  @change="onFilePicked"
+                                  multiple
+                                  prepend-icon="mdi-camera"
+                                  label="Obrazy">
+                    </v-file-input>
 
-                <v-file-input :rules="imageRules"
-                              accept="image/png, image/jpeg, image/bmp"
-                              :placeholder="imagePlaceHolder()"
-                              @click:clear="onImagesClear"
-                              hide-input
-                              update:error="onImagesupdateError"
-                              @change="onFilePicked"
-                              multiple
-                              prepend-icon="mdi-camera"
-                              label="Obrazy">
-                </v-file-input>
-                <v-row>
-                    <v-col v-for="image in item.images"
-                           :key="image.url"
-                           class="d-flex child-flex"
-                           cols="3">
-                        <v-card flat tile class="d-flex">
-                            <v-img :src="image.url"
-                                   :lazy-src="image.url"
-                                   aspect-ratio="1"
-                                   class="grey lighten-2">
-                                <template v-slot:placeholder>
-                                    <v-row class="fill-height ma-0"
-                                           align="center"
-                                           justify="center">
-                                        <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
-                                    </v-row>
-                                </template>
+                    <v-row>
+                        <v-col v-for="image in item.images"
+                               :key="image.url"
+                               class="d-flex child-flex"
+                               cols="3">
+                            <v-card flat tile class="d-flex">
+                                <v-img :src="image.url"
+                                       :lazy-src="image.url"
+                                       aspect-ratio="1"
+                                       class="grey lighten-2">
+                                    <template v-slot:placeholder>
+                                        <v-row class="fill-height ma-0"
+                                               align="center"
+                                               justify="center">
+                                            <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
+                                        </v-row>
+                                    </template>
 
-                                <template v-slot:default>
-                                    <v-row class=" d-flex flex-row-reverse fill-height ma-0">
+                                    <template v-slot:default>
+                                        <v-row class=" d-flex flex-row-reverse fill-height ma-0">
+                                            <v-btn v-on:click="deleteImage(image)" class="mr-1" icon color="grey">
+                                                <v-icon>mdi-close</v-icon>
+                                            </v-btn>
+                                        </v-row>
+                                    </template>
+                                </v-img>
+                            </v-card>
+                        </v-col>
+                    </v-row>
 
-                                        <v-btn v-on:click="deleteImage(image)" class="mr-1" icon color="grey">
-                                            <v-icon>mdi-close</v-icon>
-                                        </v-btn>
-                                    </v-row>
-                                </template>
-                            </v-img>
+
+                    <v-row>
+                       
+                        <v-card flat width="100%" @click="ShowParentCategoryDialog = true">
+                            <label class="v-label v-label--active theme--light" style="left: 0px; right: auto; position: absolute;">Kategorie produktu</label>
+                            <br/>
+                            <v-row>
+                                <v-chip class="ma-2" v-for="prodCat in productCategoryNames">
+                                    {{prodCat}}
+                                </v-chip>
+                            </v-row>
+                            <v-divider></v-divider>
                         </v-card>
-                    </v-col>
-                </v-row>
-            </v-card-text>
+                    </v-row>
 
-            <v-card max-height="400" class="overflow-y-auto">
+                </v-card-text>
+
+
+
+                <!--<v-text-field label="Kategorie produktu" readonly
+                              v-model="ProductCategoryNames"
+                              @click="ShowParentCategoryDialog = true"
+                              :clearable="true"
+                              @click:clear="onParentCategoryDelete()">
+
+                </v-text-field>-->
+
                 <v-card-title class=" grey lighten-2">
                     Opcje dostawy
                 </v-card-title>
-                <v-card-text>
-                    <v-row v-for="sdm in selectDeliveryMethods">
-                        <v-col>
-                            <v-switch v-model="sdm.isSelected"
-                                      :label="sdm.item.delivery.name"></v-switch>
-                        </v-col>
-                        <v-col>
-                            <v-text-field label="Cena"
-                                          type="'number'"
-                                          :disabled="!sdm.isSelected"
-                                          v-model="sdm.item.price"></v-text-field>
-                        </v-col>
-                        <v-col>
-                            <v-text-field label="Max w paczce"
-                                          type="'number'"
-                                          :disabled="!sdm.isSelected"
-                                          v-model="sdm.item.maxCountInPackage"></v-text-field>
-                        </v-col>
-                    </v-row>
-                </v-card-text>
+                <v-card max-height="400" class="overflow-y-auto">
+
+                    <v-card-text>
+                        <v-row v-for="sdm in selectDeliveryMethods">
+                            <v-col>
+                                <v-switch v-model="sdm.isSelected"
+                                          :label="sdm.item.delivery.name"></v-switch>
+                            </v-col>
+                            <v-col>
+                                <v-text-field label="Cena"
+                                              type="'number'"
+                                              :disabled="!sdm.isSelected"
+                                              v-model="sdm.item.price"></v-text-field>
+                            </v-col>
+                            <v-col>
+                                <v-text-field label="Max w paczce"
+                                              type="'number'"
+                                              :disabled="!sdm.isSelected"
+                                              v-model="sdm.item.maxCountInPackage"></v-text-field>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                </v-card>
+
+
+                <v-divider></v-divider>
+
+                <v-card-actions>
+                    <v-btn color="primary"
+                           text
+                           @click="closeDialog()">
+                        Anuluj
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn color="primary"
+                           text
+                           @click="save()">
+                        Zapisz
+                    </v-btn>
+                </v-card-actions>
             </v-card>
+        </v-dialog>
 
-            <v-divider></v-divider>
 
-            <v-card-actions>
-                <v-btn color="primary"
-                       text
-                       @click="closeDialog()">
-                    Anuluj
-                </v-btn>
-                <v-spacer></v-spacer>
-                <v-btn color="primary"
-                       text
-                       @click="save()">
-                    Zapisz
-                </v-btn>
-            </v-card-actions>
-        </v-card>
+        <!--<v-dialog scrollable v-model="showProductCategoryDialog" width="500">
+            <v-card>
+                <v-card-title class="headline grey lighten-2" primary-title> Wybierz kategorię </v-card-title>
+                <v-card-text>
+                    <v-treeview :items="Categories"
+                                item-children="subCategories"
+                                item-key="id"
+                                item-text="name">
 
-    </v-dialog>
+                        <template v-slot:label="{ item }">
+                            {{item.name}}
+
+
+                            <v-btn x-small class="button-mini" color="blue lighten-2" fab dark
+                                   title="Wybierz"
+                                   elevation="0"
+                                   v-on:click="setParentCategory(item)">
+                            </v-btn>
+                        </template>
+                    </v-treeview>
+                </v-card-text>
+                <v-card-actions>
+                    <v-btn color="primary"
+                           text
+                           @click="showProductCategoryDialog = false">
+                        Anuluj
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>-->
+    </div>
 </template>
 
 
 <script lang="ts">
     import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
-    import { SelectItem, Content, SelectModel } from '@/store/models';
-    import { Product, ProductDeliveryMethod, DeliveryMethod } from '@/store/modelsData';
+    import { Content, SelectModel, TreeSelectModel } from '@/store/models';
+    import { Product, ProductDeliveryMethod } from '@/store/modelsData';
     import { productService, deliveryMehodService } from "@/store/api";
     @Component
     export default class ProductEditor extends Vue {
@@ -138,23 +199,25 @@
             }) || 'Rozmiar obrazu powinien być poniżej 2 MB!',
         ];
 
-        // public ShowParentCategoryDialog = false;
+        private showProductCategoryDialog = false;
+        private productCategoryNames = ["name1", "name2"];
+
+
         private item: Product = this.getEmptyProduct();
         public show = this.isShow;
-        public selectDeliveryMethods = new Array<SelectModel<ProductDeliveryMethod>>();    
+        public selectDeliveryMethods = new Array<SelectModel<ProductDeliveryMethod>>();
 
         async created() {
             this.selectDeliveryMethods = await this.getDeliveryMethods();
         }
 
 
-        async  save() {
+        async save() {
 
             let selectedDeliveryMethods = new Array<ProductDeliveryMethod>();
             this.selectDeliveryMethods.forEach((select) => {
-                if (select.isSelected && select.item != null)
-                {
-                        selectedDeliveryMethods.push(select.item);    
+                if (select.isSelected && select.item != null) {
+                    selectedDeliveryMethods.push(select.item);
                 }
             })
 
@@ -220,7 +283,7 @@
             let self = this;
 
             files.forEach(file => {
-                let image = self.getEmptyImage();
+                const image = self.getEmptyImage();
 
                 if (file !== undefined) {
                     image.name = file.name
@@ -237,7 +300,7 @@
                         self.item.images.forEach(image => {
 
                             if (image.name === file.name) {
-                                var index = self.item.images.indexOf(image);
+                                let index = self.item.images.indexOf(image);
                                 if (index !== -1) self.item.images.splice(index, 1);
                             }
 
@@ -282,7 +345,7 @@
 
         // dialog ma możliwość lokalnej zmiany property
         @Watch('show')
-        async  onPropertyShowChanged(value: boolean, oldValue: boolean) {
+        async onPropertyShowChanged(value: boolean, oldValue: boolean) {
             if (value == false) {
                 this.closeDialog();
             }
@@ -320,7 +383,7 @@
         }
 
         @Watch('productId')
-        async      onPropertyCategoryIdChanged(value: number, oldValue: number) {
+        async onPropertyCategoryIdChanged(value: number, oldValue: number) {
             await this.loadItem();
         }
 

@@ -4,6 +4,12 @@ export interface SelectModel<T>{
     isSelected: boolean;
 }
 
+export interface TreeSelectModel<T> {
+    item: T | null;
+    isSelected: boolean;
+    children: Array<TreeSelectModel<T>> | null;
+}
+
 
 export interface SelectItem<T> {
     Value:T,
