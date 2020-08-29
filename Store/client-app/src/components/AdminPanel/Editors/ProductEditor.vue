@@ -77,7 +77,7 @@
 
                     <v-row>
                        
-                        <v-card flat width="100%" @click="ShowParentCategoryDialog = true">
+                        <v-card flat width="100%" @click="showProductCategoryDialog = true">
                             <label class="v-label v-label--active theme--light" style="left: 0px; right: auto; position: absolute;">Kategorie produktu</label>
                             <br/>
                             <v-row>
@@ -148,24 +148,29 @@
         </v-dialog>
 
 
-        <!--<v-dialog scrollable v-model="showProductCategoryDialog" width="500">
+        <v-dialog scrollable v-model="showProductCategoryDialog" width="600">
             <v-card>
                 <v-card-title class="headline grey lighten-2" primary-title> Wybierz kategorię </v-card-title>
                 <v-card-text>
-                    <v-treeview :items="Categories"
-                                item-children="subCategories"
-                                item-key="id"
-                                item-text="name">
+                    <v-treeview :items="treeSelectCategory"
+                                item-children="children"
+                                item-key="item.id"
+                                item-text="item.name">
 
                         <template v-slot:label="{ item }">
-                            {{item.name}}
+                          
+                            <div  style="padding-left:20px; margin-top:-12px">
 
 
-                            <v-btn x-small class="button-mini" color="blue lighten-2" fab dark
-                                   title="Wybierz"
-                                   elevation="0"
-                                   v-on:click="setParentCategory(item)">
-                            </v-btn>
+                                <v-switch  v-on:click="manageProductCategory(item.isSelected, item)"  style="display:inline; margin-left:10px" x-small v-model="item.isSelected"
+                                          :label="item.item.name"></v-switch>
+                            </div>
+
+                            <!--<v-btn x-small class="button-mini" color="blue lighten-2" fab dark
+           title="Wybierz"
+           elevation="0"
+           v-on:click="setParentCategory(item)">
+    </v-btn>-->
                         </template>
                     </v-treeview>
                 </v-card-text>
@@ -178,7 +183,7 @@
                     <v-spacer></v-spacer>
                 </v-card-actions>
             </v-card>
-        </v-dialog>-->
+        </v-dialog>
     </div>
 </template>
 
@@ -186,8 +191,8 @@
 <script lang="ts">
     import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
     import { Content, SelectModel, TreeSelectModel } from '@/store/models';
-    import { Product, ProductDeliveryMethod } from '@/store/modelsData';
-    import { productService, deliveryMehodService } from "@/store/api";
+    import { Product, ProductDeliveryMethod, Category } from '@/store/modelsData';
+    import { productService, deliveryMehodService, categoryService } from "@/store/api";
     @Component
     export default class ProductEditor extends Vue {
         private msg!: string;
@@ -206,11 +211,16 @@
         private item: Product = this.getEmptyProduct();
         public show = this.isShow;
         public selectDeliveryMethods = new Array<SelectModel<ProductDeliveryMethod>>();
+        public treeSelectCategory = new Array<TreeSelectModel<Category>>();
 
         async created() {
             this.selectDeliveryMethods = await this.getDeliveryMethods();
         }
 
+        manageProductCategory(isSelected :boolean, item :TreeSelectModel<Category>) {
+            console.log(isSelected);
+            console.log(item);
+        }
 
         async save() {
 
@@ -343,6 +353,34 @@
             return selectDeliveryMethods
         }
 
+
+        async LoadTree() {
+            const categories = await categoryService.Tree()
+            this.treeSelectCategory = this.buildTreeSelectModel(categories);
+        }
+
+        buildTreeSelectModel(categories: Array<Category|undefined>): Array<TreeSelectModel<Category>> {
+
+            let treeSelect: Array<TreeSelectModel<Category>> = new  Array<TreeSelectModel <Category>>();
+
+          
+            categories.forEach((cat) => {
+                if (cat != undefined && cat !== null) { 
+                let treeSelectViewModel: TreeSelectModel<Category> = {
+                    item : cat,
+                    isSelected :false,
+                    children : this.buildTreeSelectModel(cat.subCategories),
+
+                    };
+                    treeSelect.push(treeSelectViewModel);
+                }
+            });
+
+            return treeSelect;
+        }
+
+
+
         // dialog ma możliwość lokalnej zmiany property
         @Watch('show')
         async onPropertyShowChanged(value: boolean, oldValue: boolean) {
@@ -350,6 +388,7 @@
                 this.closeDialog();
             }
             else {
+                this.LoadTree();
                 let prodDelMethods = await this.getDeliveryMethods();
                 if (this.productId !== 0) {
 
