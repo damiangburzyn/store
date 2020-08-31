@@ -32,6 +32,21 @@ export class DeliveryMethod {
 
 }
 
+export class ProductCategory {
+    id: number;   
+    categoryId: number;
+    productId: number;
+    category: Category | null;
+    product: Product | null;
+    constructor() {
+        this.id = 0;
+        this.productId = 0;
+        this.categoryId = 0;
+        this.category = null;
+        this.product = null;
+    }
+}
+
 export class Product {
     id: number ;   
     isBestseller: boolean;
@@ -43,6 +58,7 @@ export class Product {
     images: Array<Content> = [];
     movies: Array<Content> = [];
     deliveryMethods: Array<ProductDeliveryMethod> = [];
+    productCategories: Array<ProductCategory> = [];
     constructor() {
         this.id = 0;
         this.isBestseller = false;

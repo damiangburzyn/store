@@ -22,7 +22,7 @@ namespace Store.Data.EF.Entities
         public long[] ConnectedProdIds { get; set; }
         public IList<ProductFile> ProductFiles { get; } = new List<ProductFile>();
         public ICollection<ProductCategory> ProductCategories { get; } = new List<ProductCategory>();
-        public IEnumerable<Category> Categories => ProductCategories.Select(e => e.Category);
+
         private IEnumerable<Category> _categories;
         public void StoreCategories(IEnumerable<Category> categories)
         {

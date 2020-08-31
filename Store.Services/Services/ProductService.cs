@@ -59,20 +59,31 @@ namespace Store.Services
 
         public override async Task<Product> Update(Product entity)
         {
-        //    if (entity.ParentCategory != null)
-        //    {
-        //        entity.ParentCategory = null;
-        //    }
-            //if (entity.Name_Translation != null)
-            //{
-            //    Repository.Attach(entity.Name_Translation, EntityState.Modified);
-
-            //    if (entity.Name_Translation.Values != null && entity.Name_Translation.Values.Count > 0)
+            //    if (entity.ParentCategory != null)
             //    {
-            //        foreach (var val in entity.Name_Translation.Values)
-            //            Repository.Attach(val, EntityState.Modified);
+            //        entity.ParentCategory = null;
             //    }
-            //}
+            if (entity.ProductCategories != null)
+            {
+                foreach (var item in entity.ProductCategories)
+                {
+                    if (item != null )
+                      
+                            Repository.Attach(item, EntityState.Modified);
+                    }
+                      
+            }
+
+            if (entity.DeliveryMethods != null)
+            {
+                foreach (var item in entity.DeliveryMethods)
+                {
+                    if (item != null)
+
+                        Repository.Attach(item, EntityState.Modified);
+                }
+
+            }
             Repository.Update(entity);
             await Repository.SaveChangesAsync();
             return entity;

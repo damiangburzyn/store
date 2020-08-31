@@ -76,10 +76,10 @@
 
 
                     <v-row>
-                       
+
                         <v-card flat width="100%" @click="showProductCategoryDialog = true">
                             <label class="v-label v-label--active theme--light" style="left: 0px; right: auto; position: absolute;">Kategorie produktu</label>
-                            <br/>
+                            <br />
                             <v-row>
                                 <v-chip class="ma-2" v-for="prodCat in productCategoryNames">
                                     {{prodCat}}
@@ -157,20 +157,19 @@
                                 item-key="item.id"
                                 item-text="item.name">
 
-                        <template v-slot:label="{ item }">
-                          
-                            <div  style="padding-left:20px; margin-top:-12px">
+                        <template v-slot:prepend="{ item }">
 
+                            <div style="padding-left:20px; margin-top:-12px">
+                                <!--v-on:click="manageProductCategories(item.isSelected, item)"-->
 
-                                <v-switch  v-on:click="manageProductCategory(item.isSelected, item)"  style="display:inline; margin-left:10px" x-small v-model="item.isSelected"
-                                          :label="item.item.name"></v-switch>
+                                <v-switch @click.native="manageProductCategories(item)" style="display:inline; margin-left:10px" x-small v-model="item.isSelected"></v-switch>
                             </div>
 
                             <!--<v-btn x-small class="button-mini" color="blue lighten-2" fab dark
-           title="Wybierz"
-           elevation="0"
-           v-on:click="setParentCategory(item)">
-    </v-btn>-->
+                                   title="Wybierz"
+                                   elevation="0"
+                                   v-on:click="setParentCategory(item)">
+                            </v-btn>-->
                         </template>
                     </v-treeview>
                 </v-card-text>
@@ -191,7 +190,7 @@
 <script lang="ts">
     import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
     import { Content, SelectModel, TreeSelectModel } from '@/store/models';
-    import { Product, ProductDeliveryMethod, Category } from '@/store/modelsData';
+    import { Product, ProductDeliveryMethod, Category, ProductCategory } from '@/store/modelsData';
     import { productService, deliveryMehodService, categoryService } from "@/store/api";
     @Component
     export default class ProductEditor extends Vue {
@@ -205,7 +204,7 @@
         ];
 
         private showProductCategoryDialog = false;
-        private productCategoryNames = ["name1", "name2"];
+        private productCategoryNames:string[] = [];
 
 
         private item: Product = this.getEmptyProduct();
@@ -217,9 +216,40 @@
             this.selectDeliveryMethods = await this.getDeliveryMethods();
         }
 
-        manageProductCategory(isSelected :boolean, item :TreeSelectModel<Category>) {
-            console.log(isSelected);
-            console.log(item);
+       // manageProductCategory(isSelected: boolean, treeSelect: TreeSelectModel<Category>) {
+        manageProductCategories(treeSelect: TreeSelectModel<Category>) {
+            alert(name);
+
+            //if (isSelected && treeSelect.item !== null) {
+            //    let pc = new ProductCategory();
+            //    pc.categoryId = treeSelect.item.id;
+            //    pc.productId = this.item.id;
+            //    this.item.productCategories.push(pc);
+            //    this.productCategoryNames.push(treeSelect.item.name);
+
+            //}
+
+                let pc = this.item.productCategories.find(x => x.categoryId === treeSelect.item?.id);
+                let pcName :string | undefined = this.productCategoryNames.find(n => n === treeSelect.item?.name);
+            if (pc !== undefined && pc !== null) {
+                this.item.productCategories.splice(this.item.productCategories.indexOf(pc), 1);
+            }
+            else {
+                pc = new ProductCategory();
+                pc.categoryId = treeSelect.item?.id ?? 0;
+                pc.productId = this.item.id;
+                this.item.productCategories.push(pc);
+            }
+
+            if (pcName !== undefined && pcName !== null) {
+                this.productCategoryNames.splice(this.productCategoryNames.indexOf(pcName), 1);
+            }
+            else {
+                let d = treeSelect?.item?.name ?? '';
+                this.productCategoryNames.push(d);
+            }
+    
+
         }
 
         async save() {
@@ -359,17 +389,17 @@
             this.treeSelectCategory = this.buildTreeSelectModel(categories);
         }
 
-        buildTreeSelectModel(categories: Array<Category|undefined>): Array<TreeSelectModel<Category>> {
+        buildTreeSelectModel(categories: Array<Category | undefined>): Array<TreeSelectModel<Category>> {
 
-            let treeSelect: Array<TreeSelectModel<Category>> = new  Array<TreeSelectModel <Category>>();
+            let treeSelect: Array<TreeSelectModel<Category>> = new Array<TreeSelectModel<Category>>();
 
-          
+
             categories.forEach((cat) => {
-                if (cat != undefined && cat !== null) { 
-                let treeSelectViewModel: TreeSelectModel<Category> = {
-                    item : cat,
-                    isSelected :false,
-                    children : this.buildTreeSelectModel(cat.subCategories),
+                if (cat != undefined && cat !== null) {
+                    let treeSelectViewModel: TreeSelectModel<Category> = {
+                        item: cat,
+                        isSelected: false,
+                        children: this.buildTreeSelectModel(cat.subCategories),
 
                     };
                     treeSelect.push(treeSelectViewModel);

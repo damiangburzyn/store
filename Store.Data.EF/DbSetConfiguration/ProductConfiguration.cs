@@ -20,7 +20,6 @@ namespace Store.Data.EF.DbSetConfiguration
                 .HasConversion(v => string.Join(",", v),
                     v => Array.ConvertAll(v.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries), long.Parse));
 
-            entityBuilder.Ignore(x => x.Categories);
         }
     }
 }
