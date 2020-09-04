@@ -65,7 +65,7 @@ namespace GC5.Application.AutoMapper
                 .ForMember(a=>a.Products, opt=> opt.Ignore())
                     .ForMember(a => a.Logo, opt => opt.MapFrom(s => new ContentViewModel() { Name = s.Logo }))
                     .ForMember(a => a.SubCategories, opt => opt.Ignore())
-                    .ForMember(a => a.ParentCategory, opt => opt.Ignore())
+                    .ForMember(a => a.ParentCategory, opt => opt.Ignore())                   
                   .AfterMap((s, d) =>
                   {
 
@@ -78,7 +78,9 @@ namespace GC5.Application.AutoMapper
                           };
                       }
                   })
-                    .ReverseMap().ForMember(a => a.Logo, opt => opt.MapFrom(s => s.Logo.Name ?? null))
+                    .ReverseMap()
+                    .ForMember(a => a.Logo, opt => opt.MapFrom(s => s.Logo.Name ?? null))
+                    .ForMember(a=>a.Products, opt=> opt.Ignore())
                     ;
 
                 x.CreateMap<GalleryImage, GalleryImageViewModel>()
@@ -114,6 +116,7 @@ namespace GC5.Application.AutoMapper
                     .ReverseMap()
                       .ForMember(a => a.Images, opt => opt.Ignore())
                       .ForMember(a => a.ProductFiles, opt => opt.Ignore())
+                      .ForMember(a=>a.DeliveryMethods, opt=> opt.MapFrom(s=>s.DeliveryMethods))
                     .AfterMap((s, d) =>
                     {
 

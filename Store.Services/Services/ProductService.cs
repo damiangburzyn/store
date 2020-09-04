@@ -14,24 +14,24 @@ namespace Store.Services
     public class ProductService : BaseService<Product>, IProductService
     {
         //protected readonly ICategoriesRepository categoriesRepository;
-        public ProductService(           
+        public ProductService(
             IRepository repository)
             : base(repository)
         {
-          //  categoriesRepository = cRepository;
+            //  categoriesRepository = cRepository;
         }
 
         public override async Task<Product> GetById(long id, Func<IQueryable<Product>, IQueryable<Product>> includeAction = null)
         {
             var images = await Repository.Find<GalleryImage>(x => x.ProductId == id);
-            var res =   await  Repository.GetById<Product>(id, includeAction);
+            var res = await Repository.GetById<Product>(id, includeAction);
             res.Images = images.ToList();
             return res;
         }
 
         public async Task<ICollection<Category>> MainCategories()
         {
-            var cat =  await Repository.Find<Category>(predicate: (a) => a.ParentCategoryId == null);
+            var cat = await Repository.Find<Category>(predicate: (a) => a.ParentCategoryId == null);
             return cat;
         }
 
@@ -55,35 +55,78 @@ namespace Store.Services
             await Repository.SaveChangesAsync();
         }
 
-      
+
 
         public override async Task<Product> Update(Product entity)
         {
-            //    if (entity.ParentCategory != null)
-            //    {
-            //        entity.ParentCategory = null;
-            //    }
-            if (entity.ProductCategories != null)
+
+            var actualpc = new List<ProductCategory>();
+            foreach (var item in entity.ProductCategories)
             {
-                foreach (var item in entity.ProductCategories)
-                {
-                    if (item != null )
-                      
-                            Repository.Attach(item, EntityState.Modified);
-                    }
-                      
+                actualpc.Add(item);
             }
 
-            if (entity.DeliveryMethods != null)
+            var pcFetched = await Repository.GetAll<ProductCategory>(pc => pc.Where(pcc => pcc.ProductId == entity.Id));
+            //remove unused
+            var pcToDelete = pcFetched.Where(a => !actualpc.Any(n => n.ProductId == a.ProductId && n.CategoryId == a.CategoryId)).ToList();
+            if (pcToDelete != null)
             {
-                foreach (var item in entity.DeliveryMethods)
+                foreach (var item in pcToDelete)
                 {
-                    if (item != null)
-
-                        Repository.Attach(item, EntityState.Modified);
+                    //Repository.Attach(item, EntityState.Deleted);
                 }
-
+                Repository.RemoveBatch(pcToDelete);
             }
+            pcFetched = pcFetched.Where(a => actualpc.Any(n => n.ProductId == a.ProductId && n.CategoryId == a.CategoryId)).ToList();
+            foreach (var item in entity.ProductCategories)
+            {
+                if (!pcFetched.Any(a => a.ProductId == item.ProductId && a.CategoryId == item.CategoryId))
+                {
+                    pcFetched.Add(item);
+                }
+            }
+            entity.ProductCategories = pcFetched;
+
+
+            var actualdm = new List<ProductDeliveryMethod>();
+            foreach (var item in entity.DeliveryMethods)
+            {
+                actualdm.Add(item);
+            }
+
+
+            var dmFetched = await Repository.GetAll<ProductDeliveryMethod>(pd => pd.Where(pdm => pdm.ProductId == entity.Id));
+            var dmToDelete = dmFetched.Where(a => !actualdm.Any(n => n.ProductId == a.ProductId && n.DeliveryId == a.DeliveryId)).ToList();
+            if (dmToDelete != null)
+            {
+                foreach (var item in dmToDelete)
+                {
+                  
+                  //  Repository.Attach(item, EntityState.Deleted);
+                }
+              Repository.RemoveBatch(dmToDelete);
+            }
+            dmFetched = dmFetched.Where(a => actualdm.Any(n => n.ProductId == a.ProductId && n.DeliveryId == a.DeliveryId)).ToList();
+            foreach (var item in entity.DeliveryMethods)
+            {
+                var existing = dmFetched.FirstOrDefault(a => a.ProductId == item.ProductId && a.DeliveryId == item.DeliveryId);
+
+                if (existing != null)
+                {
+                    existing.MaxCountInPackage = item.MaxCountInPackage;
+                    existing.Price = item.Price;
+                   // Repository.Attach(existing, EntityState.Modified);
+                }
+                else
+                {
+                    dmFetched.Add(item);
+                    //Repository.Attach(item, EntityState.Added);
+                }
+            }
+
+            entity.DeliveryMethods = dmFetched;
+
+
             Repository.Update(entity);
             await Repository.SaveChangesAsync();
             return entity;

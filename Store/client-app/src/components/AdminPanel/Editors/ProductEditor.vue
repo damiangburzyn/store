@@ -150,7 +150,7 @@
 
         <v-dialog scrollable v-model="showProductCategoryDialog" width="600">
             <v-card>
-                <v-card-title class="headline grey lighten-2" primary-title> Wybierz kategorię </v-card-title>
+                <v-card-title class="headline grey lighten-2" primary-title> Wybierz kategorie </v-card-title>
                 <v-card-text>
                     <v-treeview :items="treeSelectCategory"
                                 item-children="children"
@@ -164,7 +164,6 @@
 
                                 <v-switch @click.native="manageProductCategories(item)" style="display:inline; margin-left:10px" x-small v-model="item.isSelected"></v-switch>
                             </div>
-
                             <!--<v-btn x-small class="button-mini" color="blue lighten-2" fab dark
                                    title="Wybierz"
                                    elevation="0"
@@ -173,12 +172,14 @@
                         </template>
                     </v-treeview>
                 </v-card-text>
-                <v-card-actions>
+                <v-card-actions>                 
+                    <v-spacer></v-spacer>
                     <v-btn color="primary"
                            text
                            @click="showProductCategoryDialog = false">
-                        Anuluj
+                        Zamknij
                     </v-btn>
+
                     <v-spacer></v-spacer>
                 </v-card-actions>
             </v-card>
@@ -204,7 +205,7 @@
         ];
 
         private showProductCategoryDialog = false;
-        private productCategoryNames:string[] = [];
+        private productCategoryNames: string[] = [];
 
 
         private item: Product = this.getEmptyProduct();
@@ -213,24 +214,13 @@
         public treeSelectCategory = new Array<TreeSelectModel<Category>>();
 
         async created() {
-            this.selectDeliveryMethods = await this.getDeliveryMethods();
+           
         }
 
-       // manageProductCategory(isSelected: boolean, treeSelect: TreeSelectModel<Category>) {
+        // manageProductCategory(isSelected: boolean, treeSelect: TreeSelectModel<Category>) {
         manageProductCategories(treeSelect: TreeSelectModel<Category>) {
-            alert(name);
-
-            //if (isSelected && treeSelect.item !== null) {
-            //    let pc = new ProductCategory();
-            //    pc.categoryId = treeSelect.item.id;
-            //    pc.productId = this.item.id;
-            //    this.item.productCategories.push(pc);
-            //    this.productCategoryNames.push(treeSelect.item.name);
-
-            //}
-
-                let pc = this.item.productCategories.find(x => x.categoryId === treeSelect.item?.id);
-                let pcName :string | undefined = this.productCategoryNames.find(n => n === treeSelect.item?.name);
+            let pc = this.item.productCategories.find(x => x.categoryId === treeSelect.item?.id);
+            let pcName: string | undefined = this.productCategoryNames.find(n => n === treeSelect.item?.name);
             if (pc !== undefined && pc !== null) {
                 this.item.productCategories.splice(this.item.productCategories.indexOf(pc), 1);
             }
@@ -248,7 +238,7 @@
                 let d = treeSelect?.item?.name ?? '';
                 this.productCategoryNames.push(d);
             }
-    
+
 
         }
 
@@ -281,12 +271,42 @@
 
             if (this.productId == 0) {
                 this.item = this.getEmptyProduct();
-
+                this.productCategoryNames = [];
+                this.selectDeliveryMethods = await this.getDeliveryMethods();
+                await this.loadTree();
             }
             else {
 
                 var data = await productService.get(this.productId);
                 this.item = data;
+
+
+               
+                    await this.loadTree();
+                    let prodDelMethods = await this.getDeliveryMethods();
+                    if (this.productId !== 0) {
+
+                        this.item.deliveryMethods.forEach(dm => {
+
+                            prodDelMethods.forEach(pdm => {
+
+                                if (pdm.item?.deliveryId === dm.deliveryId) {
+
+                                    pdm.isSelected = true;
+                                    pdm.item.id = dm.id;
+                                    pdm.item.maxCountInPackage = dm.maxCountInPackage;
+                                    pdm.item.price = dm.price;
+                                }
+                            })
+
+                        })
+                    }
+
+                    this.selectDeliveryMethods = prodDelMethods;
+                
+
+
+
             }
         }
 
@@ -384,7 +404,7 @@
         }
 
 
-        async LoadTree() {
+        async loadTree() {
             const categories = await categoryService.Tree()
             this.treeSelectCategory = this.buildTreeSelectModel(categories);
         }
@@ -395,10 +415,16 @@
 
 
             categories.forEach((cat) => {
-                if (cat != undefined && cat !== null) {
+                if (cat !== undefined && cat !== null) {
+
+                    let selecteCat = this.item.productCategories.find(a => a.categoryId == cat.id);
+
+                    if (selecteCat !== undefined) {
+                        this.productCategoryNames.push(selecteCat.category?.name ?? '');
+                    }
                     let treeSelectViewModel: TreeSelectModel<Category> = {
                         item: cat,
-                        isSelected: false,
+                        isSelected: selecteCat !== undefined,
                         children: this.buildTreeSelectModel(cat.subCategories),
 
                     };
@@ -418,25 +444,7 @@
                 this.closeDialog();
             }
             else {
-                this.LoadTree();
-                let prodDelMethods = await this.getDeliveryMethods();
-                if (this.productId !== 0) {
-
-                    this.item.deliveryMethods.forEach(dm => {
-
-                        prodDelMethods.forEach(pdm => {
-
-                            if (pdm.item?.deliveryId === dm.deliveryId) {
-
-                                pdm.isSelected = true;
-                                pdm.item.id = dm.id;
-                            }
-                        })
-
-                    })
-                }
-
-                this.selectDeliveryMethods = prodDelMethods;
+   
             }
         }
 
@@ -454,6 +462,7 @@
         @Watch('productId')
         async onPropertyCategoryIdChanged(value: number, oldValue: number) {
             await this.loadItem();
+          
         }
 
         get currentTitle() {

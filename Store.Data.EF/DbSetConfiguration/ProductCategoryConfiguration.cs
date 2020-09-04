@@ -11,10 +11,6 @@ namespace Store.Data.EF.DbSetConfiguration
         {
             entityBuilder.AddBaseEntityBuilder();
 
-            entityBuilder.HasKey(c => c.Id);
-
-            entityBuilder.Property(c => c.Id)
-                  .ValueGeneratedNever();
 
             entityBuilder.HasIndex(pc => new { pc.CategoryId, pc.ProductId });
 

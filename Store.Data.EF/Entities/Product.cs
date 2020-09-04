@@ -21,7 +21,7 @@ namespace Store.Data.EF.Entities
         public virtual ICollection<ProductDeliveryMethod> DeliveryMethods { get; set; }        
         public long[] ConnectedProdIds { get; set; }
         public IList<ProductFile> ProductFiles { get; } = new List<ProductFile>();
-        public ICollection<ProductCategory> ProductCategories { get; } = new List<ProductCategory>();
+        public ICollection<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();
 
         private IEnumerable<Category> _categories;
         public void StoreCategories(IEnumerable<Category> categories)

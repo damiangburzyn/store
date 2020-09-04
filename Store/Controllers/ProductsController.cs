@@ -12,6 +12,7 @@ using Store.Services;
 using Store.Contracts.ViewModel;
 using Store.Data.EF.Entities;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 
 namespace Store.Controllers
 {
@@ -122,6 +123,33 @@ namespace Store.Controllers
                 return Ok(vm);
             });
         }
+
+
+
+        [HttpGet("{id}")]
+        public override async Task<ActionResult<ProductViewModel>> Get(long id)
+        {
+            Func<Task<ActionResult>> func = async () =>
+            {
+                Func<IQueryable<Product>, IQueryable<Product>> includeAction = x => x.Include(a => a.ProductCategories).ThenInclude(b => b.Category).Include(a => a.DeliveryMethods).ThenInclude(d => d.Delivery);
+
+                var result = await _service.GetById(id, includeAction);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+
+                var vm = Mapper.Map<ProductViewModel>(result);
+                return Ok(vm);
+            };
+
+            return await this.WrapExceptionAsync(async () =>
+            {
+                return await func();
+            });
+
+        }
+
 
     }
 }
