@@ -68,7 +68,7 @@
     export default class App extends Vue {
 
         async  beforeCreate() {
-            await users.getProfile();
+          //  await users.getProfile();
         }
 
     }

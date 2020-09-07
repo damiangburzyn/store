@@ -179,19 +179,19 @@
         }
 
         onFilePicked(file: File) {
-            const self = this;
-            self.Item.logo = self.getEmptyLogo();
+          
+            this.Item.logo = this.getEmptyLogo();
 
             if (file !== undefined) {
-                self.Item.logo.name = file.name
+                this.Item.logo.name = file.name
                 if (this.Item.logo.name.lastIndexOf('.') <= 0) {
                     return
                 }
                 const fr = new FileReader()
                 fr.readAsDataURL(file)
                 fr.addEventListener('load', () => {
-                    self.Item.logo.data = fr.result as string || '';
-                    self.Item.logo.url = URL.createObjectURL(file);  // this is an image file that can be sent to server...
+                    this.Item.logo.data = fr.result as string || '';
+                    this.Item.logo.url = URL.createObjectURL(file);  // this is an image file that can be sent to server...
                     //console.log(e);
                 })
             } else {

@@ -78,7 +78,7 @@ export default class DeliveryMethods extends Vue {
         { text: 'Opis', value: 'description', sortable: false },
         { text: 'Actions', value: 'actions', sortable: false },
     ];
-    queryString: string = '';
+    queryString = '';
     tableProps = {
         rowsPerPage: 10,
         pageNo: 1,

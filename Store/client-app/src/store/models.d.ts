@@ -34,7 +34,7 @@ export interface Profile {
     firstName?: string  ;
     lastName?: string ;
     userName: string;
-    token: string; 
+    //token: string; 
     roles?: Array<string>;    
 }
 

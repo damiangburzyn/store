@@ -73,7 +73,7 @@
                     Panel Administratora
                 </v-btn>
                 
-                <v-btn v-if="username" >
+                <v-btn v-if="username"  v-on:click="logout">
                   Wyloguj: {{username}}
                 </v-btn>
             </v-btn-toggle>
@@ -156,6 +156,9 @@ export default class AppNavbar extends Vue {
     }
     get isAdmin() {
         return users.isAdmin;
+    }
+    logout() {
+        users.logOut();
     }
 }
 </script>

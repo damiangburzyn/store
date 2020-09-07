@@ -86,12 +86,13 @@ var ApiBase = /** @class */ (function () {
     };
     return ApiBase;
 }());
-export function setJWT(token) {
-    api.defaults.headers.common['Authorization'] = "Bearer " + token;
-}
-export function clearJWT() {
-    delete api.defaults.headers.common['Authorization'];
-}
+//now jwt stored in httponly cookie
+//export function setJWT(token: string) {
+//    api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+//}
+//export function clearJWT() {
+//    delete api.defaults.headers.common['Authorization']
+//}
 export function getProfile() {
     return __awaiter(this, void 0, void 0, function () {
         var resp, error_1;
@@ -134,7 +135,6 @@ export function getCookie(name) {
 }
 export function antiforgery() {
     return __awaiter(this, void 0, void 0, function () {
-        var resp;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, api.get('/antiforgery').then(function (r) {
@@ -143,7 +143,7 @@ export function antiforgery() {
                         api.defaults.headers.common['X-XSRF-TOKEN'] = antiforgeryToken;
                     })];
                 case 1:
-                    resp = _a.sent();
+                    _a.sent();
                     return [2 /*return*/];
             }
         });
@@ -185,6 +185,18 @@ export function loginUser(userSubmit) {
                     console.log("wystąpił błąd ", error_2);
                     return [2 /*return*/, err("Nieprawidłowe login lub hasło")];
                 case 3: return [2 /*return*/];
+            }
+        });
+    });
+}
+export function logOutUser() {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, api.get('/user/logOff')];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
             }
         });
     });

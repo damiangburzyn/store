@@ -25,6 +25,7 @@
     <None Remove="client-app\src\store\api.ts" />
     <None Remove="client-app\src\store\error.ts" />
     <None Remove="client-app\src\store\modelsData.ts" />
+    <None Remove="client-app\src\store\Modules\Cart.ts" />
     <None Remove="client-app\src\store\Modules\Models.d.ts" />
     <None Remove="client-app\src\store\Modules\Users.ts" />
     <None Remove="client-app\src\views\AdminPanel.vue" />
@@ -70,6 +71,7 @@
     <TypeScriptCompile Include="client-app\src\store\api.ts" />
     <TypeScriptCompile Include="client-app\src\store\error.ts" />
     <TypeScriptCompile Include="client-app\src\store\modelsData.ts" />
+    <TypeScriptCompile Include="client-app\src\store\Modules\Cart.ts" />
     <TypeScriptCompile Include="client-app\src\store\Modules\Users.ts" />
     <TypeScriptCompile Include="client-app\src\store\models.d.ts" />
   </ItemGroup>

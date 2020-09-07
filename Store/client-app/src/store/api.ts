@@ -53,13 +53,14 @@ class ApiBase<T> {
 
 }
 
-export function setJWT(token: string) {
-    api.defaults.headers.common['Authorization'] = `Bearer ${token}`
-}
+//now jwt stored in httponly cookie
+//export function setJWT(token: string) {
+//    api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+//}
 
-export function clearJWT() {
-    delete api.defaults.headers.common['Authorization']
-}
+//export function clearJWT() {
+//    delete api.defaults.headers.common['Authorization']
+//}
 
 export async function getProfile(): Promise<Profile | null> {
     try {
@@ -101,7 +102,7 @@ export function getCookie(name: string) {
 
 
 export async function antiforgery() {
-    const resp = await api.get('/antiforgery').then(
+   await api.get('/antiforgery').then(
         (r) => {
             console.log(r.headers["set-cookies"]);
             const antiforgeryToken = getCookie("XSRF-REQUEST-TOKEN");
@@ -146,6 +147,11 @@ export async function loginUser(userSubmit: UserLogin): Promise<Either<Profile |
     }
 }
 
+
+export async function logOutUser() {
+    await api.get('/user/logOff')
+    return;
+}
 
 
 export async function Products(categoryId: number, page: number, pageSize: number) {

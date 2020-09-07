@@ -26,6 +26,7 @@ using GC5.IoC;
 using Microsoft.AspNetCore.Antiforgery;
 using GC5.Application.Extensions;
 using Microsoft.Extensions.Logging;
+using Store.Services.Middleware;
 
 namespace Store
 {
@@ -99,8 +100,8 @@ namespace Store
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
 
-                options.LoginPath = "/Identity/Account/Login";
-                options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+                options.LoginPath = "/#/Login";
+                options.AccessDeniedPath = "/#/AccessDenied";
                 options.SlidingExpiration = true;
             });
             services.Configure<ConfigurationStorage>(Configuration.GetSection("ConfigurationStorage"));
@@ -139,20 +140,20 @@ namespace Store
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IAntiforgery antiforgery, ILoggerFactory loggerFactory)
         {
-
+            app.UseMiddleware<JWTInHeaderMiddleware>();
             app.UseStaticFiles();
             SingleLogger.Factory = loggerFactory;
-            app.Use(next => context =>
-            {
-                if (context.Request.Path.Value.IndexOf("/api", StringComparison.OrdinalIgnoreCase) != -1)
-                {
-                    var tokens = antiforgery.GetAndStoreTokens(context);
-                    context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken,
-                        new CookieOptions() { HttpOnly = false });
-                }
+            //app.Use(next => context =>
+            //{
+            //    if (context.Request.Path.Value.IndexOf("/api", StringComparison.OrdinalIgnoreCase) != -1)
+            //    {
+            //        var tokens = antiforgery.GetAndStoreTokens(context);
+            //        context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken,
+            //            new CookieOptions() { HttpOnly = false });
+            //    }
 
-                return next(context);
-            });
+            //    return next(context);
+            //});
             app.UseSession();
 
 

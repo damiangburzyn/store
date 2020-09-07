@@ -60,7 +60,7 @@ namespace Store.Controllers
             });
         }
 
-
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public override async Task<ActionResult<CategoryViewModel>> Create(CategoryViewModel viewModel)
         {
@@ -72,6 +72,7 @@ namespace Store.Controllers
             return Ok(vm);
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPut]
         public override async Task<ActionResult<CategoryViewModel>> Update(CategoryViewModel viewModel)
         {
@@ -89,7 +90,7 @@ namespace Store.Controllers
             });
         }
 
-        [ValidateAntiForgeryToken]
+       
         [HttpGet("main")]
         [AllowAnonymous]
         public async Task<IActionResult> MainCategories()

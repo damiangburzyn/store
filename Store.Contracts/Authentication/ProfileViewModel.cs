@@ -16,8 +16,8 @@ namespace Store.Contracts.Authentication
         public string LastName { get; set; }
         [JsonProperty("userName")]
         public string UserName { get; set; }
-        [JsonProperty("token")]
-        public string Token { get; set; }
+        //[JsonProperty("token")]
+        //public string Token { get; set; }
         [JsonProperty("roles")]
         public IList<string> Roles { get; set; } = new List<string>();
     }

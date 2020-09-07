@@ -26,7 +26,6 @@ namespace Store.Controllers
         public IMapper Mapper { get; private set; }
      //   internal IWebApiService WebApiService { get; }
         internal ILocalPageData pageData { get; set; }
-        public string AuthToken { get { return HttpContext.Session.GetString("token"); } }
 
         protected BaseController(IOptions<AppSettings> applicationSettings,
            // IWebApiService webApiService,

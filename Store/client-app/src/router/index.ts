@@ -43,9 +43,9 @@ const router = new VueRouter({
 
  router.beforeEach( async (to, from, next) =>  {
 
-    if (!users.isProfileLoaded) {
-        await users.getProfile();
-    }
+    //if (!users.isProfileLoaded) {
+     //   await users.getProfile();
+    //}
 
 
     if (to.path.toLowerCase() == '/adminpanel' && !users.isAdmin) {

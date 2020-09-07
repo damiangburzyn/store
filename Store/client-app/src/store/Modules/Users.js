@@ -1,7 +1,7 @@
 import { __awaiter, __decorate, __extends, __generator } from "tslib";
 import { VuexModule, Module, getModule, Mutation, Action } from "vuex-module-decorators";
 import store from "@/store";
-import { loginUser, setJWT, getProfile, antiforgery } from "../api";
+import { loginUser, /*setJWT,*/ getProfile, antiforgery, logOutUser } from "../api";
 var UserRoles;
 (function (UserRoles) {
     UserRoles[UserRoles["Administrator"] = 0] = "Administrator";
@@ -25,6 +25,15 @@ var UsersModule = /** @class */ (function (_super) {
             return __generator(this, function (_a) {
                 this.profile = profile;
                 this.isProfileLoaded = true;
+                return [2 /*return*/];
+            });
+        });
+    };
+    UsersModule.prototype.logOutUser = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                this.profile = null;
+                this.isProfileLoaded = false;
                 return [2 /*return*/];
             });
         });
@@ -53,17 +62,19 @@ var UsersModule = /** @class */ (function (_super) {
     });
     UsersModule.prototype.login = function (loginPass) {
         return __awaiter(this, void 0, void 0, function () {
-            var userEither, token;
+            var userEither;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, loginUser(loginPass)];
                     case 1:
                         userEither = _a.sent();
                         if (!userEither.isOk()) return [3 /*break*/, 3];
-                        token = userEither.value.token;
-                        setJWT(token);
+                        //const token = (userEither.value as Profile).token;
+                        //setJWT(token);
                         return [4 /*yield*/, antiforgery()];
                     case 2:
+                        //const token = (userEither.value as Profile).token;
+                        //setJWT(token);
                         _a.sent();
                         _a.label = 3;
                     case 3: return [2 /*return*/, userEither];
@@ -73,23 +84,29 @@ var UsersModule = /** @class */ (function (_super) {
     };
     UsersModule.prototype.getProfile = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var user, token;
+            var user;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, getProfile()];
                     case 1:
                         user = _a.sent();
                         if (!(user !== null)) return [3 /*break*/, 3];
-                        token = user.token;
-                        setJWT(token);
+                        //const token = user.token;
+                        //setJWT(token);
                         return [4 /*yield*/, antiforgery()];
                     case 2:
+                        //const token = user.token;
+                        //setJWT(token);
                         _a.sent();
                         _a.label = 3;
                     case 3: return [2 /*return*/, user];
                 }
             });
         });
+    };
+    UsersModule.prototype.logOut = function () {
+        logOutUser();
+        return;
     };
     __decorate([
         Mutation
@@ -98,17 +115,24 @@ var UsersModule = /** @class */ (function (_super) {
         Mutation
     ], UsersModule.prototype, "setProfile", null);
     __decorate([
+        Mutation
+    ], UsersModule.prototype, "logOutUser", null);
+    __decorate([
         Action({ commit: "setProfileEither" })
     ], UsersModule.prototype, "login", null);
     __decorate([
         Action({ commit: "setProfile" })
     ], UsersModule.prototype, "getProfile", null);
+    __decorate([
+        Action({ commit: "logOutUser" })
+    ], UsersModule.prototype, "logOut", null);
     UsersModule = __decorate([
         Module({
             namespaced: true,
             name: "users",
             store: store,
-            dynamic: true
+            dynamic: true,
+            preserveState: true
         })
     ], UsersModule);
     return UsersModule;
