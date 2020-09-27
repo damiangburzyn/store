@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Store.Contracts;
@@ -33,8 +34,9 @@ namespace Store.Controllers
             , ILocalPageData pageData
             , IMapper mapper
             , UserManager<ApplicationUser> userManager
-            , SignInManager<ApplicationUser> signInManager)
-             : base(settings, pageData, mapper)
+            , SignInManager<ApplicationUser> signInManager,
+            ILogger<UserController> logger)
+             : base(settings, pageData, mapper, logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -61,7 +63,7 @@ namespace Store.Controllers
             {
                 var userRoles = await _userManager.GetRolesAsync(user);
                 var profile = new ProfileViewModel()
-                { 
+                {
                     Roles = userRoles,
                     UserName = user.Email,
                     FirstName = user.FirstName,
@@ -73,7 +75,7 @@ namespace Store.Controllers
             return Ok();
         }
 
-       // [ValidateAntiForgeryToken]
+        // [ValidateAntiForgeryToken]
         [HttpPost("login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] AuthenticationModel model)
@@ -174,6 +176,72 @@ namespace Store.Controllers
             await _signInManager.SignOutAsync();
             return Ok();
         }
+
+
+
+
+
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Register(RegisterUserViewModel vm)
+        {
+            Func<Task<IActionResult>> fun = async () =>
+            {
+
+                if (!string.Equals(vm.Password, vm.RepeatPassword))
+                {
+                    ModelState.AddModelError(nameof(RegisterUserViewModel.RepeatPassword), "Hasła się nie zgadzają");
+                }
+                if (await _userManager.FindByNameAsync(vm.Email) != null)
+                {
+                    ModelState.AddModelError(nameof(RegisterUserViewModel.Email), "Użytkownik o podanym Loginie już istnieje");
+                }
+                if (await _userManager.FindByEmailAsync(vm.Email) != null)
+                {
+                    ModelState.AddModelError(nameof(RegisterUserViewModel.Email), "Użytkownik o podanym email już istnieje");
+                }
+
+                var user = Mapper.Map<RegisterUserViewModel, ApplicationUser>(vm);
+
+                var userRoles = new List<string>();
+                userRoles.Add(ERole.User.ToString());
+
+                var result = await _userManager.CreateAsync(user, vm.Password);
+                if (result.Succeeded)
+                {
+                    if (userRoles.Count > 0)
+                    {
+                        await _userManager.AddToRolesAsync(user, userRoles);
+                    }
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    //var callbackUrl = Url.MultiLingualAction("VerifyAccountConfirmation", "Accounts", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+                    //try
+                    //{
+                    //    await _mailSenderManager.SendVerificationCodeMail(vm.Email, callbackUrl, user.Culture);
+                    //}
+                    //catch (Exception ex)
+                    //{
+                    //    _logger.LogError(ex, "Wystąpił błąd wysyłania wiadomości z linkiem aktywacyjnym", null);
+                    //}
+
+                    return Ok(vm);
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+
+                return Ok(vm);
+            };
+            return await this.WrapExceptionAsync(async () => { return await fun(); });
+        }
+
+
+
+
 
     }
 }

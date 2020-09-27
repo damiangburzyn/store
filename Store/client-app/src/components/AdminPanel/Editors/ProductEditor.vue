@@ -196,8 +196,8 @@
     @Component
     export default class ProductEditor extends Vue {
         private msg!: string;
-        @Prop(Number) readonly productId!: number;
-        @Prop(Boolean) readonly isShow!: boolean;
+        @Prop({ default: 0, validator: (x) => x >= 0, type: Number, required: true }) readonly productId!: number;
+        @Prop( ) readonly isShow!: boolean;
         public imageRules: [Function] = [
             (value: File[]) => !value || value.every(file => {
                 return file.size < 2000000

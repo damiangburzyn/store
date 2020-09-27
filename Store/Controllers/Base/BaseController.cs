@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Store.Contracts;
 
@@ -22,28 +23,26 @@ namespace Store.Controllers
     public abstract class BaseController : Controller
     {
         protected readonly AppSettings _appsettings;
+        protected readonly ILogger _logger;
 
-        public IMapper Mapper { get; private set; }
-     //   internal IWebApiService WebApiService { get; }
+        public IMapper Mapper { get; private set; }   
+        
         internal ILocalPageData pageData { get; set; }
 
-        protected BaseController(IOptions<AppSettings> applicationSettings,
-           // IWebApiService webApiService,
+        protected BaseController(IOptions<AppSettings> applicationSettings,        
             ILocalPageData pageData,
-            IMapper mapper)
+            IMapper mapper, 
+            ILogger logger)
         {
             _appsettings = applicationSettings.Value;
             Mapper = mapper;
             this.pageData = pageData;
-          //  this.WebApiService = webApiService;
+            _logger = logger;
         }
 
-        protected BaseController(IOptions<AppSettings> applicationSettings
-            //, IWebApiService webApiService
-            )
+        protected BaseController(IOptions<AppSettings> applicationSettings)
         {
             _appsettings = applicationSettings.Value;
-            //this.WebApiService = webApiService;
         }
 
 

@@ -17,12 +17,5 @@ namespace Store.Controllers
         {
             return Ok();
         }
-
-        [HttpPost("login")]
-        public async Task<IActionResult> Login()
-        {
-            await Task.Run(() => { Console.WriteLine("test"); });
-            return Ok();
-        }
     }
 }

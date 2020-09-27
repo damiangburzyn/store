@@ -13,6 +13,7 @@ using Store.Contracts.ViewModel;
 using Store.Data.EF.Entities;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Store.Controllers
 {
@@ -24,8 +25,8 @@ namespace Store.Controllers
         private readonly StorageHelper storageHelper;
 
         public ProductsController(
-            IOptions<AppSettings> settings, ILocalPageData pageData, IMapper mapper, IProductService productService, IMediaService mediaService, StorageHelper storageHelper)
-             : base(settings, pageData, mapper, productService, mediaService)
+            IOptions<AppSettings> settings, ILocalPageData pageData, IMapper mapper, IProductService productService, IMediaService mediaService, StorageHelper storageHelper, ILogger<ProductsController> logger)
+             : base(settings, pageData, mapper, productService, mediaService, logger)
         {
             this.productService = productService;
             this.storageHelper = storageHelper;

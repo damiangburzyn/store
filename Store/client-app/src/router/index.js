@@ -27,6 +27,11 @@ var routes = [
         path: '/AdminPanel',
         name: 'AdminPanel',
         component: function () { return import(/* webpackChunkName: "about" */ '../views/AdminPanel.vue'); }
+    },
+    {
+        path: '/Products/:categoryId',
+        name: 'Products',
+        component: function () { return import(/* webpackChunkName: "about" */ '../views/Products.vue'); }
     }
 ];
 var router = new VueRouter({

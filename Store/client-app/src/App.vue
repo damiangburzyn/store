@@ -1,4 +1,4 @@
-<template>
+﻿<template>
     <div id="app">
         <v-app>
 
@@ -8,16 +8,19 @@
 
                 <v-row no-gutters>
                     <v-col cols="12"
-                           sm="4">
+                           sm="3">
 
 
                     </v-col>
                     <v-col cols="12"
-                           sm="4">
+                           sm="6">
                         <v-container bg fill-height grid-list-md text-xs-center>
                             <v-layout row wrap align-center>
                                 <v-flex>
-                                    Hello I am center to vertically using "align-center".
+                                    <h1 class="heading">Time To Shop</h1>
+                                    <br />
+                                    <br />
+                                    <i>Twój czas na zakupy</i>
                                 </v-flex>
                             </v-layout>
                         </v-container>
@@ -26,7 +29,7 @@
 
                     </v-col>
                     <v-col class="banner-image-container" cols="12"
-                           sm="4">
+                           sm="3">
 
 
                         <img class="banner-image" src="../src/assets/watch.webp" alt="">
@@ -96,5 +99,8 @@
 
     .banner-text-container {
         margin-top: 25%;
+    }
+    .heading {
+    font-size: 6rem;
     }
 </style>

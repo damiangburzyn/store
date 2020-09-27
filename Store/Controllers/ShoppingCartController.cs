@@ -10,6 +10,7 @@ using AutoMapper;
 using Microsoft.Extensions.Options;
 using Store.Contracts;
 using System.Text.Encodings.Web;
+using Microsoft.Extensions.Logging;
 
 namespace Store.Controllers
 {
@@ -19,8 +20,8 @@ namespace Store.Controllers
     {
         private ShoppingCartService _shoppingCartService;
 
-        public ShoppingCartController(IOptions<AppSettings> settings, ILocalPageData pageData , ShoppingCartService cartService, IMapper mapper)
-            :base(settings, pageData, mapper)
+        public ShoppingCartController(IOptions<AppSettings> settings, ILocalPageData pageData , ShoppingCartService cartService, IMapper mapper, ILogger<ShoppingCartController> logger)
+            :base(settings, pageData, mapper, logger)
         {
             _shoppingCartService = cartService;
         }

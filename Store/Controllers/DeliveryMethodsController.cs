@@ -12,7 +12,7 @@ using Store.Services;
 using Store.Contracts.ViewModel;
 using Store.Data.EF.Entities;
 using System.Linq.Expressions;
-
+using Microsoft.Extensions.Logging;
 
 namespace Store.Controllers
 {
@@ -23,8 +23,8 @@ namespace Store.Controllers
         private IBaseService<DeliveryMethod> deliverMethodService;
 
         public DeliveryMethodsController(
-        IOptions<AppSettings> settings, ILocalPageData pageData, IMapper mapper, IDeliveryMethodService deliverMethodService, IMediaService mediaService)
-         : base(settings, pageData, mapper, deliverMethodService, mediaService)
+        IOptions<AppSettings> settings, ILocalPageData pageData, IMapper mapper, IDeliveryMethodService deliverMethodService, IMediaService mediaService, ILogger<DeliveryMethodsController> logger)
+         : base(settings, pageData, mapper, deliverMethodService, mediaService, logger)
         {
             this.deliverMethodService = deliverMethodService;
        

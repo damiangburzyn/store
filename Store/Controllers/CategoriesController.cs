@@ -12,6 +12,7 @@ using Store.Services;
 using Store.Contracts.ViewModel;
 using Store.Data.EF.Entities;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.Extensions.Logging;
 
 namespace Store.Controllers
 {
@@ -21,20 +22,14 @@ namespace Store.Controllers
     {
         private readonly ICategoryService categoryService;
         private readonly StorageHelper storageHelper;
-
+     
         public CategoriesController(
-            IOptions<AppSettings> settings, ILocalPageData pageData, IMapper mapper, ICategoryService categoryService, IMediaService mediaService, StorageHelper storageHelper)
-             : base(settings, pageData, mapper, categoryService, mediaService)
+            IOptions<AppSettings> settings, ILocalPageData pageData, IMapper mapper, ICategoryService categoryService, IMediaService mediaService, StorageHelper storageHelper, ILogger<CategoriesController> logger)
+             : base(settings, pageData, mapper, categoryService, mediaService, logger)
         {
             this.categoryService = categoryService;
-            this.storageHelper = storageHelper;
+            this.storageHelper = storageHelper;         
         }
-
-
-
-
-
-
 
         // Get: api/categories/tree
         [HttpGet("tree")]
@@ -57,7 +52,7 @@ namespace Store.Controllers
             return await this.WrapExceptionAsync(async () =>
             {
                 return await func();
-            });
+            });           
         }
 
         [ValidateAntiForgeryToken]

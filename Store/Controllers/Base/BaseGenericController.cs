@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Store.Contracts;
 using Store.Contracts.ViewModel;
@@ -26,11 +27,16 @@ namespace Store.Controllers
     where TViewModel : BaseViewModel
     where TEntity : class, IBaseEntity
     {
-        public readonly IBaseService<TEntity> _service;
-        public readonly IMediaService _mediaService;
+        protected readonly IBaseService<TEntity> _service;
+        protected readonly IMediaService _mediaService;
 
-        public BaseController(IOptions<AppSettings> settings, ILocalPageData pageData, IMapper mapper, IBaseService<TEntity> service, IMediaService mediaService)
-            : base(settings, pageData, mapper)
+
+        public BaseController(IOptions<AppSettings> settings,
+            ILocalPageData pageData,
+            IMapper mapper, IBaseService<TEntity> service,
+            IMediaService mediaService, 
+            ILogger logger)
+            : base(settings, pageData, mapper, logger)
         {
             _service = service;
             _mediaService = mediaService;

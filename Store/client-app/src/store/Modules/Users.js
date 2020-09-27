@@ -20,23 +20,15 @@ var UsersModule = /** @class */ (function (_super) {
             this.profile = eitherProfile.value;
         }
     };
+    //Mutation cannot be async 
+    //if async then do Action and then mutation
     UsersModule.prototype.setProfile = function (profile) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                this.profile = profile;
-                this.isProfileLoaded = true;
-                return [2 /*return*/];
-            });
-        });
+        this.profile = profile;
+        this.isProfileLoaded = true;
     };
     UsersModule.prototype.logOutUser = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                this.profile = null;
-                this.isProfileLoaded = false;
-                return [2 /*return*/];
-            });
-        });
+        this.profile = null;
+        this.isProfileLoaded = false;
     };
     Object.defineProperty(UsersModule.prototype, "username", {
         get: function () {

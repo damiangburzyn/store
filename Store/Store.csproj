@@ -21,6 +21,8 @@
     <None Remove="client-app\src\components\AdminPanel\Editors\ProductEditor.vue" />
     <None Remove="client-app\src\components\AdminPanel\Orders.vue" />
     <None Remove="client-app\src\components\AdminPanel\Products.vue" />
+    <None Remove="client-app\src\components\Cards\CategoryCard.vue" />
+    <None Remove="client-app\src\components\Cards\ProductCard.vue" />
     <None Remove="client-app\src\components\ProductBaseCard.vue" />
     <None Remove="client-app\src\store\api.ts" />
     <None Remove="client-app\src\store\error.ts" />
@@ -41,6 +43,8 @@
     <Content Include="client-app\src\components\AdminPanel\Orders.vue" />
     <Content Include="client-app\src\components\AdminPanel\Products.vue" />
     <Content Include="client-app\src\components\AdminPanel\Categories.vue" />
+    <Content Include="client-app\src\components\Cards\ProductCard.vue" />
+    <Content Include="client-app\src\components\Cards\CategoryCard.vue" />
     <Content Include="client-app\src\views\AdminPanel.vue" />
     <Content Include="client-app\src\views\Login.vue" />
   </ItemGroup>
@@ -77,6 +81,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="logs\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

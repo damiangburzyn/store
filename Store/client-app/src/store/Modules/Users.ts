@@ -30,14 +30,15 @@ class UsersModule extends VuexModule {
             this.profile = eitherProfile.value as Profile;
         }
     }
-
-    @Mutation async setProfile(profile: Profile) {
+    //Mutation cannot be async 
+    //if async then do Action and then mutation
+    @Mutation  setProfile(profile: Profile) {
 
         this.profile = profile;
         this.isProfileLoaded = true;
     }
 
-    @Mutation async logOutUser() {
+    @Mutation  logOutUser() {
 
         this.profile = null;
         this.isProfileLoaded = false;

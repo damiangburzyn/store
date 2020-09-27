@@ -31,7 +31,14 @@ Vue.use(VueRouter)
     path: '/AdminPanel',
     name: 'AdminPanel',
     component: () => import(/* webpackChunkName: "about" */ '../views/AdminPanel.vue')
-  }
+      },
+
+      {
+          path: '/Products/:categoryId',
+          name: 'Products',
+          component: () => import(/* webpackChunkName: "about" */ '../views/Products.vue')
+      }
+
 
 ]
 

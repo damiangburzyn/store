@@ -201,19 +201,10 @@ export function logOutUser() {
         });
     });
 }
-export function Products(categoryId, page, pageSize) {
-    return __awaiter(this, void 0, void 0, function () {
-        var resp;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0: return [4 /*yield*/, api.get("category/subcategories/${parentCategoryId}")];
-                case 1:
-                    resp = _a.sent();
-                    return [2 /*return*/, resp];
-            }
-        });
-    });
-}
+//export async function Products(categoryId: number, page: number, pageSize: number) {
+//    const resp = await api.get("category/subcategories/${parentCategoryId}")
+//    return resp;
+//}
 var CategoryService = /** @class */ (function (_super) {
     __extends(CategoryService, _super);
     function CategoryService() {
@@ -242,7 +233,7 @@ var CategoryService = /** @class */ (function (_super) {
                     case 0: return [4 /*yield*/, api.get(this.controller + "/main")];
                     case 1:
                         resp = _a.sent();
-                        return [2 /*return*/, resp];
+                        return [2 /*return*/, resp.data];
                 }
             });
         });

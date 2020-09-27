@@ -154,10 +154,10 @@ export async function logOutUser() {
 }
 
 
-export async function Products(categoryId: number, page: number, pageSize: number) {
-    const resp = await api.get("category/subcategories/${parentCategoryId}")
-    return resp;
-}
+//export async function Products(categoryId: number, page: number, pageSize: number) {
+//    const resp = await api.get("category/subcategories/${parentCategoryId}")
+//    return resp;
+//}
 
 class CategoryService extends ApiBase<Category>{
     async  Tree() {
@@ -170,7 +170,7 @@ class CategoryService extends ApiBase<Category>{
 
     async  MainCategiories() {
         const resp = await api.get(`${this.controller}/main`)
-        return resp;
+        return resp.data as Category[];
     }
 
     async  SubCategiories(parentCategoryId: number) {

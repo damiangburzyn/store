@@ -84,11 +84,11 @@ namespace VueDemoWithAsp.NetCore.VueCoreConnection
                     }
                 });
 
-                var timeout = Task.Delay(Timeout);
-                if (await Task.WhenAny(timeout, tcs.Task) == timeout)
-                {
-                    throw new TimeoutException();
-                }
+                //var timeout = Task.Delay(Timeout);
+                //if (await Task.WhenAny(timeout, tcs.Task) == timeout)
+                //{
+                //    throw new TimeoutException();
+                //}
 
                 return DevelopmentServerEndpoint;
             });

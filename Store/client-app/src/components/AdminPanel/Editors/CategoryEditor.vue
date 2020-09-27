@@ -98,7 +98,7 @@
     @Component
     export default class CategoryEditor extends Vue {
 
-        @Prop(Number) readonly CategoryId!: number;
+        @Prop({ default: 0, validator : (x)=> x>=0,  type: Number,  required: true }) readonly CategoryId!: number;
         @Prop(Boolean) readonly IsShow!: boolean;
         @Prop() readonly Categories!: Array<Category>;
         public ShowParentCategoryDialog = false;
