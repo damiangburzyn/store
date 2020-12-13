@@ -12,9 +12,9 @@
                 <v-card-text>
                     <v-text-field label="Nazwa"
                                   v-model="Item.name"></v-text-field>
-                    <v-img v-if=" Item.logo !== null && Item.logo.url !== '' " class="align-content-center" v-bind:src="Item.logo.url" aspect-ratio="1.7" contain></v-img>
+                    <v-img v-if="Item !== null && Item.logo !== null && Item.logo.url !== null && Item.logo.url !== '' " class="align-content-center" v-bind:src="Item.logo.url" aspect-ratio="1.7" contain></v-img>
 
-                    <v-file-input :rules="ImageRules"
+                    <v-file-input v-if="Show" id="categryImage" :rules="ImageRules"
                                   accept="image/png, image/jpeg, image/bmp"
                                   :placeholder="imagePlaceHolder()"
                                   @change="onFilePicked"
@@ -229,6 +229,11 @@
         onPropertyIsShowChanged(value: boolean, oldValue: boolean) {
             this.Show = value;
 
+            //let file = <HTMLInputElement>document.getElementById("categryImage");
+            //if (file !== null) {
+            //    file.placeholder = "";
+            //    file.value = "";
+            //}
         }
 
         @Watch('CategoryId')

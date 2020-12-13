@@ -1,7 +1,7 @@
 import { __awaiter, __decorate, __extends, __generator } from "tslib";
 import { VuexModule, Module, getModule, Mutation, Action } from "vuex-module-decorators";
 import store from "@/store";
-import { loginUser, /*setJWT,*/ getProfile, antiforgery, logOutUser } from "../api";
+import { loginUser, /*setJWT,*/ getProfile, logOutUser } from "../api";
 var UserRoles;
 (function (UserRoles) {
     UserRoles[UserRoles["Administrator"] = 0] = "Administrator";
@@ -60,16 +60,12 @@ var UsersModule = /** @class */ (function (_super) {
                     case 0: return [4 /*yield*/, loginUser(loginPass)];
                     case 1:
                         userEither = _a.sent();
-                        if (!userEither.isOk()) return [3 /*break*/, 3];
-                        //const token = (userEither.value as Profile).token;
-                        //setJWT(token);
-                        return [4 /*yield*/, antiforgery()];
-                    case 2:
-                        //const token = (userEither.value as Profile).token;
-                        //setJWT(token);
-                        _a.sent();
-                        _a.label = 3;
-                    case 3: return [2 /*return*/, userEither];
+                        if (userEither.isOk()) {
+                            //const token = (userEither.value as Profile).token;
+                            //setJWT(token);
+                            //  await this.loadAntiforgery();
+                        }
+                        return [2 /*return*/, userEither];
                 }
             });
         });
@@ -82,20 +78,22 @@ var UsersModule = /** @class */ (function (_super) {
                     case 0: return [4 /*yield*/, getProfile()];
                     case 1:
                         user = _a.sent();
-                        if (!(user !== null)) return [3 /*break*/, 3];
-                        //const token = user.token;
-                        //setJWT(token);
-                        return [4 /*yield*/, antiforgery()];
-                    case 2:
-                        //const token = user.token;
-                        //setJWT(token);
-                        _a.sent();
-                        _a.label = 3;
-                    case 3: return [2 /*return*/, user];
+                        if (user !== null) {
+                            //const token = user.token;
+                            //setJWT(token);
+                            // await this.loadAntiforgery();
+                        }
+                        return [2 /*return*/, user];
                 }
             });
         });
     };
+    //async loadAntiforgery(): Promise<string|undefined> {
+    //    const antiforgeryToken=   await antiforgery();
+    //    if (typeof antiforgeryToken !== 'undefined')
+    //        Antiforgery.commitAntiForgery(antiforgeryToken)
+    //    return antiforgeryToken
+    //}
     UsersModule.prototype.logOut = function () {
         logOutUser();
         return;

@@ -80,7 +80,8 @@
     @Component({
         components: {
             CategoryEditor: CategoryEditor,
-            ConfirmationDialog: ConfirmationDialog
+            ConfirmationDialog: ConfirmationDialog,
+
         },
     })
     export default class Categories extends Vue {

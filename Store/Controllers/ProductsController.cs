@@ -48,7 +48,7 @@ namespace Store.Controllers
                 return Ok(vm);
             });
         }
-        [ValidateAntiForgeryToken]
+     //   [ValidateAntiForgeryToken]
         [HttpPost]
         public override async Task<ActionResult<ProductViewModel>> Create(ProductViewModel viewModel)
         {
@@ -67,7 +67,7 @@ namespace Store.Controllers
             return Ok(vm);
         }
 
-        [ValidateAntiForgeryToken]
+       // [ValidateAntiForgeryToken]
         [HttpPut]
         public override async Task<ActionResult<ProductViewModel>> Update(ProductViewModel viewModel)
         {

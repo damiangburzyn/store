@@ -36,7 +36,7 @@
     import { Category } from '@/store/modelsData'
 
     @Component
-    export default class CategoryCard extends Vue {
+    export default class ProductCard extends Vue {
         @Prop({ default: new Category() }) readonly item!: Category;
 
         onClick() {

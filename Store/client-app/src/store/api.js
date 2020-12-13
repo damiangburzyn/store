@@ -1,8 +1,12 @@
+var _a;
 import { __awaiter, __extends, __generator } from "tslib";
 import axios from 'axios';
 import { ok, err } from '@/store/error';
+import antiforgeryState from "@/store/Modules/Antiforgery";
+var head = (_a = antiforgeryState === null || antiforgeryState === void 0 ? void 0 : antiforgeryState.antiforgeryToken) !== null && _a !== void 0 ? _a : "";
 export var api = axios.create({
-    baseURL: "/api/"
+    baseURL: "/api/",
+    headers: { 'X-XSRF-TOKEN': head }
 });
 var ApiBase = /** @class */ (function () {
     function ApiBase(controller) {
@@ -135,16 +139,18 @@ export function getCookie(name) {
 }
 export function antiforgery() {
     return __awaiter(this, void 0, void 0, function () {
+        var res;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, api.get('/antiforgery').then(function (r) {
                         console.log(r.headers["set-cookies"]);
                         var antiforgeryToken = getCookie("XSRF-REQUEST-TOKEN");
                         api.defaults.headers.common['X-XSRF-TOKEN'] = antiforgeryToken;
+                        return antiforgeryToken;
                     })];
                 case 1:
-                    _a.sent();
-                    return [2 /*return*/];
+                    res = _a.sent();
+                    return [2 /*return*/, res];
             }
         });
     });

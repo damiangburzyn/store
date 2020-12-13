@@ -80,6 +80,7 @@
 
     //import UserLogin from "@/store/models";
     import users from "@/store/Modules/Users";
+    import antiforgery from "@/store/Modules/Antiforgery";
 
     @Component
     export default class Login extends Vue {
@@ -104,6 +105,7 @@
         }
 
         async login() {
+          
             this.runValidate = true;
             const isValid = this.validate();
             if (!isValid) {
@@ -118,6 +120,8 @@
                 this.errorMessage = either.value as string;
             }
             else {
+
+                await antiforgery.loadAntiforgery();
                 this.errorMessage = "";
                 this.$router.push('/');
             }

@@ -3,7 +3,7 @@
     <v-card @click="goToCategoryProducts(item.id)" class="mx-auto my-12"
               min-width="100"
             max-width="374">
-        <v-img v-if="item.logo !== null"  min-width="10"  height="250"
+        <v-img v-if="item !== null && item.logo !== null && item.logo.url !== null"  min-width="10"  height="250"
                :src="item.logo.url"></v-img>
         <!--<v-img height="250" src="https://cdn.vuetifyjs.com/images/cards/cooking.png"></v-img>-->
 

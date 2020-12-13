@@ -2,14 +2,19 @@
 import { UserLogin, Profile } from '@/store/Models';
 import { Category, DataTableSearchViewModel, DeliveryMethod, Product } from '@/store/ModelsData';
 import { ok, err, Either } from '@/store/error';
+import antiforgeryState from "@/store/Modules/Antiforgery";
+const head = antiforgeryState?.antiforgeryToken ?? "";
+
+
 
 
 export const api = axios.create({
-    baseURL: "/api/"
+    baseURL: "/api/",
+    headers: { 'X-XSRF-TOKEN':head }
 });
 
 class ApiBase<T> {
-   protected controller: string;
+    protected controller: string;
 
     constructor(controller: string) {
         this.controller = controller;
@@ -101,16 +106,18 @@ export function getCookie(name: string) {
 
 
 
-export async function antiforgery() {
-   await api.get('/antiforgery').then(
+export async function antiforgery(): Promise<string | undefined> {
+    const res = await api.get('/antiforgery').then(
         (r) => {
             console.log(r.headers["set-cookies"]);
             const antiforgeryToken = getCookie("XSRF-REQUEST-TOKEN");
-            api.defaults.headers.common['X-XSRF-TOKEN'] = antiforgeryToken; 
- 
-        });    
+            api.defaults.headers.common['X-XSRF-TOKEN'] = antiforgeryToken;
+            return antiforgeryToken;
+        });
+
+    return res;
 }
-   
+
 
 
 
@@ -160,7 +167,7 @@ export async function logOutUser() {
 //}
 
 class CategoryService extends ApiBase<Category>{
-    async  Tree() {
+    async Tree() {
         const res = await api.get(`${this.controller}/tree`).then(
             (r) => {
                 return r;
@@ -168,12 +175,12 @@ class CategoryService extends ApiBase<Category>{
         return res.data as Category[];
     }
 
-    async  MainCategiories() {
+    async MainCategiories() {
         const resp = await api.get(`${this.controller}/main`)
         return resp.data as Category[];
     }
 
-    async  SubCategiories(parentCategoryId: number) {
+    async SubCategiories(parentCategoryId: number) {
         const resp = await api.get(`${this.controller}/subcategories/${parentCategoryId}`)
         return resp;
     }

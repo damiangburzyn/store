@@ -3,48 +3,20 @@
 
 
     <div>
-        <!--<b-navbar toggleable="sm" type="light" variant="light">
-        <b-navbar-toggle target="nav-text-collapse"></b-navbar-toggle>
-
-
-        <b-collapse id="nav-text-collapse" is-nav>
-            <b-navbar-nav>
-                <b-nav-item><router-link class="nav-link" to="/"> Home </router-link></b-nav-item>
-
-                <b-nav-item><router-link class="nav-link" to="/about"> About </router-link></b-nav-item>
-
-                <b-nav-item v-if="!username"><router-link class="nav-link" to="/login"> Logowanie </router-link></b-nav-item>
-                <b-nav-item v-if="!username"><router-link class="nav-link" to="/register"> Rejestracja </router-link></b-nav-item>
-                <b-nav-item v-if="isAdmin"> <router-link class="nav-link" to="/adminpanel"> Panel Administratora </router-link></b-nav-item>
-                <b-nav-item></b-nav-item>
-                <b-nav-item></b-nav-item>
-            </b-navbar-nav>
-
-
-            <b-navbar-nav class="ml-auto">
-
-                <b-nav-item v-if="username" right> Wyloguj</b-nav-item>
-                <b-nav-item right>{{ username }} </b-nav-item>
-
-            </b-navbar-nav>
-
-        </b-collapse>
-    </b-navbar>-->
-
 
 
       
 
 
 
-        <v-app-bar color="blue lighten-5"
+        <v-app-bar color="grey lighten-1"
                    dense
                    light>
             <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
             <v-btn-toggle 
                           tile
-                          color="blue accent-3"
+                          color="black"
                           group>
                 <v-btn to="/">
                     Home
@@ -59,7 +31,7 @@
             <v-spacer></v-spacer>
             <v-btn-toggle 
                           tile
-                          color="blue accent-3"
+                          color="black"
                           group>
 
 

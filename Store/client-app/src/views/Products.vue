@@ -7,11 +7,11 @@
         <!--<CategoryCard  :item="cat"></CategoryCard>-->
 
 
-        <v-row v-if="categories.length > 0" v-for="(group, i) in categoryGroups">
+        <!--<v-row v-if="categories.length > 0" v-for="(group, i) in categoryGroups">
 
             <CategoryCard v-for="category in categories.slice(i * itemsPerRow, (i + 1) * itemsPerRow)" :item="category"></CategoryCard>
 
-        </v-row>
+        </v-row>-->
 
     </div>
 
@@ -23,14 +23,14 @@
     import { Component, Vue } from 'vue-property-decorator';
     import { Product } from '@/store/modelsData'
     import { productService } from "@/store/api";
-    import productCard from "@/components/Cards/productCard.vue"
+    //import productCard from "@/components/Cards/productCard.vue"
 
 
     import Categories from '../components/AdminPanel/Categories.vue';
 
     @Component({
         components: {
-            ProductCard: productCard,
+           // ProductCard: productCard,
 
         },
     })
@@ -44,7 +44,7 @@
 
             let catId = parseInt(this.$route.params.id);
 
-            this.products = await productService.ProductsInCategory(catId);
+         //   this.products = await productService.ProductsInCategory(catId);
            
         }
 

@@ -141,7 +141,7 @@ namespace Store.Controllers
         }
 
 
-        [ValidateAntiForgeryToken]
+       // [ValidateAntiForgeryToken]
         [HttpPost]
         public virtual async Task<ActionResult<TViewModel>> Create(TViewModel viewModel)
         {
@@ -159,7 +159,7 @@ namespace Store.Controllers
             });
         }
 
-        [ValidateAntiForgeryToken]
+      //  [ValidateAntiForgeryToken]
         [HttpPut]
         public virtual async Task<ActionResult<TViewModel>> Update(TViewModel viewModel)
         {
