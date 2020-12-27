@@ -19,15 +19,13 @@ namespace Store.Services.Middleware
         }
 
         public async Task Invoke(HttpContext context)
-        {
-          
+        {        
             var cookie = context.Request.Cookies[AuthenticationCookieName];
             if (cookie != null)
             {
                 var token = JsonConvert.DeserializeObject<AccessToken>(cookie);
                 context.Request.Headers.Append("Authorization", "Bearer " + token.TokenString);
             }
-
             await _next.Invoke(context);
         }
     }

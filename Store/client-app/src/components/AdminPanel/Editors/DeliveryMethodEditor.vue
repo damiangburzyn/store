@@ -76,7 +76,7 @@
             }
             else {
 
-                var data = await service.get(this.itemId);
+                const data = await service.get(this.itemId);
                 this.item = data;
             }
         }

@@ -60,11 +60,6 @@ var UsersModule = /** @class */ (function (_super) {
                     case 0: return [4 /*yield*/, loginUser(loginPass)];
                     case 1:
                         userEither = _a.sent();
-                        if (userEither.isOk()) {
-                            //const token = (userEither.value as Profile).token;
-                            //setJWT(token);
-                            //  await this.loadAntiforgery();
-                        }
                         return [2 /*return*/, userEither];
                 }
             });
@@ -78,22 +73,11 @@ var UsersModule = /** @class */ (function (_super) {
                     case 0: return [4 /*yield*/, getProfile()];
                     case 1:
                         user = _a.sent();
-                        if (user !== null) {
-                            //const token = user.token;
-                            //setJWT(token);
-                            // await this.loadAntiforgery();
-                        }
                         return [2 /*return*/, user];
                 }
             });
         });
     };
-    //async loadAntiforgery(): Promise<string|undefined> {
-    //    const antiforgeryToken=   await antiforgery();
-    //    if (typeof antiforgeryToken !== 'undefined')
-    //        Antiforgery.commitAntiForgery(antiforgeryToken)
-    //    return antiforgeryToken
-    //}
     UsersModule.prototype.logOut = function () {
         logOutUser();
         return;

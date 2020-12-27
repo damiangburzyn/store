@@ -131,6 +131,7 @@ export default class AppNavbar extends Vue {
     }
     logout() {
         users.logOut();
+        this.$router.push('/');
     }
 }
 </script>

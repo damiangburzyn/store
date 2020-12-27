@@ -136,7 +136,7 @@ namespace Store.Controllers
                     };
                     SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
                     var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-                    HttpContext.Session.SetString("userId", user.Id.ToString());
+                   // HttpContext.Session.SetString("userId", user.Id.ToString());
                     var acToken = new AccessToken()
                     {
                         TokenString = tokenString,

@@ -43,29 +43,19 @@ namespace Store
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddAntiforgery(options => {
+            services.AddAntiforgery(options =>
+            {
                 options.HeaderName = "X-XSRF-TOKEN";
                 options.Cookie.HttpOnly = true;
-                });
+            });
             IdentityInjector.RegisterServices(services, Configuration);
-
-
-            services.AddControllers().AddNewtonsoftJson(); 
+            services.AddControllers().AddNewtonsoftJson();
             // connect vue app - middleware  
             services.AddSpaStaticFiles(options => options.RootPath = "client-app/dist");
-
-
-
             services.AddDbContext<ApplicationDbContext>(options =>
-         options.UseSqlServer(
-             Configuration.GetConnectionString("DefaultConnection")));
-
-
-
+            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddRazorPages();
-
             AddJWTAuthentication(services);
-
             services.AddSession();
 
 
@@ -140,22 +130,11 @@ namespace Store
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IAntiforgery antiforgery, ILoggerFactory loggerFactory)
         {
-         
+
 
             app.UseMiddleware<JWTInHeaderMiddleware>();
             app.UseStaticFiles();
             SingleLogger.Factory = loggerFactory;
-            //app.Use(next => context =>
-            //{
-            //    if (context.Request.Path.Value.IndexOf("/api", StringComparison.OrdinalIgnoreCase) != -1)
-            //    {
-            //        var tokens = antiforgery.GetAndStoreTokens(context);
-            //        context.Response.Cookies.Append("XSRF-TOKEN", tokens.RequestToken,
-            //            new CookieOptions() { HttpOnly = false });
-            //    }
-
-            //    return next(context);
-            //});
             app.UseSession();
 
 
@@ -172,7 +151,7 @@ namespace Store
             app.UseHttpsRedirection();
             app.UseRouting();
 
-           // app.UseCors();
+            // app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -189,7 +168,7 @@ namespace Store
                 spa.Options.SourcePath = "client-app";
                 if (env.IsDevelopment())
                 {
-                   
+
                     spa.UseVueDevelopmentServer();
                 }
             });

@@ -33,18 +33,14 @@ class UsersModule extends VuexModule {
     //Mutation cannot be async 
     //if async then do Action and then mutation
     @Mutation setProfile(profile: Profile) {
-
         this.profile = profile;
         this.isProfileLoaded = true;
     }
-
   
     @Mutation logOutUser() {
-
         this.profile = null;
         this.isProfileLoaded = false;
     }
-
 
     get username() {
         return this.profile && this.profile.userName || null;
@@ -64,35 +60,14 @@ class UsersModule extends VuexModule {
     @Action({ commit: "setProfileEither" })
     async login(loginPass: UserLogin): Promise<Either<Profile | undefined, string>> {
         const userEither = await loginUser(loginPass);
-        if (userEither.isOk()) {
-            //const token = (userEither.value as Profile).token;
-            //setJWT(token);
-          //  await this.loadAntiforgery();
-        }
         return userEither;
     }
 
     @Action({ commit: "setProfile" })
     async getProfile(): Promise<Profile | null> {
         const user = await getProfile();
-        if (user !== null) {
-            //const token = user.token;
-            //setJWT(token);
-       // await this.loadAntiforgery();
-        }
         return user;
     }
-
-
-    //async loadAntiforgery(): Promise<string|undefined> {
-    //    const antiforgeryToken=   await antiforgery();
-    //    if (typeof antiforgeryToken !== 'undefined')
-    //        Antiforgery.commitAntiForgery(antiforgeryToken)
-
-    //    return antiforgeryToken
-    //}
-
-
 
     @Action({ commit: "logOutUser" })
     logOut() {
