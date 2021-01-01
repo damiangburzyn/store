@@ -13,6 +13,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\css\app.css" />
+    <Content Remove="wwwroot\css\main.css" />
+    <Content Remove="wwwroot\css\styles.css" />
+    <Content Remove="wwwroot\js\app.js" />
+    <Content Remove="wwwroot\js\chunk-13d5dfc8.js" />
+    <Content Remove="wwwroot\js\main.js" />
+    <Content Remove="wwwroot\js\styles.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="client-app\src\components\AdminPanel\Categories.vue" />
     <None Remove="client-app\src\components\AdminPanel\DeliveryMethods.vue" />
     <None Remove="client-app\src\components\AdminPanel\Editors\CategoryEditor.vue" />
@@ -83,8 +93,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="logs\" />
-    <Folder Include="wwwroot\" />
+    <None Include="Views\Shared\Error.cshtml" />
+    <None Include="Views\Shared\_Layout.cshtml" />
+    <None Include="Views\Shared\_ValidationScriptsPartial.cshtml" />
+    <None Include="wwwroot\css\app.css" />
+    <None Include="wwwroot\css\main.css" />
+    <None Include="wwwroot\css\styles.css" />
+    <None Include="wwwroot\js\app.js" />
+    <None Include="wwwroot\js\chunk-13d5dfc8.js" />
+    <None Include="wwwroot\js\main.js" />
+    <None Include="wwwroot\js\styles.js" />
   </ItemGroup>
 
 

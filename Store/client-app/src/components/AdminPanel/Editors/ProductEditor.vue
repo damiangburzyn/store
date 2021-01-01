@@ -81,7 +81,7 @@
                             <label class="v-label v-label--active theme--light" style="left: 0px; right: auto; position: absolute;">Kategorie produktu</label>
                             <br />
                             <v-row>
-                                <v-chip class="ma-2" v-for="prodCat in productCategoryNames">
+                                <v-chip class="ma-2" v-for="(prodCat, index)  in productCategoryNames" :key="index">
                                     {{prodCat}}
                                 </v-chip>
                             </v-row>
@@ -107,7 +107,7 @@
                 <v-card max-height="400" class="overflow-y-auto">
 
                     <v-card-text>
-                        <v-row v-for="sdm in selectDeliveryMethods">
+                        <v-row v-for="(sdm, index) in selectDeliveryMethods" :key="index">
                             <v-col>
                                 <v-switch v-model="sdm.isSelected"
                                           :label="sdm.item.delivery.name"></v-switch>
@@ -213,14 +213,14 @@
         public selectDeliveryMethods = new Array<SelectModel<ProductDeliveryMethod>>();
         public treeSelectCategory = new Array<TreeSelectModel<Category>>();
 
-        async created() {
+        //async created() {
            
-        }
+        //}
 
         // manageProductCategory(isSelected: boolean, treeSelect: TreeSelectModel<Category>) {
         manageProductCategories(treeSelect: TreeSelectModel<Category>) {
             let pc = this.item.productCategories.find(x => x.categoryId === treeSelect.item?.id);
-            let pcName: string | undefined = this.productCategoryNames.find(n => n === treeSelect.item?.name);
+            const pcName: string | undefined = this.productCategoryNames.find(n => n === treeSelect.item?.name);
             if (pc !== undefined && pc !== null) {
                 this.item.productCategories.splice(this.item.productCategories.indexOf(pc), 1);
             }
@@ -235,7 +235,7 @@
                 this.productCategoryNames.splice(this.productCategoryNames.indexOf(pcName), 1);
             }
             else {
-                let d = treeSelect?.item?.name ?? '';
+                const d = treeSelect?.item?.name ?? '';
                 this.productCategoryNames.push(d);
             }
 
@@ -244,7 +244,7 @@
 
         async save() {
 
-            let selectedDeliveryMethods = new Array<ProductDeliveryMethod>();
+            const selectedDeliveryMethods = new Array<ProductDeliveryMethod>();
             this.selectDeliveryMethods.forEach((select) => {
                 if (select.isSelected && select.item != null) {
                     selectedDeliveryMethods.push(select.item);
@@ -277,13 +277,13 @@
             }
             else {
 
-                var data = await productService.get(this.productId);
+                const data = await productService.get(this.productId);
                 this.item = data;
 
 
                
                     await this.loadTree();
-                    let prodDelMethods = await this.getDeliveryMethods();
+                    const prodDelMethods = await this.getDeliveryMethods();
                     if (this.productId !== 0) {
 
                         this.item.deliveryMethods.forEach(dm => {
@@ -340,10 +340,10 @@
         }
 
         onFilePicked(files: File[]) {
-            let self = this;
+           
 
             files.forEach(file => {
-                const image = self.getEmptyImage();
+                const image = this.getEmptyImage();
 
                 if (file !== undefined) {
                     image.name = file.name
@@ -357,15 +357,15 @@
                         image.url = URL.createObjectURL(file);  // this is an image file that can be sent to server...
 
 
-                        self.item.images.forEach(image => {
+                        this.item.images.forEach(image => {
 
                             if (image.name === file.name) {
-                                let index = self.item.images.indexOf(image);
-                                if (index !== -1) self.item.images.splice(index, 1);
+                                const index = this.item.images.indexOf(image);
+                                if (index !== -1) this.item.images.splice(index, 1);
                             }
 
                         })
-                        self.item.images.push(image);
+                        this.item.images.push(image);
                     })
                 }
             })
@@ -379,21 +379,21 @@
         }
 
         async getDeliveryMethods() {
-            let selectDeliveryMethods = new Array<SelectModel<ProductDeliveryMethod>>();
+            const selectDeliveryMethods = new Array<SelectModel<ProductDeliveryMethod>>();
 
-            let self = this;
+           
             const methods = await deliveryMehodService.list();
             methods.forEach(method => {
                 const prodDeliveryMethod: ProductDeliveryMethod = {
                     id: 0,
                     delivery: method,
                     deliveryId: method.id,
-                    productId: self.productId,
+                    productId: this.productId,
                     maxCountInPackage: 0,
                     price: 0
                 }
 
-                let model: SelectModel<ProductDeliveryMethod> = {
+                const model: SelectModel<ProductDeliveryMethod> = {
                     isSelected: false,
                     item: prodDeliveryMethod,
                 }
@@ -411,18 +411,18 @@
 
         buildTreeSelectModel(categories: Array<Category | undefined>): Array<TreeSelectModel<Category>> {
 
-            let treeSelect: Array<TreeSelectModel<Category>> = new Array<TreeSelectModel<Category>>();
+            const treeSelect: Array<TreeSelectModel<Category>> = new Array<TreeSelectModel<Category>>();
 
 
             categories.forEach((cat) => {
                 if (cat !== undefined && cat !== null) {
 
-                    let selecteCat = this.item.productCategories.find(a => a.categoryId == cat.id);
+                    const selecteCat = this.item.productCategories.find(a => a.categoryId == cat.id);
 
                     if (selecteCat !== undefined) {
                         this.productCategoryNames.push(selecteCat.category?.name ?? '');
                     }
-                    let treeSelectViewModel: TreeSelectModel<Category> = {
+                    const treeSelectViewModel: TreeSelectModel<Category> = {
                         item: cat,
                         isSelected: selecteCat !== undefined,
                         children: this.buildTreeSelectModel(cat.subCategories),
@@ -442,9 +442,6 @@
         async onPropertyShowChanged(value: boolean, oldValue: boolean) {
             if (value == false) {
                 this.closeDialog();
-            }
-            else {
-   
             }
         }
 

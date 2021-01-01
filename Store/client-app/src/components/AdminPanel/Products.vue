@@ -84,7 +84,7 @@ export default class Products extends Vue {
             pageNo: 1,
             total: 0
         };
-        queryString: string = '';
+        queryString = '';
         headers = [
             {
                 text: 'Nazwa', align: 'start',

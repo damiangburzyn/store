@@ -42,14 +42,14 @@
         private itemsPerRow = 3;
         async getCategories() {
 
-            let catId = parseInt(this.$route.params.id);
+            const catId = parseInt(this.$route.params.id);
 
          //   this.products = await productService.ProductsInCategory(catId);
            
         }
 
         getItem(i: number) {
-            let item = this.products[i]
+            const item = this.products[i]
             return item ;
         }
 
@@ -59,7 +59,7 @@
 
 
         get categoryGroups() {
-            let res = Array.from(Array(Math.ceil(this.products.length / this.itemsPerRow)).keys())
+            const res = Array.from(Array(Math.ceil(this.products.length / this.itemsPerRow)).keys())
             return res;
         }
     }

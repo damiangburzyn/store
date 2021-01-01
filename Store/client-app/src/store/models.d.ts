@@ -12,14 +12,14 @@ export interface TreeSelectModel<T> {
 
 
 export interface SelectItem<T> {
-    Value:T,
-    Text: string,
+    Value: T;
+    Text: string;
 }
 
 export interface Content {
-    name: string,
-    url: string,
-    data: string,
+    name: string;
+    url: string;
+    data: string;
 }
 
 

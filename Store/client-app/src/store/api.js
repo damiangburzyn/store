@@ -1,10 +1,12 @@
+var _a;
 import { __awaiter, __extends, __generator } from "tslib";
 import axios from 'axios';
 import { ok, err } from '@/store/error';
-//import antiforgeryState from "@/store/Modules/Antiforgery";
-//const head = antiforgeryState?.antiforgeryToken ?? "";
+import antiforgeryState from "@/store/Modules/Antiforgery";
+var head = (_a = antiforgeryState === null || antiforgeryState === void 0 ? void 0 : antiforgeryState.antiforgeryToken) !== null && _a !== void 0 ? _a : "";
 export var api = axios.create({
     baseURL: "/api/",
+    headers: { 'X-XSRF-TOKEN': head }
 });
 var ApiBase = /** @class */ (function () {
     function ApiBase(controller) {

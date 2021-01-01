@@ -43,6 +43,15 @@ namespace Store
         public void ConfigureServices(IServiceCollection services)
         {
 
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy(name: "MyAllowSpecificOrigins",
+            //                      builder =>
+            //                      {
+            //                          builder.WithOrigins("http://localhost:8080");
+            //                      });
+            //});
+
             services.AddAntiforgery(options =>
             {
                 options.HeaderName = "X-XSRF-TOKEN";
@@ -151,7 +160,7 @@ namespace Store
             app.UseHttpsRedirection();
             app.UseRouting();
 
-            // app.UseCors();
+            //app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -163,6 +172,15 @@ namespace Store
 
             // use middleware and launch server for Vue  
             app.UseSpaStaticFiles();
+         
+          //  app.UseHttpMethodOverride();
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllerRoute(
+            //        name: "default",
+            //        pattern: "{controller=Home}/{action=Index}/{id?}");
+            //});
+
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "client-app";
@@ -172,9 +190,6 @@ namespace Store
                     spa.UseVueDevelopmentServer();
                 }
             });
-
-
-
         }
     }
 }

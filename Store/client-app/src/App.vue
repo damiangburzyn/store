@@ -104,4 +104,9 @@
     .heading {
     font-size: 6rem;
     }
+    .heading {
+    line-height: normal;
+
+    }
+
 </style>

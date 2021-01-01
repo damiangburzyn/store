@@ -7,15 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Store.Controllers
 {
-    [ApiController]
-    [Route("[controller]")]
-    public class HomeController : ControllerBase
+    public class HomeController : Controller
     {
-
-        [HttpGet("index")]
-        public IActionResult Index()
+        // GET: HomeController
+        public ActionResult Index()
         {
-            return Ok();
+            return View();
         }
+
+
     }
 }

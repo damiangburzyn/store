@@ -12,7 +12,7 @@
         <v-app-bar color="grey lighten-1"
                    dense
                    light>
-            <v-app-bar-nav-icon></v-app-bar-nav-icon>
+            <!--<v-app-bar-nav-icon></v-app-bar-nav-icon>-->
 
             <v-btn-toggle 
                           tile
