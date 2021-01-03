@@ -94,7 +94,7 @@
         removeMessage = "Czy na pewno chcesz usunąć kategorię? Dane zostaną trwale usunięte";
 
         async LoadTree() {
-            const categories = await categoryService.Tree()
+            const categories = await categoryService.tree()
             this.items = categories;
         }
 

@@ -331,7 +331,7 @@
 
 
 
-        onImagesupdateError(e: any) {
+        onImagesupdateError(e: Error) {
             console.log(e);
         }
 
@@ -405,7 +405,7 @@
 
 
         async loadTree() {
-            const categories = await categoryService.Tree()
+            const categories = await categoryService.tree()
             this.treeSelectCategory = this.buildTreeSelectModel(categories);
         }
 

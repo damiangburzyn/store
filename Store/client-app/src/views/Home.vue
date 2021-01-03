@@ -38,7 +38,7 @@
 
         private itemsPerRow = 3;
         async getCategories() {
-            this.categories = await categoryService.MainCategiories();
+            this.categories = await categoryService.mainCategiories();
         }
 
         getItem(i: number) {

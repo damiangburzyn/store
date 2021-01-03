@@ -5,8 +5,6 @@
         <!--<img alt="Vue logo" src="../assets/logo.png">
         <HelloWorld msg="Welcome to Your Vue.js App" />-->
         <!--<CategoryCard  :item="cat"></CategoryCard>-->
-
-
         <!--<v-row v-if="categories.length > 0" v-for="(group, i) in categoryGroups">
 
             <CategoryCard v-for="category in categories.slice(i * itemsPerRow, (i + 1) * itemsPerRow)" :item="category"></CategoryCard>
@@ -22,7 +20,7 @@
 
     import { Component, Vue } from 'vue-property-decorator';
     import { Product } from '@/store/modelsData'
-    import { productService } from "@/store/api";
+    import { productService, categoryService } from "@/store/api";
     //import productCard from "@/components/Cards/productCard.vue"
 
 
@@ -30,31 +28,45 @@
 
     @Component({
         components: {
-           // ProductCard: productCard,
+            // ProductCard: productCard,
 
         },
     })
     export default class Home extends Vue {
 
         public products = new Array<Product>();
-       
+
 
         private itemsPerRow = 3;
-        async getCategories() {
+        async categoryProducts() {
 
-            const catId = parseInt(this.$route.params.id);
+            const catId = parseInt(this.$route.params.categoryId);
+            await categoryService.categoryProducts(catId).then(res =>
+                this.products = res.data as Product[]
+            ).catch(ex => {
+                if (process.env === 'development') {
+                    console.log(ex);
+                }
+            }
+            );
 
-         //   this.products = await productService.ProductsInCategory(catId);
-           
         }
+
+        async subCategoryTree() {
+
+            const catId = parseInt(this.$route.params.categoryId);
+            const subCategories = await categoryService.subCategiories(catId);
+
+        }
+
 
         getItem(i: number) {
             const item = this.products[i]
-            return item ;
+            return item;
         }
 
         async created() {
-            await this.getCategories();
+            await this.categoryProducts();
         }
 
 

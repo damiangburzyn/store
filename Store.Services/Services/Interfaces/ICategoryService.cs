@@ -8,6 +8,8 @@ namespace Store.Services
 {
     public interface ICategoryService : IBaseService<Category>
     {
-        public Task<ICollection<Category>> MainCategories();
+        Task<ICollection<Category>> MainCategories();
+
+        Task<ICollection<Product>> CategoryProducts(int categoryId);
     }
 }

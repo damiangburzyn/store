@@ -167,7 +167,7 @@ export async function logOutUser() {
 //}
 
 class CategoryService extends ApiBase<Category>{
-    async Tree() {
+    async tree() {
         const res = await api.get(`${this.controller}/tree`).then(
             (r) => {
                 return r;
@@ -175,21 +175,38 @@ class CategoryService extends ApiBase<Category>{
         return res.data as Category[];
     }
 
-    async MainCategiories() {
+    async mainCategiories() {
         const resp = await api.get(`${this.controller}/main`)
         return resp.data as Category[];
     }
 
-    async SubCategiories(parentCategoryId: number) {
-        const resp = await api.get(`${this.controller}/subcategories/${parentCategoryId}`)
+    async subCategiories(id: number) {
+        const resp = await api.get(`${this.controller}/${id}/subcategories`)
         return resp;
     }
+
+    async categoryProducts(id: number) {
+
+        const resp = await api.get(`${this.controller}/${id}/categoryProducts`)
+        return resp;
+    }
+
 }
+
+class ProductService extends ApiBase<Product>{
+
+ 
+
+
+}
+
+
+
 
 
 export const categoryService = new CategoryService("categories");
 
-export const productService = new ApiBase<Product>("products")
+export const productService = new ProductService("products")
 
 export const deliveryMehodService = new ApiBase<DeliveryMethod>("deliverymethods");
 

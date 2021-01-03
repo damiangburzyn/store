@@ -216,7 +216,7 @@ var CategoryService = /** @class */ (function (_super) {
     function CategoryService() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    CategoryService.prototype.Tree = function () {
+    CategoryService.prototype.tree = function () {
         return __awaiter(this, void 0, void 0, function () {
             var res;
             return __generator(this, function (_a) {
@@ -231,7 +231,7 @@ var CategoryService = /** @class */ (function (_super) {
             });
         });
     };
-    CategoryService.prototype.MainCategiories = function () {
+    CategoryService.prototype.mainCategiories = function () {
         return __awaiter(this, void 0, void 0, function () {
             var resp;
             return __generator(this, function (_a) {
@@ -244,12 +244,25 @@ var CategoryService = /** @class */ (function (_super) {
             });
         });
     };
-    CategoryService.prototype.SubCategiories = function (parentCategoryId) {
+    CategoryService.prototype.subCategiories = function (id) {
         return __awaiter(this, void 0, void 0, function () {
             var resp;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, api.get(this.controller + "/subcategories/" + parentCategoryId)];
+                    case 0: return [4 /*yield*/, api.get(this.controller + "/" + id + "/subcategories")];
+                    case 1:
+                        resp = _a.sent();
+                        return [2 /*return*/, resp];
+                }
+            });
+        });
+    };
+    CategoryService.prototype.categoryProducts = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var resp;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, api.get(this.controller + "/" + id + "/categoryProducts")];
                     case 1:
                         resp = _a.sent();
                         return [2 /*return*/, resp];
@@ -259,7 +272,14 @@ var CategoryService = /** @class */ (function (_super) {
     };
     return CategoryService;
 }(ApiBase));
+var ProductService = /** @class */ (function (_super) {
+    __extends(ProductService, _super);
+    function ProductService() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return ProductService;
+}(ApiBase));
 export var categoryService = new CategoryService("categories");
-export var productService = new ApiBase("products");
+export var productService = new ProductService("products");
 export var deliveryMehodService = new ApiBase("deliverymethods");
 //# sourceMappingURL=api.js.map

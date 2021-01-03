@@ -100,5 +100,29 @@ namespace Store.Controllers
 
             });
         }
+
+
+
+        [HttpGet()]
+        public async Task<ActionResult> CategoryProducts(int id)
+        {
+
+            Func<Task<ActionResult>> func = async () =>
+            {
+                var result = await categoryService.CategoryProducts(id);
+                var vm = Mapper.Map<List<ProductViewModel>>(result);
+                return Ok(vm);
+            };
+
+            return await this.WrapExceptionAsync(async () =>
+            {
+                return await func();
+            });
+
+
+
+        }
+
+
     }
 }

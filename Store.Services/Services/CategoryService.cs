@@ -27,6 +27,13 @@ namespace Store.Services
             return cat;
         }
 
+
+        public async Task<ICollection<Product>> CategoryProducts(int categoryId)
+        {
+            var cat = await Repository.Find<Product>(predicate: (a) => a.ProductCategories.Any(a=>a.CategoryId == categoryId));
+            return cat;
+        }
+
         public override async Task<Category> Add(Category entity)
         {
             if (entity.ParentCategory != null)

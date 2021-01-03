@@ -172,15 +172,6 @@ namespace Store
 
             // use middleware and launch server for Vue  
             app.UseSpaStaticFiles();
-         
-          //  app.UseHttpMethodOverride();
-            //app.UseEndpoints(endpoints =>
-            //{
-            //    endpoints.MapControllerRoute(
-            //        name: "default",
-            //        pattern: "{controller=Home}/{action=Index}/{id?}");
-            //});
-
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "client-app";
@@ -190,6 +181,15 @@ namespace Store
                     spa.UseVueDevelopmentServer();
                 }
             });
+
+            //app.UseHttpMethodOverride();
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapControllerRoute(
+            //        name: "default",
+            //        pattern: "{controller=Home}/{action=Index}/{id?}");
+            //});
+
         }
     }
 }
