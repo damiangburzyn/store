@@ -56,21 +56,24 @@ namespace Store.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetProfile()
         {
-            //string token = HttpContext.Session.GetString("token");
-            string userIdStr = HttpContext.Session.GetString("userId");
-            var user = await _userManager.FindByIdAsync(userIdStr);
-            if (user != null)
+            var userId = (await _userManager.GetUserAsync(HttpContext.User)).Id;
+            //string userIdStr = HttpContext.Session.GetString("userId");
+            if (userId != 0)
             {
-                var userRoles = await _userManager.GetRolesAsync(user);
-                var profile = new ProfileViewModel()
+                var user = await _userManager.FindByIdAsync(userId.ToString());
+                if (user != null)
                 {
-                    Roles = userRoles,
-                    UserName = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Id = user.Id
-                };
-                return Ok(profile);
+                    var userRoles = await _userManager.GetRolesAsync(user);
+                    var profile = new ProfileViewModel()
+                    {
+                        Roles = userRoles,
+                        UserName = user.Email,
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        Id = user.Id
+                    };
+                    return Ok(profile);
+                }
             }
             return Ok();
         }
@@ -118,8 +121,8 @@ namespace Store.Controllers
 
                     var claims = new[]
                     {
-                        new Claim(ClaimTypes.Name, user.Id.ToString()),
-                        new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                       // new Claim(ClaimTypes.Name, user.Email),
+                        new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                     };
 
@@ -136,7 +139,7 @@ namespace Store.Controllers
                     };
                     SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
                     var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-                    HttpContext.Session.SetString("userId", user.Id.ToString());
+                    //HttpContext.Session.SetString("userId", user.Id.ToString());
                     var acToken = new AccessToken()
                     {
                         TokenString = tokenString,
