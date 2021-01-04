@@ -56,23 +56,26 @@ namespace Store.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetProfile()
         {
-            var userId = (await _userManager.GetUserAsync(HttpContext.User)).Id;
-            //string userIdStr = HttpContext.Session.GetString("userId");
-            if (userId != 0)
+            if (HttpContext.User.Identity.IsAuthenticated)
             {
-                var user = await _userManager.FindByIdAsync(userId.ToString());
-                if (user != null)
+                var userId = (await _userManager.GetUserAsync(HttpContext.User)).Id;
+                //string userIdStr = HttpContext.Session.GetString("userId");
+                if (userId != 0)
                 {
-                    var userRoles = await _userManager.GetRolesAsync(user);
-                    var profile = new ProfileViewModel()
+                    var user = await _userManager.FindByIdAsync(userId.ToString());
+                    if (user != null)
                     {
-                        Roles = userRoles,
-                        UserName = user.Email,
-                        FirstName = user.FirstName,
-                        LastName = user.LastName,
-                        Id = user.Id
-                    };
-                    return Ok(profile);
+                        var userRoles = await _userManager.GetRolesAsync(user);
+                        var profile = new ProfileViewModel()
+                        {
+                            Roles = userRoles,
+                            UserName = user.Email,
+                            FirstName = user.FirstName,
+                            LastName = user.LastName,
+                            Id = user.Id
+                        };
+                        return Ok(profile);
+                    }
                 }
             }
             return Ok();
@@ -168,11 +171,11 @@ namespace Store.Controllers
             });
         }
 
-
+        [HttpGet("logOff")]
         public async Task<IActionResult> LogOff()
         {
             var userId = (await _userManager.GetUserAsync(HttpContext.User)).Id;
-            HttpContext.Session.SetString("userId", "");
+            // HttpContext.Session.SetString("userId", "");
 
             Response.Cookies.Delete(JWTInHeaderMiddleware.AuthenticationCookieName);
 
