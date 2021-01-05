@@ -22,7 +22,6 @@ using Store.Services;
 
 namespace Store.Controllers
 {
-    // [AutoValidateAntiforgeryToken]
     public abstract class BaseController<TEntity, TViewModel> : BaseController
     where TViewModel : BaseViewModel
     where TEntity : class, IBaseEntity
@@ -30,11 +29,10 @@ namespace Store.Controllers
         protected readonly IBaseService<TEntity> _service;
         protected readonly IMediaService _mediaService;
 
-
         public BaseController(IOptions<AppSettings> settings,
             ILocalPageData pageData,
             IMapper mapper, IBaseService<TEntity> service,
-            IMediaService mediaService, 
+            IMediaService mediaService,
             ILogger logger)
             : base(settings, pageData, mapper, logger)
         {
@@ -42,40 +40,26 @@ namespace Store.Controllers
             _mediaService = mediaService;
         }
 
-
         [HttpGet("search")]
         public virtual async Task<IActionResult> Search(string query, string culture = null, bool withCount = false, int? page = null, int? pageSize = null)
         {
-
-
-            return await this.WrapExceptionAsync(async () =>
-            {
-
                 DataTableSearchViewModel<TEntity> result = null;
                 IEnumerable<PropertyInfo> stringProps = null;
                 if (!string.IsNullOrWhiteSpace(query))
                 {
                     stringProps = typeof(TEntity).GetProperties().Where(prop =>
                          prop.PropertyType == query.GetType());
-
-
-                    result = await _service.Search( page, pageSize, null,    q => stringProps.Any(p =>
-                    (p.GetValue(q, null) as string).Contains(query)));
-
+                    result = await _service.Search(page, pageSize, null, q => stringProps.Any(p =>
+                (p.GetValue(q, null) as string).Contains(query)));
                 }
-                else {
-
+                else
+                {
                     result = await _service.Search(page, pageSize, null);
-
                 }
 
                 var vm = Mapper.Map<DataTableSearchViewModel<TViewModel>>(result);
                 return Ok(vm);
-            });
-
         }
-
-
 
         // DELETE: api/controller/5
         [HttpDelete("{id}")]
@@ -84,18 +68,14 @@ namespace Store.Controllers
             Func<Task<ActionResult>> func = async () =>
             {
                 var todoItem = await _service.GetById(id);
-            if (todoItem == null)
-            {
-                return NotFound();
-            }
-            await _service.Remove(id);
-            return Ok();
+                if (todoItem == null)
+                {
+                    return NotFound();
+                }
+                await _service.Remove(id);
+                return Ok();
             };
-
-            return await this.WrapExceptionAsync(async () =>
-            {
                 return await func();
-            });
         }
 
         // Get: api/controller
@@ -104,18 +84,12 @@ namespace Store.Controllers
         {
             Func<Task<ActionResult>> func = async () =>
             {
-                var result = await _service.GetAll();              
+                var result = await _service.GetAll();
                 var vm = Mapper.Map<List<TViewModel>>(result);
                 return Ok(vm);
             };
-
-            return await this.WrapExceptionAsync(async () =>
-            {
                 return await func();
-            });
         }
-
-
 
         // Get: api/categories/5
         [HttpGet("{id}")]
@@ -128,20 +102,12 @@ namespace Store.Controllers
                 {
                     return NotFound();
                 }
-               
                 var vm = Mapper.Map<TViewModel>(result);
                 return Ok(vm);
             };
-
-            return await this.WrapExceptionAsync(async () =>
-            {
                 return await func();
-            });
-
         }
 
-
-       // [ValidateAntiForgeryToken]
         [HttpPost]
         public virtual async Task<ActionResult<TViewModel>> Create(TViewModel viewModel)
         {
@@ -152,14 +118,9 @@ namespace Store.Controllers
                 var vm = Mapper.Map<TViewModel>(result);
                 return Ok(vm);
             };
-
-            return await this.WrapExceptionAsync(async () =>
-            {
                 return await func();
-            });
         }
 
-      //  [ValidateAntiForgeryToken]
         [HttpPut]
         public virtual async Task<ActionResult<TViewModel>> Update(TViewModel viewModel)
         {
@@ -170,10 +131,7 @@ namespace Store.Controllers
                 var vm = Mapper.Map<TViewModel>(result);
                 return Ok(vm);
             };
-            return await this.WrapExceptionAsync(async () =>
-            {
-                return await func();
-            });
+            return await func();
         }
     }
 }

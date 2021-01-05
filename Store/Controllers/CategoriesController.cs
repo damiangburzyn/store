@@ -49,33 +49,25 @@ namespace Store.Controllers
                 return Ok(vm);
             };
 
-            return await this.WrapExceptionAsync(async () =>
-            {
                 return await func();
-            });
         }
 
         [ValidateAntiForgeryToken]
         [HttpPost]
         public override async Task<ActionResult<CategoryViewModel>> Create(CategoryViewModel viewModel)
         {
-            return await this.WrapExceptionAsync(async () =>
-            {
                 var model = Mapper.Map<Category>(viewModel);
                 var result = await _service.Add(model);
                 viewModel.Id = result.Id;
                 await _mediaService.SaveMedia(viewModel.Logo, storageHelper.CrateContainer<CategoryViewModel>(viewModel));
                 var vm = Mapper.Map<CategoryViewModel>(result);
                 return Ok(vm);
-            });
         }
 
         [ValidateAntiForgeryToken]
         [HttpPut]
         public override async Task<ActionResult<CategoryViewModel>> Update(CategoryViewModel viewModel)
         {
-            return await this.WrapExceptionAsync(async () =>
-            {
 
                 var model = await _service.GetById(viewModel.Id);
                 var prevLogo = model.Logo;
@@ -84,7 +76,6 @@ namespace Store.Controllers
                 await _mediaService.SaveMedia(viewModel.Logo, storageHelper.CrateContainer<CategoryViewModel>(viewModel), null, prevLogo);
                 var vm = Mapper.Map<CategoryViewModel>(result);
                 return Ok(vm);
-            });
         }
 
 
@@ -92,35 +83,24 @@ namespace Store.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> MainCategories()
         {
-            return await this.WrapExceptionAsync(async () =>
-            {
-                var mainCat = await categoryService.MainCategories();
+            throw new Exception("test");
+                 var mainCat = await categoryService.MainCategories();
                 var res = Mapper.Map<List<CategoryViewModel>>(mainCat);
                 return Ok(res);
-
-            });
         }
 
 
 
-        [HttpGet()]
+        [HttpGet("{id}/categoryproducts")]
         public async Task<ActionResult> CategoryProducts(int id)
         {
-
             Func<Task<ActionResult>> func = async () =>
             {
                 var result = await categoryService.CategoryProducts(id);
                 var vm = Mapper.Map<List<ProductViewModel>>(result);
                 return Ok(vm);
             };
-
-            return await this.WrapExceptionAsync(async () =>
-            {
                 return await func();
-            });
-
-
-
         }
 
 

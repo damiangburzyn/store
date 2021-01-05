@@ -2,14 +2,13 @@
 
 <template>
     <div id="home" class="home">
-        <!--<img alt="Vue logo" src="../assets/logo.png">
-        <HelloWorld msg="Welcome to Your Vue.js App" />-->
-        <!--<CategoryCard  :item="cat"></CategoryCard>-->
-        <!--<v-row v-if="categories.length > 0" v-for="(group, i) in categoryGroups">
+        <div v-if="products.length > 0">
+            <v-row v-for="(group, i) in categoryGroups" :key="i">
 
-            <CategoryCard v-for="category in categories.slice(i * itemsPerRow, (i + 1) * itemsPerRow)" :item="category"></CategoryCard>
+                <ProductCard v-for="(product, index) in products.slice(i * itemsPerRow, (i + 1) * itemsPerRow)" :item="product" :key="index"></ProductCard>
 
-        </v-row>-->
+            </v-row>
+        </div>
 
     </div>
 
@@ -20,23 +19,21 @@
 
     import { Component, Vue } from 'vue-property-decorator';
     import { Product } from '@/store/modelsData'
-    import { productService, categoryService } from "@/store/api";
-    //import productCard from "@/components/Cards/productCard.vue"
+    import {  categoryService } from "@/store/api";
+    import productCard from "@/components/Cards/ProductCard.vue"
 
 
     import Categories from '../components/AdminPanel/Categories.vue';
 
     @Component({
         components: {
-            // ProductCard: productCard,
+             ProductCard: productCard,
 
         },
     })
     export default class Home extends Vue {
 
         public products = new Array<Product>();
-
-
         private itemsPerRow = 3;
         async categoryProducts() {
 

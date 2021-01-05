@@ -139,7 +139,18 @@ namespace Store
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IAntiforgery antiforgery, ILoggerFactory loggerFactory)
         {
-
+          
+            if (env.IsDevelopment())
+            {
+                app.UseExceptionHandler("/error-local-development");
+               
+            }
+            else
+            {
+                app.UseExceptionHandler("/error");
+              
+            }
+            app.UseHsts();
 
             app.UseMiddleware<JWTInHeaderMiddleware>();
             app.UseStaticFiles();
@@ -147,16 +158,7 @@ namespace Store
             app.UseSession();
 
 
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.  
-                app.UseHsts();
-            }
-
+       
             app.UseHttpsRedirection();
             app.UseRouting();
 

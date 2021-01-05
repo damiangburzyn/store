@@ -19,16 +19,12 @@ using Store.Contracts;
 
 namespace Store.Controllers
 {
-   // [AutoValidateAntiforgeryToken]
     public abstract class BaseController : Controller
     {
         protected readonly AppSettings _appsettings;
         protected readonly ILogger _logger;
-
-        public IMapper Mapper { get; private set; }   
-        
+        public IMapper Mapper { get; private set; }        
         internal ILocalPageData pageData { get; set; }
-
         protected BaseController(IOptions<AppSettings> applicationSettings,        
             ILocalPageData pageData,
             IMapper mapper, 

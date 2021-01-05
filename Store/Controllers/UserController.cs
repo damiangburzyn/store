@@ -86,8 +86,7 @@ namespace Store.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] AuthenticationModel model)
         {
-            return await this.WrapExceptionAsync(async () =>
-            {
+
 
                 if (string.IsNullOrWhiteSpace(model.UserName) || string.IsNullOrWhiteSpace(model.Password))
                     return (IActionResult)Unauthorized("Nieprawidłowe dane do logowania");
@@ -124,7 +123,7 @@ namespace Store.Controllers
 
                     var claims = new[]
                     {
-                       // new Claim(ClaimTypes.Name, user.Email),
+                        new Claim(ClaimTypes.Name, user.Email),
                         new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                     };
@@ -168,17 +167,14 @@ namespace Store.Controllers
 
                     return Ok(profile);
                 }
-            });
+
         }
 
         [HttpGet("logOff")]
         public async Task<IActionResult> LogOff()
         {
-            var userId = (await _userManager.GetUserAsync(HttpContext.User)).Id;
-            // HttpContext.Session.SetString("userId", "");
-
+            var userId = (await _userManager.GetUserAsync(HttpContext.User)).Id;          
             Response.Cookies.Delete(JWTInHeaderMiddleware.AuthenticationCookieName);
-
             await _signInManager.SignOutAsync();
             return Ok();
         }
@@ -222,16 +218,7 @@ namespace Store.Controllers
                         await _userManager.AddToRolesAsync(user, userRoles);
                     }
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    //var callbackUrl = Url.MultiLingualAction("VerifyAccountConfirmation", "Accounts", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-                    //try
-                    //{
-                    //    await _mailSenderManager.SendVerificationCodeMail(vm.Email, callbackUrl, user.Culture);
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    _logger.LogError(ex, "Wystąpił błąd wysyłania wiadomości z linkiem aktywacyjnym", null);
-                    //}
-
+          
                     return Ok(vm);
                 }
 
@@ -242,7 +229,7 @@ namespace Store.Controllers
 
                 return Ok(vm);
             };
-            return await this.WrapExceptionAsync(async () => { return await fun(); });
+            return await fun(); 
         }
 
 

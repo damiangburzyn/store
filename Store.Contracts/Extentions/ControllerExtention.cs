@@ -16,11 +16,6 @@ namespace System
     public static class ControllerExtension
     {
 
-        //public static ILoggerFactory LoggerFactory { get; set; } = new LoggerFactory();
-        //internal static ILogger CreateLogger<T>() => LoggerFactory.CreateLogger<T>();
-        //internal static ILogger CreateLogger(string categoryName) => LoggerFactory.CreateLogger(categoryName);
-        //private static ILogger logger = CreateLogger("ControllerExtension");
-
         public static async Task<T> WrapExceptionAsync<T>(this ControllerBase contr, Func<Task<T>> action)
         {
             try
