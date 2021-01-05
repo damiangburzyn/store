@@ -49,19 +49,19 @@ namespace Store.Controllers
                 return Ok(vm);
             };
 
-                return await func();
+            return await func();
         }
 
         [ValidateAntiForgeryToken]
         [HttpPost]
         public override async Task<ActionResult<CategoryViewModel>> Create(CategoryViewModel viewModel)
         {
-                var model = Mapper.Map<Category>(viewModel);
-                var result = await _service.Add(model);
-                viewModel.Id = result.Id;
-                await _mediaService.SaveMedia(viewModel.Logo, storageHelper.CrateContainer<CategoryViewModel>(viewModel));
-                var vm = Mapper.Map<CategoryViewModel>(result);
-                return Ok(vm);
+            var model = Mapper.Map<Category>(viewModel);
+            var result = await _service.Add(model);
+            viewModel.Id = result.Id;
+            await _mediaService.SaveMedia(viewModel.Logo, storageHelper.CrateContainer<CategoryViewModel>(viewModel));
+            var vm = Mapper.Map<CategoryViewModel>(result);
+            return Ok(vm);
         }
 
         [ValidateAntiForgeryToken]
@@ -69,27 +69,23 @@ namespace Store.Controllers
         public override async Task<ActionResult<CategoryViewModel>> Update(CategoryViewModel viewModel)
         {
 
-                var model = await _service.GetById(viewModel.Id);
-                var prevLogo = model.Logo;
-                Mapper.Map<CategoryViewModel, Category>(viewModel, model);
-                var result = await _service.Update(model);
-                await _mediaService.SaveMedia(viewModel.Logo, storageHelper.CrateContainer<CategoryViewModel>(viewModel), null, prevLogo);
-                var vm = Mapper.Map<CategoryViewModel>(result);
-                return Ok(vm);
+            var model = await _service.GetById(viewModel.Id);
+            var prevLogo = model.Logo;
+            Mapper.Map<CategoryViewModel, Category>(viewModel, model);
+            var result = await _service.Update(model);
+            await _mediaService.SaveMedia(viewModel.Logo, storageHelper.CrateContainer<CategoryViewModel>(viewModel), null, prevLogo);
+            var vm = Mapper.Map<CategoryViewModel>(result);
+            return Ok(vm);
         }
-
 
         [HttpGet("main")]
         [AllowAnonymous]
         public async Task<IActionResult> MainCategories()
         {
-            throw new Exception("test");
-                 var mainCat = await categoryService.MainCategories();
-                var res = Mapper.Map<List<CategoryViewModel>>(mainCat);
-                return Ok(res);
+            var mainCat = await categoryService.MainCategories();
+            var res = Mapper.Map<List<CategoryViewModel>>(mainCat);
+            return Ok(res);
         }
-
-
 
         [HttpGet("{id}/categoryproducts")]
         public async Task<ActionResult> CategoryProducts(int id)
@@ -100,9 +96,7 @@ namespace Store.Controllers
                 var vm = Mapper.Map<List<ProductViewModel>>(result);
                 return Ok(vm);
             };
-                return await func();
+            return await func();
         }
-
-
     }
 }
