@@ -1,5 +1,10 @@
 module.exports = {
-
+    configureWebpack: {
+        devtool: 'eval-source-map',
+        //optimization: {
+        //    splitChunks: false
+        //}
+    },
     devServer: {
         proxy: 'https://localhost:44309/',
     },
@@ -13,20 +18,5 @@ module.exports = {
     //productionSourceMap: false,
 
     transpileDependencies: ['vuex-module-decorators '],
-
-
-
-    // configureWebpack: {
-    //    optimization: {
-    //        splitChunks: false
-    //    }
-    //}
-
-
-    //configureWebpack: {
-    //    plugins: [
-    //        new Css()
-    //    ]
-    //},
 
 };

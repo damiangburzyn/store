@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20210106115132_RegisterModel.cs" />
+    <Compile Remove="Migrations\20210106115132_RegisterModel.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="DataSample.json" />
   </ItemGroup>
 

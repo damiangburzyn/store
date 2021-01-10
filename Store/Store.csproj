@@ -43,6 +43,7 @@
     <None Remove="client-app\src\store\Modules\Users.ts" />
     <None Remove="client-app\src\views\AdminPanel.vue" />
     <None Remove="client-app\src\views\Login.vue" />
+    <None Remove="client-app\src\views\Register.vue" />
   </ItemGroup>
 
   <ItemGroup>
@@ -57,6 +58,7 @@
     <Content Include="client-app\src\components\Cards\ProductCard.vue" />
     <Content Include="client-app\src\components\Cards\CategoryCard.vue" />
     <Content Include="client-app\src\views\AdminPanel.vue" />
+    <Content Include="client-app\src\views\Register.vue" />
     <Content Include="client-app\src\views\Login.vue" />
   </ItemGroup>
 

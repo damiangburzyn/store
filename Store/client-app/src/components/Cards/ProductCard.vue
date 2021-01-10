@@ -50,7 +50,7 @@
         }
 
         addToBasket() {
-
+            alert('addToBasket');
         }
     }
 

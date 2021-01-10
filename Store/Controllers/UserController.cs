@@ -185,7 +185,7 @@ namespace Store.Controllers
 
 
 
-        [HttpPost]
+        [HttpPost("register")]
         [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterUserViewModel vm)
         {

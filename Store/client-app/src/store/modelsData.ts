@@ -110,3 +110,26 @@ export class DataTableSearchViewModel<T>{
         this.data = [];
     }
 }
+
+export class RegisterModel {
+
+    password: string;
+    repeatPassword: string;
+    email: string;
+    acceptTermsOfUse: boolean;
+    name: string;
+    lastName: string;
+    phone: string;
+
+    constructor() {
+        this.password = '';
+        this.repeatPassword = '';
+        this.email = '';
+        this.acceptTermsOfUse = false;
+        this.name = '';
+        this.lastName = '';
+        this.phone = '';
+
+
+    }
+}

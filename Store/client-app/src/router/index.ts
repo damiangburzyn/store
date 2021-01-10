@@ -5,39 +5,46 @@ import users from '@/store/Modules/Users';
 
 Vue.use(VueRouter)
 
-  const routes: Array<RouteConfig> = [
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  },
+const routes: Array<RouteConfig> = [
+    {
+        path: '/',
+        name: 'Home',
+        component: Home
+    },
+    {
+        path: '/about',
+        name: 'About',
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    },
 
-  {
-      path: '/Login',
-      name: 'Login',
-      component: () => import(/* webpackChunkName: "about" */ '../views/Login.vue')
+    {
+        path: '/Login',
+        name: 'Login',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Login.vue')
 
-  },
+    },
 
-  {
-    path: '/AdminPanel',
-    name: 'AdminPanel',
-    component: () => import(/* webpackChunkName: "about" */ '../views/AdminPanel.vue')
-      },
+    {
+        path: '/Register',
+        name: 'Register',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Register.vue')
 
-      {
-          path: '/Products/:categoryId',
-          name: 'Products',
-          component: () => import(/* webpackChunkName: "about" */ '../views/Products.vue')
-      }
+    },
+
+    {
+        path: '/AdminPanel',
+        name: 'AdminPanel',
+        component: () => import(/* webpackChunkName: "about" */ '../views/AdminPanel.vue')
+    },
+
+    {
+        path: '/Products/:categoryId',
+        name: 'Products',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Products.vue')
+    }
 
 
 ]
@@ -48,10 +55,10 @@ const router = new VueRouter({
 
 
 
- router.beforeEach( async (to, from, next) =>  {
+router.beforeEach(async (to, from, next) => {
 
     //if (!users.isProfileLoaded) {
-     //   await users.getProfile();
+    //   await users.getProfile();
     //}
 
 

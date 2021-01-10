@@ -1,12 +1,9 @@
 ﻿import axios from 'axios'
 import { UserLogin, Profile } from '@/store/Models';
-import { Category, DataTableSearchViewModel, DeliveryMethod, Product } from '@/store/ModelsData';
+import { Category, DataTableSearchViewModel, DeliveryMethod, Product, RegisterModel } from '@/store/ModelsData';
 import { ok, err, Either } from '@/store/error';
 import antiforgeryState from "@/store/Modules/Antiforgery";
 const head = antiforgeryState?.antiforgeryToken ?? "";
-
-
-
 
 export const api = axios.create({
     baseURL: "/api/",
@@ -90,8 +87,6 @@ export async function getProfile(): Promise<Profile | null> {
     }
 }
 
-
-
 export function getCookie(name: string) {
     const value = "; " + document.cookie;
     const parts = value.split("; " + name + "=");
@@ -103,8 +98,6 @@ export function getCookie(name: string) {
         }
     }
 }
-
-
 
 export async function antiforgery(): Promise<string | undefined> {
     const res = await api.get('/antiforgery').then(
@@ -118,9 +111,9 @@ export async function antiforgery(): Promise<string | undefined> {
     return res;
 }
 
-
-
-
+export async function registerUser(userData: RegisterModel) {
+    return await api.post('/user/register', userData)
+}
 
 export async function loginUser(userSubmit: UserLogin): Promise<Either<Profile | undefined, string>> {
     try {
@@ -153,7 +146,6 @@ export async function loginUser(userSubmit: UserLogin): Promise<Either<Profile |
         return err("Nieprawidłowe login lub hasło");
     }
 }
-
 
 export async function logOutUser() {
     await api.get('/user/logOff')
@@ -190,7 +182,6 @@ class CategoryService extends ApiBase<Category>{
         const resp = await api.get(`${this.controller}/${id}/categoryProducts`)
         return resp;
     }
-
 }
 
 class ProductService extends ApiBase<Product>{
