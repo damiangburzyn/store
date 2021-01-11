@@ -16,21 +16,21 @@ namespace Store.Services
 {
     public class MailSenderManager : IMailingService
     {
-        private readonly IStringLocalizer<MailSenderManager> _localizer;
+       // private readonly IStringLocalizer<MailSenderManager> _localizer;
         private readonly Mailing _mailingOptions;
         private readonly ILogger<MailSenderManager> _logger;
 
 
-        public MailSenderManager(
-            IStringLocalizer<MailSenderManager> localizer,
-            IOptions<AppSettings> appsettings,
-            ILogger<MailSenderManager> logger)
-        {
-            _localizer = localizer;
-            _mailingOptions = appsettings.Value.Mailing;
-            _logger = logger;
+        //public MailSenderManager(
+        //    IStringLocalizer<MailSenderManager> localizer,
+        //    IOptions<AppSettings> appsettings,
+        //    ILogger<MailSenderManager> logger)
+        //{
+        //    _localizer = localizer;
+        //    _mailingOptions = appsettings.Value.Mailing;
+        //    _logger = logger;
           
-        }
+        //}
 
         public MailSenderManager(
             IOptions<Mailing> mailingOptions)

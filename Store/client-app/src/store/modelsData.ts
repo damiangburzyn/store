@@ -118,7 +118,7 @@ export class RegisterModel {
     email: string;
     acceptTermsOfUse: boolean;
     name: string;
-    lastName: string;
+    lastname: string;
     phone: string;
 
     constructor() {
@@ -127,7 +127,7 @@ export class RegisterModel {
         this.email = '';
         this.acceptTermsOfUse = false;
         this.name = '';
-        this.lastName = '';
+        this.lastname = '';
         this.phone = '';
 
 

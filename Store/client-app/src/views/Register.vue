@@ -1,8 +1,12 @@
 ﻿<template>
     <div class="auth-page">
 
+        <v-dialog scrollable v-model="showRegisterDialog"
+                  persistent
+                  width="500">
 
 
+        </v-dialog>
 
         <v-row no-gutters>
             <v-col cols="12"
@@ -24,11 +28,11 @@
                                           :rules="nameRules"></v-text-field>
 
                             <v-text-field :type="'text'"
-                                          v-model="registerModel.lastName"
+                                          v-model="registerModel.lastname"
                                           outlined
                                           @keyup.enter="registerUser()"
                                           placeholder="Nazwisko"
-                                          :rules="lastnNameRules"></v-text-field>
+                                          :rules="lastnameRules"></v-text-field>
 
                             <v-text-field v-model="registerModel.email" v-on:keyup.enter="login"
                                           :rules="emailRules"
@@ -59,8 +63,7 @@
 
                             <v-checkbox v-model="registerModel.acceptTermsOfUse"
                                         :label="`Warunki korzystania z serwisu`"
-                                         :rules="termsRules"
-                                        ></v-checkbox>
+                                        :rules="termsRules"></v-checkbox>
 
                             <span v-if="typeof(errorMessage)!= 'undefined'&& errorMessage !== '' " class="alert text-danger" role="alert">
                                 {{errorMessage}}
@@ -92,13 +95,15 @@
     import { Vue, Component } from "vue-property-decorator";
 
     //import UserLogin from "@/store/models";
-    import { registerUser as registerFunc} from "@/store/api";
+    import { registerUser as registerFunc } from "@/store/api";
     import antiforgery from "@/store/Modules/Antiforgery";
     import { RegisterModel } from "@/store/modelsData"
 
 
     @Component
-    export default class Login extends Vue {
+    export default class Register extends Vue {
+        registerSuccess = false;
+        showRegisterDialog = false;
         valid = true;
         runValidate = false;
         registerModel = new RegisterModel();
@@ -109,7 +114,10 @@
         ];
 
         passwordRules: Array<Function> = [
-            (v: string) => !!v || 'Hasło jest wymagane'
+            (v: string) => !!v || 'Hasło jest wymagane',
+            (v: string) => /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/.test(v) || 'Hasło musi się składać z conajmniej 8 znaków. <br /> Wielkich i małych liter cyfr i znaku specjalnego',
+
+
         ];
         repeatPasswordRules: Array<Function> = [
             (v: string) => !!v || 'Hasło jest wymagane',
@@ -126,7 +134,7 @@
         nameRules: Array<Function> = [
             (v: string) => !!v || 'Pole wymagane'
         ];
-        lastnNameRules: Array<Function> = [
+        lastnameRules: Array<Function> = [
             (v: string) => !!v || 'Pole wymagane'
         ];
         validate() {
@@ -136,7 +144,7 @@
         }
 
         async registerUser() {
-          
+
             this.runValidate = true;
             const isValid = this.validate();
             if (!isValid) {
@@ -144,10 +152,12 @@
             }
 
             await registerFunc(this.registerModel).then(() => {
-                alert('OK');
-            }).catch ((ex) => { alert(ex); }
-
-            );
+                this.registerSuccess = true;
+                this.showRegisterDialog = true;
+            }).catch((ex) => {
+                this.registerSuccess = false;
+                this.showRegisterDialog = false;
+            });
         }
     }
 </script>

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace Store.Contracts.ViewModel
 {
@@ -9,11 +10,13 @@ namespace Store.Contracts.ViewModel
 
         }
 
-        [Required] 
+        [Required]
+        [JsonProperty("name")]
         public string Name { get; set; }
 
         [Required]
-        public string LastName { get; set; }
+        [JsonProperty("lastname")]
+        public string Lastname { get; set; }
 
         [Required]
         [EmailAddress]

@@ -20,6 +20,7 @@ using Store.Contracts;
 using Store.Contracts.Authentication;
 using Store.Contracts.ViewModel;
 using Store.Data.Entities.Identity;
+using Store.Services;
 using Store.Services.Middleware;
 
 namespace Store.Controllers
@@ -30,16 +31,20 @@ namespace Store.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly IMailingService _mailSenderManager;
+
         public UserController(IOptions<AppSettings> settings
             , ILocalPageData pageData
             , IMapper mapper
             , UserManager<ApplicationUser> userManager
             , SignInManager<ApplicationUser> signInManager,
-            ILogger<UserController> logger)
+            ILogger<UserController> logger,
+            IMailingService mailSenderManager)
              : base(settings, pageData, mapper, logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _mailSenderManager = mailSenderManager;
         }
 
 
@@ -218,13 +223,31 @@ namespace Store.Controllers
                         await _userManager.AddToRolesAsync(user, userRoles);
                     }
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-          
+                    var callbackUrl = Url.Action("VerifyAccountConfirmation", "Accounts", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
+
+                    try
+                    {
+                        await _mailSenderManager.SendVerificationCodeMail(vm.Email, callbackUrl);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Wystąpił błąd wysyłania wiadomości z linkiem aktywacyjnym", null);
+                    }
+
                     return Ok(vm);
                 }
 
+               var errors = new List<string>();
+
                 foreach (var error in result.Errors)
                 {
-                    ModelState.AddModelError(string.Empty, error.Description);
+                    errors.Add(error.Description);
+                }
+
+                if (errors.Count > 0) {
+
+                    var det = string.Join("<br />", errors);
+                    return Problem(detail: det, statusCode:400 );
                 }
 
                 return Ok(vm);

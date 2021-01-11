@@ -51,7 +51,7 @@ namespace Store
             //                          builder.WithOrigins("http://localhost:8080");
             //                      });
             //});
-
+            services.Configure<Mailing>(Configuration.GetSection("Mailing"));
             services.AddAntiforgery(options =>
             {
                 options.HeaderName = "X-XSRF-TOKEN";

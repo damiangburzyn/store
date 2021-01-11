@@ -28,7 +28,7 @@ namespace GC5.Application.AutoMapper
                    .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email))
                    .ForMember(dest => dest.Status, opt => opt.MapFrom(src => EUserStatus.Blocked))
                    .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Name))
-                   .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))                
+                   .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Lastname))                
                    .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Phone))
                   ;
 
@@ -37,7 +37,7 @@ namespace GC5.Application.AutoMapper
                   .ForMember(dest => dest.Status, opt => opt.Ignore())
                   .ForMember(a => a.Email, opt => opt.Ignore())
                   .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Name))
-                  .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
+                  .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Lastname))
                   .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.Phone))
                   .ReverseMap()
                   .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
