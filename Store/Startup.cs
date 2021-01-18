@@ -107,7 +107,6 @@ namespace Store
             ServicesInjector.RegisterServices(services, Configuration);
         }
 
-
         private void AddJWTAuthentication(IServiceCollection services)
         {
             // configure strongly typed settings objects
