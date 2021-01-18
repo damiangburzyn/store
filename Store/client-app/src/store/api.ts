@@ -7,7 +7,7 @@ const head = antiforgeryState?.antiforgeryToken ?? "";
 
 export const api = axios.create({
     baseURL: "/api/",
-    headers: { 'X-XSRF-TOKEN':head }
+    headers: { 'X-XSRF-TOKEN': head }
 });
 
 class ApiBase<T> {
@@ -115,6 +115,56 @@ export async function registerUser(userData: RegisterModel) {
     return await api.post('/user/register', userData)
 }
 
+export async function loadCount(): Promise<number | null> {
+
+    const resp = await api.get('/shoppingcart/count').then(
+        (r) => {
+            return r;
+        }
+    ).catch((e) => {
+        console.log(e);
+        return e.response;
+    });
+    if (resp.status === 200) {
+        return resp.data as number;
+    }
+
+    else return 0;
+}
+export async function addProductToCard(product: Product): Promise<number | undefined> {
+
+    let count = 0;
+    const resp = await api.post(`/shoppingcart/${product.id}`).then((r) => {
+        return r;
+    }
+    ).catch((e) => {
+        console.log(e);
+        return e.response;
+    });
+    if (resp.status === 200) {
+        count = (resp.data as number);
+    }
+
+    return count;
+}
+export async function removeProductFromCard(product: Product): Promise<number | undefined> {
+
+    let count = 0;
+    const resp = await api.delete(`/shoppingcart/${product.id}`)
+        .then((r) => {
+        return r;
+    }
+    ).catch((e) => {
+        console.log(e);
+        return e.response;
+    });
+    if (resp.status === 200) {
+        count = (resp.data as number);
+    }
+
+    return count;
+}
+
 export async function loginUser(userSubmit: UserLogin): Promise<Either<Profile | undefined, string>> {
     try {
 
@@ -186,7 +236,7 @@ class CategoryService extends ApiBase<Category>{
 
 class ProductService extends ApiBase<Product>{
 
- 
+
 
 
 }

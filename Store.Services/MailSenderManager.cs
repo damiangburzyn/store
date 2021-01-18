@@ -128,7 +128,7 @@ namespace Store.Services
 
             if (!_mailingOptions.IsAuthenticationDisabled)
             {
-                smtpClient.Authenticate(string.Join("@", sender, _mailingOptions.SenderDomain), _mailingOptions.Senders[sender]);
+                smtpClient.Authenticate( sender, _mailingOptions.Senders[sender]);
             }
             return smtpClient;
         }
@@ -152,7 +152,7 @@ namespace Store.Services
                 sender = _mailingOptions.Senders.Keys.First();
             }
 
-            message.From.Add(new MailboxAddress(_mailingOptions.SenderDomain, string.Join("@", sender, _mailingOptions.SenderDomain)));
+            message.From.Add(new MailboxAddress(sender,  sender));
             message.To.Add(new MailboxAddress(recipient, recipient));
             message.Subject = subject;
 

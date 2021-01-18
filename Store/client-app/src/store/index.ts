@@ -18,6 +18,10 @@ export default new Vuex.Store({
         antiforgery: {
             antiforgeryToken :""
         }
+        ,
+        cart: {
+
+        }
       
     },
   mutations: {

@@ -20,8 +20,8 @@ namespace Store.Controllers
     {
         private ShoppingCartService _shoppingCartService;
 
-        public ShoppingCartController(IOptions<AppSettings> settings, ILocalPageData pageData , ShoppingCartService cartService, IMapper mapper, ILogger<ShoppingCartController> logger)
-            :base(settings, pageData, mapper, logger)
+        public ShoppingCartController(IOptions<AppSettings> settings, ILocalPageData pageData, ShoppingCartService cartService, IMapper mapper, ILogger<ShoppingCartController> logger)
+            : base(settings, pageData, mapper, logger)
         {
             _shoppingCartService = cartService;
         }
@@ -46,33 +46,35 @@ namespace Store.Controllers
             return Ok(viewModel);
         }
 
-        //
-        // GET: /Store/AddToCart/5
+  
+        [HttpPost("{id}")]
         public ActionResult AddToCart(long id)
         {
             _shoppingCartService.AddToCard(id, this.HttpContext);
             // Go back to the main store page for more shopping
-            return Ok();
+
+            return CartSummary();
         }
 
 
         //
         // AJAX: /ShoppingCart/RemoveFromCart/5
-        [HttpPost]
+        [HttpDelete("{id}")]
         public ActionResult RemoveFromCart(long id)
         {
             var results = _shoppingCartService.RemoveFromCart(id,  this.HttpContext);
 
-            return Json(results);
+           
+            return CartSummary();
         }
 
 
         //
-        // GET: /ShoppingCart/CartSummary
-       
+        // GET: api/shoppingcart/count
+       [HttpGet("count")]
         public ActionResult CartSummary()
         {
-            var cardCount = _shoppingCartService.CartSummary( this.HttpContext);
+            var cardCount = _shoppingCartService.CartSummary(this.HttpContext);
          
             return Ok(cardCount);
         }

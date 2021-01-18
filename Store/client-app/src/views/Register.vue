@@ -2,9 +2,40 @@
     <div class="auth-page">
 
         <v-dialog scrollable v-model="showRegisterDialog"
-                  persistent
                   width="500">
+            <!--<template v-slot:activator="{ on, attrs }">
+                <v-btn color="red lighten-2"
+                       dark
+                       v-bind="attrs"
+                       v-on="on">
+                    Click Me2
+                </v-btn>
+            </template>-->
+            <v-card>
+                <v-card-title class="headline grey lighten-2">                    
+                </v-card-title>
+                <v-card-text>
+                    <br />
+                    <p v-if="registerSuccess" >
+                        Proces rejestracji zakończył się sukcesem. Na Twoją pocztę został wysłany email z linkiem aktywacyjnym.
+                    </p>
+                    <p v-else>
+                        Podczas procesu rejestracji wystąpił błąd.
+                    </p>
+                 </v-card-text>
 
+                <v-divider></v-divider>
+
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="primary"
+                           text
+                           @click="showRegisterDialog = false">
+                        OK
+                    </v-btn>
+                    <v-spacer></v-spacer>
+                </v-card-actions>
+            </v-card>
 
         </v-dialog>
 
@@ -96,7 +127,6 @@
 
     //import UserLogin from "@/store/models";
     import { registerUser as registerFunc } from "@/store/api";
-    import antiforgery from "@/store/Modules/Antiforgery";
     import { RegisterModel } from "@/store/modelsData"
 
 
@@ -156,7 +186,7 @@
                 this.showRegisterDialog = true;
             }).catch((ex) => {
                 this.registerSuccess = false;
-                this.showRegisterDialog = false;
+                this.showRegisterDialog = true;
             });
         }
     }

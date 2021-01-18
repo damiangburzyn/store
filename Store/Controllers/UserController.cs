@@ -22,8 +22,12 @@ using Store.Contracts.ViewModel;
 using Store.Data.Entities.Identity;
 using Store.Services;
 using Store.Services.Middleware;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.WebUtilities;
+using System.Web;
 
 namespace Store.Controllers
+
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -32,6 +36,7 @@ namespace Store.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IMailingService _mailSenderManager;
+        private readonly LinkGenerator _linkGenerator;
 
         public UserController(IOptions<AppSettings> settings
             , ILocalPageData pageData
@@ -39,12 +44,14 @@ namespace Store.Controllers
             , UserManager<ApplicationUser> userManager
             , SignInManager<ApplicationUser> signInManager,
             ILogger<UserController> logger,
-            IMailingService mailSenderManager)
+            IMailingService mailSenderManager,
+            LinkGenerator linkGenerator)
              : base(settings, pageData, mapper, logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _mailSenderManager = mailSenderManager;
+            _linkGenerator = linkGenerator;
         }
 
 
@@ -184,7 +191,37 @@ namespace Store.Controllers
             return Ok();
         }
 
+        //[HttpGet("VerifyAccountConfirmation/{userId}/{code}")] -- this route configuration couses double escape sequnece error
+        //second solution: enable double escape sequnece in web config and   //code = Uri.UnescapeDataString(code) here
+        [HttpGet("VerifyAccountConfirmation")]
+        [AllowAnonymous]     
+        public async Task<IActionResult> VerifyAccountConfirmation(long? userId, string code)
+        {
+            ViewBag.RobotsIndex = false;
 
+            if (!userId.HasValue || code == null)
+            {
+                return BadRequest();
+            }
+
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+
+            //code = Uri.UnescapeDataString(code);
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+        
+            if (!result.Succeeded)
+            {
+                return BadRequest();
+            }
+
+            return Redirect("https://www.google.com");
+        }
 
 
 
@@ -223,8 +260,9 @@ namespace Store.Controllers
                         await _userManager.AddToRolesAsync(user, userRoles);
                     }
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                    var callbackUrl = Url.Action("VerifyAccountConfirmation", "Accounts", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
-
+                    //code = HttpUtility.UrlEncode(Encoding.UTF8.GetBytes(code));
+                     var callbackUrl = _linkGenerator.GetUriByAction("VerifyAccountConfirmation", "User", new { userId = user.Id, code = code }, scheme: HttpContext.Request.Scheme, HttpContext.Request.Host);                     
+                    //var callbackUrl = Url.Action("VerifyAccountConfirmation", "User", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
                     try
                     {
                         await _mailSenderManager.SendVerificationCodeMail(vm.Email, callbackUrl);
@@ -232,9 +270,10 @@ namespace Store.Controllers
                     catch (Exception ex)
                     {
                         _logger.LogError(ex, "Wystąpił błąd wysyłania wiadomości z linkiem aktywacyjnym", null);
+                        return BadRequest();
                     }
 
-                    return Ok(vm);
+                    return Ok();
                 }
 
                var errors = new List<string>();
@@ -250,14 +289,9 @@ namespace Store.Controllers
                     return Problem(detail: det, statusCode:400 );
                 }
 
-                return Ok(vm);
+                return BadRequest();
             };
             return await fun(); 
         }
-
-
-
-
-
     }
 }

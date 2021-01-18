@@ -21,11 +21,13 @@ const routes: Array<RouteConfig> = [
     },
 
     {
-        path: '/Login',
+        path: '/Login/:successfulRegister?',
         name: 'Login',
         component: () => import(/* webpackChunkName: "about" */ '../views/Login.vue')
 
     },
+
+
 
     {
         path: '/Register',

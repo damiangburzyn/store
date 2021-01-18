@@ -46,7 +46,7 @@
             return cat as Category;
         }
 
-        async created() {
+        async activated() {
             await this.getCategories();
         }
 

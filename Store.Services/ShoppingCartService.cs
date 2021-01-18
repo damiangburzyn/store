@@ -30,10 +30,10 @@ namespace Store.Services
 
         public void AddToCard(long id, HttpContext context)
         {
-            // Retrieve the album from the database
+            // Retrieve the product from the database
 
             var addedProduct = _storeDb.Products
-                .Single(album => album.Id == id);
+                .Single(product => product.Id == id);
 
             // Add it to the shopping cart
             var cart = ShoppingCart.GetCart(context, _storeDb);
@@ -49,8 +49,8 @@ namespace Store.Services
             // Remove the item from the cart
             var cart = ShoppingCart.GetCart(context, _storeDb);
 
-            // Get the name of the album to display confirmation
-            string albumName = _storeDb.Carts
+            // Get the name of the product to display confirmation
+            string productName = _storeDb.Carts
                 .Single(item => item.Id == id).Product.Name;
 
             // Remove from cart
@@ -59,7 +59,7 @@ namespace Store.Services
             // Display the confirmation message
             var results = new ShoppingCartRemoveViewModel
             {
-                Message = HtmlEncoder.Default.Encode(albumName) +
+                Message = HtmlEncoder.Default.Encode(productName) +
                     " has been removed from your shopping cart.",
                 CartTotal = cart.GetTotal(),
                 CartCount = cart.GetCount(),

@@ -27,7 +27,7 @@ namespace GC5.IoC
         public static void RegisterServices(IServiceCollection services, Microsoft.Extensions.Configuration.IConfiguration configuration)
         {
 
-
+            services.Configure<Mailing>(configuration.GetSection("Mailing"));
             var mediaType =  configuration.GetValue<EStorageType>("ConfigurationStorage:StorageType");
 
 
@@ -63,7 +63,7 @@ namespace GC5.IoC
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IDeliveryMethodService, DeliveryMethodService>();
-          
+            services.AddScoped<ShoppingCartService, ShoppingCartService>();
             // identity
             //services.AddScoped<IApplicationUsersService, ApplicationUsersService>();
             //services.AddScoped<IAcceptancesService, AcceptancesService>();

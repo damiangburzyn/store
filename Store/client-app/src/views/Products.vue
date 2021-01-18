@@ -19,7 +19,7 @@
 
     import { Component, Vue } from 'vue-property-decorator';
     import { Product } from '@/store/modelsData'
-    import {  categoryService } from "@/store/api";
+    import { categoryService } from "@/store/api";
     import productCard from "@/components/Cards/ProductCard.vue"
 
 

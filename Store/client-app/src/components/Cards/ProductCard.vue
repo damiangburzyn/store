@@ -13,20 +13,21 @@
 
 
             <div class="my-4 subtitle-1">
-                $ • Italian, Cafe
+                • $ {{item.currentPrice}}
             </div>
 
-            <div>Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.</div>
+            <div>{{item.description}}</div>
         </v-card-text>
 
         <v-divider class="mx-4"></v-divider>
 
         <v-card-actions>
-            <v-btn color="deep-purple lighten-2"
-                   text
-                   @click.stop="addToBasket">
+            <v-spacer></v-spacer>  <v-btn color="deep-purple lighten-2"
+                                          text
+                                          @click.stop="addToBasket">
                 Dodaj do koszyka
             </v-btn>
+            <v-spacer></v-spacer>
         </v-card-actions>
     </v-card>
 </template>
@@ -34,6 +35,8 @@
 <script lang="ts">
     import { Component, Vue , Prop} from 'vue-property-decorator';
     import { Product } from '@/store/modelsData'
+    import cartModule from '@/store/Modules/Cart'
+
 
     @Component
     export default class ProductCard extends Vue {
@@ -49,8 +52,8 @@
             }
         }
 
-        addToBasket() {
-            alert('addToBasket');
+       async addToBasket() {
+            await cartModule.addToCard(this.item);
         }
     }
 

@@ -13,7 +13,6 @@ namespace Store.Contracts
 
         public string Secret { get; set; }
 
-        public Mailing Mailing { get; set; }
     }
 
 }

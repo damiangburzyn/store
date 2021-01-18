@@ -28,6 +28,10 @@ namespace Store.Contracts.ViewModel
         [JsonProperty("acceptTermsOfUse")]
         public bool AcceptTermsOfUse { get; set; }
 
-       
+        [JsonProperty("successUrl")]
+        public string SuccessUrl { get; set; }
+
+        [JsonProperty("failedUrl")]
+        public string FailedUrl { get; set; }
     }
 }
