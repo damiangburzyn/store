@@ -14,23 +14,23 @@ namespace Store.Services
     public class CategoryService : BaseService<Category>, ICategoryService
     {
         //protected readonly ICategoriesRepository categoriesRepository;
-        public CategoryService(           
+        public CategoryService(
             IRepository repository)
             : base(repository)
         {
-          //  categoriesRepository = cRepository;
+            //  categoriesRepository = cRepository;
         }
 
         public async Task<ICollection<Category>> MainCategories()
         {
-            var cat =  await Repository.Find<Category>(predicate: (a) => a.ParentCategoryId == null);
+            var cat = await Repository.Find<Category>(predicate: (a) => a.ParentCategoryId == null);
             return cat;
         }
 
 
-        public async Task<ICollection<Product>> CategoryProducts(int categoryId)
+        public async Task<ICollection<Product>> CategoryProducts(List<long> categoryIds)
         {
-            var cat = await Repository.Find<Product>(predicate: (a) => a.ProductCategories.Any(a=>a.CategoryId == categoryId));
+            var cat = await Repository.Find<Product>(predicate: (a) => a.ProductCategories.Any(a => categoryIds.Any(categoryId=> a.CategoryId == categoryId)));
             return cat;
         }
 
@@ -55,7 +55,7 @@ namespace Store.Services
         {
             var entity = await GetById(id, q => q
                         //.Include(c => c.Name_Translation)
-                       // .ThenInclude(v => v.Values)
+                        // .ThenInclude(v => v.Values)
                         .Include(c => c.SubCategories)
                         //.ThenInclude(t => t.Name_Translation)
                         //.ThenInclude(t => t.Values)
@@ -116,10 +116,36 @@ namespace Store.Services
                 entity.ParentCategory = null;
             }
 
-            Repository.Attach(entity,EntityState.Modified);
+            Repository.Attach(entity, EntityState.Modified);
             Repository.Update(entity);
             await Repository.SaveChangesAsync();
             return entity;
+        }
+
+        public async Task<List<long>> ChildCategoryIds(long categoryId)
+        {
+            var result = (await GetAll()).ToList();
+            for (int i = 0; i < result.Count; i++)
+            {
+                var item = result[i];
+                item.SubCategories = result.Where(a => a.ParentCategoryId == item.Id).ToList();
+            }
+            var currentCat = result.FirstOrDefault(a => a.Id == categoryId);
+            var childCatIds = new List<long>();
+            GetChildIds(currentCat,  childCatIds);
+            return childCatIds;
+        }
+
+        private static void GetChildIds(Category currentCat,  List<long> childCatIds)
+        {
+            foreach (var item in currentCat.SubCategories)
+            {
+                childCatIds.Add(item.Id);
+                if (item.SubCategories?.Any() == true)
+                {
+                    GetChildIds(item, childCatIds);
+                }
+            }
         }
     }
 }

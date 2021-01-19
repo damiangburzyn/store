@@ -46,6 +46,12 @@ const routes: Array<RouteConfig> = [
         path: '/Products/:categoryId',
         name: 'Products',
         component: () => import(/* webpackChunkName: "about" */ '../views/Products.vue')
+    },
+
+    {
+        path: '/Summary',
+        name: 'Summary',
+        component: () => import(/* webpackChunkName: "about" */ '../views/Summary.vue')
     }
 
 

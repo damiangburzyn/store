@@ -88,11 +88,13 @@ namespace Store.Controllers
         }
 
         [HttpGet("{id}/categoryproducts")]
-        public async Task<ActionResult> CategoryProducts(int id)
+        public async Task<ActionResult> CategoryProducts(long id)
         {
             Func<Task<ActionResult>> func = async () =>
             {
-                var result = await categoryService.CategoryProducts(id);
+                var childCatIds = await categoryService.ChildCategoryIds(id);
+                childCatIds.Add(id);
+                var result = await categoryService.CategoryProducts(childCatIds);
                 var vm = Mapper.Map<List<ProductViewModel>>(result);
                 return Ok(vm);
             };

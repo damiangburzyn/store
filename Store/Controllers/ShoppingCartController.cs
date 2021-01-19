@@ -47,10 +47,10 @@ namespace Store.Controllers
         }
 
   
-        [HttpPost("{id}")]
-        public ActionResult AddToCart(long id)
+        [HttpPost("{id}/{count}")]
+        public ActionResult AddToCart(long id, int count =1)
         {
-            _shoppingCartService.AddToCard(id, this.HttpContext);
+            _shoppingCartService.AddToCard(id, this.HttpContext, count);
             // Go back to the main store page for more shopping
 
             return CartSummary();

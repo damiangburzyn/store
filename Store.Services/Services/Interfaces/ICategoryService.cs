@@ -10,6 +10,9 @@ namespace Store.Services
     {
         Task<ICollection<Category>> MainCategories();
 
-        Task<ICollection<Product>> CategoryProducts(int categoryId);
+        Task<ICollection<Product>> CategoryProducts(List<long> categoryIds);
+
+        Task<List<long>> ChildCategoryIds(long categoryId);
+
     }
 }

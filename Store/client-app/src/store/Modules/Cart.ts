@@ -35,9 +35,9 @@ class CartModule extends VuexModule {
         commit: "setCartCount",
         rawError: true
     })
-    async addToCard(product: Product): Promise<number | undefined> {
-        const count = await addProductToCard(product);
-        return count;
+    async addToCard(product: Product, count: number): Promise<number | undefined> {
+        const allCount = await addProductToCard(product, count);
+        return allCount;
     }
 
     @Action({

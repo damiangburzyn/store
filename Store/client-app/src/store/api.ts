@@ -131,10 +131,10 @@ export async function loadCount(): Promise<number | null> {
 
     else return 0;
 }
-export async function addProductToCard(product: Product): Promise<number | undefined> {
+export async function addProductToCard(product: Product, count: number): Promise<number | undefined> {
 
-    let count = 0;
-    const resp = await api.post(`/shoppingcart/${product.id}`).then((r) => {
+    let cartCount = 0;
+    const resp = await api.post(`/shoppingcart/${product.id}/${count}`).then((r) => {
         return r;
     }
     ).catch((e) => {
@@ -142,10 +142,10 @@ export async function addProductToCard(product: Product): Promise<number | undef
         return e.response;
     });
     if (resp.status === 200) {
-        count = (resp.data as number);
+        cartCount = (resp.data as number);
     }
 
-    return count;
+    return cartCount;
 }
 export async function removeProductFromCard(product: Product): Promise<number | undefined> {
 

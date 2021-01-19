@@ -28,7 +28,7 @@ namespace Store.Services
             return ShoppingCart.GetCart(controller, _storeDb);
         }
 
-        public void AddToCard(long id, HttpContext context)
+        public void AddToCard(long id, HttpContext context, int count)
         {
             // Retrieve the product from the database
 
@@ -38,7 +38,7 @@ namespace Store.Services
             // Add it to the shopping cart
             var cart = ShoppingCart.GetCart(context, _storeDb);
 
-            cart.AddToCart(addedProduct);
+            cart.AddToCart(addedProduct, count);
 
             // Go back to the main store page for more shopping
         }

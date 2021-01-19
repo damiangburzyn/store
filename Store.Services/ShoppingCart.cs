@@ -10,13 +10,10 @@ namespace Store.Services
 {
     public  class ShoppingCart
     {
-
-
         public ShoppingCart(ApplicationDbContext storeDB)
         {
             this.storeDB = storeDB;
         }
-
 
         ApplicationDbContext storeDB { get; set; }
         string ShoppingCartId { get; set; }
@@ -32,7 +29,7 @@ namespace Store.Services
         {
             return GetCart(controller.HttpContext, storeDB);
         }
-        public void AddToCart(Product product)
+        public void AddToCart(Product product, int count)
         {
             // Get the matching cart and product instances
             var cartItem = storeDB.Carts.SingleOrDefault(
@@ -46,16 +43,19 @@ namespace Store.Services
                 {
                     ProductId = product.Id,
                     CartId = ShoppingCartId,
-                    Count = 1,
+                    Count = count,
                     CreateDate = DateTime.Now
                 };
                 storeDB.Carts.Add(cartItem);
             }
             else
-            {
+            {  
                 // If the item does exist in the cart, 
                 // then add one to the quantity
-                cartItem.Count++;
+                for (int i = 0; i < count ; i++)
+                {
+                    cartItem.Count++;
+                }
             }
             // Save changes
             storeDB.SaveChanges();

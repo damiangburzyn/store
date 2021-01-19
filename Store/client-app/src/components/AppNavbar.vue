@@ -55,7 +55,7 @@
                 </template>
 
                 <v-list>
-                    <v-list-item v-if="cartCount>0" @click="() => {}">
+                    <v-list-item v-if="cartCount>0" @click="goToSummary()">
                         <v-list-item-title>Podsumowanie</v-list-item-title>
                     </v-list-item>
                     <v-list-item v-else>
@@ -96,6 +96,10 @@ export default class AppNavbar extends Vue {
         users.logOut();
         this.$router.push('/');
     }
+    goToSummary() {
+        this.$router.push('/Summary')
+    }
+
 }
 </script>
 
