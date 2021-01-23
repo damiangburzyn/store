@@ -56,7 +56,7 @@
                     <v-btn x-small class="button-mini" color="blue lighten-2" fab dark
                            title="Usuń"
                            elevation="0"
-                           v-on:click="confirmRemove(item.Id)">
+                           v-on:click="confirmRemove(item.id)">
                         <v-icon class="body-2">mdi-delete-forever-outline</v-icon>
                     </v-btn>
 
@@ -110,8 +110,11 @@
             this.isEditorEnabled = true;
         }
 
-       async Remove(id: number) {
-         await   categoryService.destroy(id);
+        async Remove(id: number) {
+            await categoryService.destroy(id).then(async () => {
+                await this.LoadTree();
+            });
+
         }
 
         onEditorClosed() {
@@ -138,7 +141,7 @@
             this.isRemoveConfirmation = false;
         }
 
-        async  created() {
+        async created() {
             await this.LoadTree();
         }
     }

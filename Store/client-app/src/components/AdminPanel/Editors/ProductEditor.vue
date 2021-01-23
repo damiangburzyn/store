@@ -28,9 +28,9 @@
                                 auto-grow
                                 value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."></v-textarea>
 
-                    <v-text-field label="Ilość sztuk"
+                    <!--<v-text-field label="Ilość sztuk"
                                   type="'number'"
-                                  v-model="item.count"></v-text-field>
+                                  v-model="item.count"></v-text-field>-->
 
                     <v-file-input :rules="imageRules"
                                   accept="image/png, image/jpeg, image/bmp"
@@ -73,7 +73,7 @@
                             </v-card>
                         </v-col>
                     </v-row>
-
+                    <br/>
 
                     <v-row>
 
@@ -101,7 +101,7 @@
 
                 </v-text-field>-->
 
-                <v-card-title class=" grey lighten-2">
+                <!--<v-card-title class=" grey lighten-2">
                     Opcje dostawy
                 </v-card-title>
                 <v-card max-height="400" class="overflow-y-auto">
@@ -126,7 +126,7 @@
                             </v-col>
                         </v-row>
                     </v-card-text>
-                </v-card>
+                </v-card>-->
 
 
                 <v-divider></v-divider>
@@ -210,12 +210,12 @@
 
         private item: Product = this.getEmptyProduct();
         public show = this.isShow;
-        public selectDeliveryMethods = new Array<SelectModel<ProductDeliveryMethod>>();
+      //  public selectDeliveryMethods = new Array<SelectModel<ProductDeliveryMethod>>();
         public treeSelectCategory = new Array<TreeSelectModel<Category>>();
 
-        //async created() {
-           
-        //}
+        async created() {
+            await this.loadTree();
+        }
 
         // manageProductCategory(isSelected: boolean, treeSelect: TreeSelectModel<Category>) {
         manageProductCategories(treeSelect: TreeSelectModel<Category>) {
@@ -244,14 +244,14 @@
 
         async save() {
 
-            const selectedDeliveryMethods = new Array<ProductDeliveryMethod>();
-            this.selectDeliveryMethods.forEach((select) => {
-                if (select.isSelected && select.item != null) {
-                    selectedDeliveryMethods.push(select.item);
-                }
-            })
+            //const selectedDeliveryMethods = new Array<ProductDeliveryMethod>();
+            //this.selectDeliveryMethods.forEach((select) => {
+            //    if (select.isSelected && select.item != null) {
+            //        selectedDeliveryMethods.push(select.item);
+            //    }
+            //})
 
-            this.item.deliveryMethods = selectedDeliveryMethods;
+            //this.item.deliveryMethods = selectedDeliveryMethods;
 
             try {
                 if (this.item != null && this.item?.id === 0) {
@@ -272,37 +272,36 @@
             if (this.productId == 0) {
                 this.item = this.getEmptyProduct();
                 this.productCategoryNames = [];
-                this.selectDeliveryMethods = await this.getDeliveryMethods();
+              //  this.selectDeliveryMethods = await this.getDeliveryMethods();
                 await this.loadTree();
             }
             else {
 
-                const data = await productService.get(this.productId);
-                this.item = data;
-
-
-               
+                await productService.get(this.productId).then((data) => {
+                    this.item = data;
+                });
+    
                     await this.loadTree();
-                    const prodDelMethods = await this.getDeliveryMethods();
-                    if (this.productId !== 0) {
+                    //const prodDelMethods = await this.getDeliveryMethods();
+                    //if (this.productId !== 0) {
 
-                        this.item.deliveryMethods.forEach(dm => {
+                    //    this.item.deliveryMethods.forEach(dm => {
 
-                            prodDelMethods.forEach(pdm => {
+                    //        prodDelMethods.forEach(pdm => {
 
-                                if (pdm.item?.deliveryId === dm.deliveryId) {
+                    //            if (pdm.item?.deliveryId === dm.deliveryId) {
 
-                                    pdm.isSelected = true;
-                                    pdm.item.id = dm.id;
-                                    pdm.item.maxCountInPackage = dm.maxCountInPackage;
-                                    pdm.item.price = dm.price;
-                                }
-                            })
+                    //                pdm.isSelected = true;
+                    //                pdm.item.id = dm.id;
+                    //                pdm.item.maxCountInPackage = dm.maxCountInPackage;
+                    //                pdm.item.price = dm.price;
+                    //            }
+                    //        })
 
-                        })
-                    }
+                    //    })
+                    //}
 
-                    this.selectDeliveryMethods = prodDelMethods;
+                    //this.selectDeliveryMethods = prodDelMethods;
                 
 
 

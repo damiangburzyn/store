@@ -54,10 +54,9 @@ export class Product {
     currentPrice: number;
     previousPrice: number;
     description: string;
-    count: number ;
     images: Array<Content> = [];
     movies: Array<Content> = [];
-    deliveryMethods: Array<ProductDeliveryMethod> = [];
+   // deliveryMethods: Array<ProductDeliveryMethod> = [];
     productCategories: Array<ProductCategory> = [];
     constructor() {
         this.id = 0;
@@ -66,7 +65,6 @@ export class Product {
         this.currentPrice = 0.00;
         this.previousPrice = 0.00;
         this.description = '';
-        this.count = 0;
     }
 }
 
@@ -129,7 +127,29 @@ export class RegisterModel {
         this.name = '';
         this.lastname = '';
         this.phone = '';
+    }
+}
 
+export class ShoppingCart {
+    cartItems: CartModel[];
+    cartTotal: number;
+    constructor() {
+        this.cartItems = [];
+        this.cartTotal = 0;
+    }
+}
 
+export class CartModel {
+
+    cartId: string;
+    productId: number;
+    count: number;
+    product: Product;
+
+    constructor() {
+        this.cartId = '';
+        this.productId = 0;
+        this.count = 0;
+        this.product = new Product();
     }
 }

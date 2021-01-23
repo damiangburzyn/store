@@ -1,6 +1,6 @@
 ﻿import axios from 'axios'
 import { UserLogin, Profile } from '@/store/Models';
-import { Category, DataTableSearchViewModel, DeliveryMethod, Product, RegisterModel } from '@/store/ModelsData';
+import { Category, DataTableSearchViewModel, DeliveryMethod, Product, RegisterModel, CartModel, ShoppingCart } from '@/store/ModelsData';
 import { ok, err, Either } from '@/store/error';
 import antiforgeryState from "@/store/Modules/Antiforgery";
 const head = antiforgeryState?.antiforgeryToken ?? "";
@@ -54,6 +54,25 @@ class ApiBase<T> {
     }
 
 }
+
+
+
+class CartService {
+    protected controller = "";
+    constructor(controller: string) {
+        this.controller = controller;
+    }
+
+    async list() {
+        const res = await api.get(`${this.controller}`).then(
+            (r) => {
+                return r;
+            });
+        return res.data as ShoppingCart;
+    }
+
+}
+
 
 //now jwt stored in httponly cookie
 //export function setJWT(token: string) {
@@ -234,22 +253,15 @@ class CategoryService extends ApiBase<Category>{
     }
 }
 
-class ProductService extends ApiBase<Product>{
-
-
-
-
-}
-
-
-
 
 
 export const categoryService = new CategoryService("categories");
 
-export const productService = new ProductService("products")
+export const productService = new ApiBase<Product>("products")
 
 export const deliveryMehodService = new ApiBase<DeliveryMethod>("deliverymethods");
+
+export const cartService = new CartService("shoppingcart");
 
 
 

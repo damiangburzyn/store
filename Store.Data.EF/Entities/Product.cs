@@ -18,7 +18,7 @@ namespace Store.Data.EF.Entities
         public int Count { get; set; }
         public virtual IList<GalleryImage> Images { get; set; } = new List<GalleryImage>();
         public virtual ICollection<Movie> Movies { get; set; }
-        public virtual ICollection<ProductDeliveryMethod> DeliveryMethods { get; set; }        
+       // public virtual ICollection<ProductDeliveryMethod> DeliveryMethods { get; set; }        
         public long[] ConnectedProdIds { get; set; }
         public IList<ProductFile> ProductFiles { get; } = new List<ProductFile>();
         public ICollection<ProductCategory> ProductCategories { get; set; } = new List<ProductCategory>();

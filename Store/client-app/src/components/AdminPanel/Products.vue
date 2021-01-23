@@ -92,7 +92,7 @@ export default class Products extends Vue {
             { text: 'Cena', value: 'currentPrice' },
             { text: 'Poprzednia cena', value: 'previousPrice' },
             { text: 'Bestseller', value: 'isBestseller' },
-            { text: 'Ilość sztuk', value: 'count' },
+            //{ text: 'Ilość sztuk', value: 'count' },
             //{ text: 'Obraz', value: 'image' },
             { text: 'Działania', value: 'actions', sortable: false },
         ];

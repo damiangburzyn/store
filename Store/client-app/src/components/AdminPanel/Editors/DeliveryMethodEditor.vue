@@ -16,6 +16,18 @@
                             auto-grow
                             value="">
                 </v-textarea>
+                <v-text-field label="Cena"
+                              type="'number'"
+                             
+                              v-model="item.price"></v-text-field>
+                <v-text-field label="Max w paczce"
+                              type="'number'"
+                             
+                              v-model="item.maxCountInPackage"></v-text-field>
+             
+
+
+
             </v-card-text>
 
             <v-divider></v-divider>
@@ -70,7 +82,7 @@
 
         async loadItem() {
 
-            if (this.itemId == 0) {
+            if (this.itemId === 0) {
                 this.item = new DeliveryMethod();
 
             }

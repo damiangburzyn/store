@@ -30,17 +30,17 @@ namespace Store.Controllers
 
         public ActionResult Index()
         {
-            var cart = _shoppingCartService.GetCart(this.HttpContext);
+      
 
             //Todo: Automapper
-            var cartItemsDb = cart.GetCartItems();
+            var cartItemsDb = _shoppingCartService.GetCartItems(this.HttpContext);
             var cartItemsVm = Mapper.Map<List<CartViewModel>>(cartItemsDb);
 
             // Set up our ViewModel
             var viewModel = new ShoppingCartViewModel
             {
                 CartItems = cartItemsVm,
-                CartTotal = cart.GetTotal()
+                CartTotal = _shoppingCartService.GetTotal(this.HttpContext)
             };
             // Return the view
             return Ok(viewModel);
@@ -53,7 +53,7 @@ namespace Store.Controllers
             _shoppingCartService.AddToCard(id, this.HttpContext, count);
             // Go back to the main store page for more shopping
 
-            return CartSummary();
+            return CartCount();
         }
 
 
@@ -65,14 +65,14 @@ namespace Store.Controllers
             var results = _shoppingCartService.RemoveFromCart(id,  this.HttpContext);
 
            
-            return CartSummary();
+            return CartCount();
         }
 
 
         //
         // GET: api/shoppingcart/count
        [HttpGet("count")]
-        public ActionResult CartSummary()
+        public ActionResult CartCount()
         {
             var cardCount = _shoppingCartService.CartSummary(this.HttpContext);
          

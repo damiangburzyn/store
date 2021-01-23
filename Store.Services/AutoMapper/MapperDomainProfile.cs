@@ -101,7 +101,7 @@ namespace GC5.Application.AutoMapper
                     .ReverseMap()
                       .ForMember(a => a.Images, opt => opt.Ignore())
                       .ForMember(a => a.ProductFiles, opt => opt.Ignore())
-                      .ForMember(a=>a.DeliveryMethods, opt=> opt.MapFrom(s=>s.DeliveryMethods))
+                     // .ForMember(a=>a.DeliveryMethods, opt=> opt.MapFrom(s=>s.DeliveryMethods))
                     .AfterMap((s, d) =>
                     {
 
@@ -175,9 +175,11 @@ namespace GC5.Application.AutoMapper
 
                 x.CreateMap(typeof(DataTableSearchViewModel<>), typeof(DataTableSearchViewModel<>));
 
-
                 x.CreateMap<ProductCategory, ProductCategoryViewModel>()
                    .ReverseMap();
+
+                x.CreateMap<Cart, CartViewModel>()
+                .ReverseMap();
 
                 //x.CreateMap<DataTableSearchViewModel, DataTableSearchViewModel>()
                 // .ReverseMap();

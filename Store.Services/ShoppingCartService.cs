@@ -7,26 +7,36 @@ using System.Collections.Generic;
 using System.Text;
 using Store.Contracts.ViewModel.Shopping;
 using System.Text.Encodings.Web;
+using Store.Data.EF.Repositories;
+using Store.Data.EF.Entities;
 
 namespace Store.Services
 {
    public class ShoppingCartService
     {
         private ApplicationDbContext _storeDb;
-
+        public const string CartSessionKey = "CartId";
+        public readonly ShoppingCart cart;
         public ShoppingCartService(ApplicationDbContext storeDb)
         {
             _storeDb = storeDb;
+            cart = new ShoppingCart(storeDb);
+
         }
 
-        public ShoppingCart GetCart(HttpContext context)
+        public List<Cart> GetCartItems(HttpContext context)
         {
-          return  ShoppingCart.GetCart(context, _storeDb);
+            var cartId = GetCartId(context);
+            return cart.GetCartItems(cartId);
         }
-        public ShoppingCart GetCart(ControllerBase controller)
+
+        public decimal GetTotal(HttpContext context)
         {
-            return ShoppingCart.GetCart(controller, _storeDb);
+            var cartId = GetCartId(context);
+            return cart.GetTotal(cartId);
         }
+
+
 
         public void AddToCard(long id, HttpContext context, int count)
         {
@@ -36,9 +46,8 @@ namespace Store.Services
                 .Single(product => product.Id == id);
 
             // Add it to the shopping cart
-            var cart = ShoppingCart.GetCart(context, _storeDb);
-
-            cart.AddToCart(addedProduct, count);
+            var cartId = GetCartId(context);
+            cart.AddToCart(addedProduct, count, cartId);
 
             // Go back to the main store page for more shopping
         }
@@ -47,22 +56,22 @@ namespace Store.Services
         {
 
             // Remove the item from the cart
-            var cart = ShoppingCart.GetCart(context, _storeDb);
+            var cartId = GetCartId(context);
 
             // Get the name of the product to display confirmation
             string productName = _storeDb.Carts
                 .Single(item => item.Id == id).Product.Name;
 
             // Remove from cart
-            int itemCount = cart.RemoveFromCart(id);
+            int itemCount = cart.RemoveFromCart(id, cartId);
 
             // Display the confirmation message
             var results = new ShoppingCartRemoveViewModel
             {
                 Message = HtmlEncoder.Default.Encode(productName) +
                     " has been removed from your shopping cart.",
-                CartTotal = cart.GetTotal(),
-                CartCount = cart.GetCount(),
+                CartTotal = cart.GetTotal(cartId),
+                CartCount = cart.GetCount(cartId),
                 ItemCount = itemCount,
                 DeleteId = id
             };
@@ -70,11 +79,35 @@ namespace Store.Services
             return results;
         }
 
-        public int CartSummary(HttpContext httpContext)
+        public int CartSummary(HttpContext context)
         {
-            var cart = ShoppingCart.GetCart(httpContext, _storeDb);
-            var cardCount = cart.GetCount();
+            var cartId = GetCartId(context);
+            var cardCount = cart.GetCount(cartId);
             return cardCount;
         }
+
+
+
+        public string GetCartId(HttpContext context)
+        {
+            if (context.Session.Get<string>(CartSessionKey) == null)
+            {
+                if (!string.IsNullOrWhiteSpace(context.User.Identity.Name))
+                {
+                    context.Session.Set(CartSessionKey,
+                        context.User.Identity.Name);
+                }
+                else
+                {
+                    // Generate a new random GUID using System.Guid class
+                    Guid tempCartId = Guid.NewGuid();
+                    // Send tempCartId back to client as a cookie
+                    context.Session.Set(CartSessionKey, tempCartId.ToString());
+                }
+            }
+            return context.Session.Get<string>(CartSessionKey);
+        }
+
+
     }
 }

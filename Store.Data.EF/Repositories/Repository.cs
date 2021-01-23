@@ -13,7 +13,7 @@ using Store.Data.Database;
 
 namespace Store.Data.EF.Repositories.Base
 {
-    public class Repository :IRepository
+    public class Repository : IRepository
     {
         protected ApplicationDbContext DbContext;
 
@@ -184,8 +184,8 @@ namespace Store.Data.EF.Repositories.Base
             where TEntity : class, IBaseEntity
         {
             var dbSet = DbContext.Set<TEntity>();
-
-            dbSet.Remove(dbSet.Find(id));
+            var co = dbSet.Find(id);
+            dbSet.Remove(co);
         }
 
         public virtual void RemoveBatch<TEntity>(IEnumerable<TEntity> entities)

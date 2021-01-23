@@ -126,8 +126,7 @@ namespace Store.Controllers
         {
             Func<Task<ActionResult>> func = async () =>
             {
-                Func<IQueryable<Product>, IQueryable<Product>> includeAction = x => x.Include(a => a.ProductCategories).ThenInclude(b => b.Category).Include(a => a.DeliveryMethods).ThenInclude(d => d.Delivery);
-
+                Func<IQueryable<Product>, IQueryable<Product>> includeAction = x => x.Include(a => a.ProductCategories).ThenInclude(b => b.Category);
                 var result = await _service.GetById(id, includeAction);
                 if (result == null)
                 {

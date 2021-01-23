@@ -35,7 +35,7 @@ namespace Store.Data.Database
         public DbSet<Cart>Carts { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
-
+        public DbSet<DeliveryMethod> DeliveryMethods { get; set; }
 
         public DbSet<Page> Pages { get; set; }
 
@@ -62,7 +62,7 @@ namespace Store.Data.Database
             
             builder.Entity<ProductFile>().GetConfiguration();
             builder.Entity<File>().GetConfiguration();
-          
+            //builder.Entity<DeliveryMethod>().GetConfiguration();
 
             base.OnModelCreating(builder);
         }

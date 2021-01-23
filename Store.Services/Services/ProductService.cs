@@ -51,7 +51,7 @@ namespace Store.Services
             {
                 return;
             }
-            Repository.Remove<Category>(entity.Id);
+            Repository.Remove<Product>(entity.Id);
             await Repository.SaveChangesAsync();
         }
 
@@ -88,43 +88,43 @@ namespace Store.Services
             entity.ProductCategories = pcFetched;
 
 
-            var actualdm = new List<ProductDeliveryMethod>();
-            foreach (var item in entity.DeliveryMethods)
-            {
-                actualdm.Add(item);
-            }
+            //var actualdm = new List<ProductDeliveryMethod>();
+            //foreach (var item in entity.DeliveryMethods)
+            //{
+            //    actualdm.Add(item);
+            //}
 
 
-            var dmFetched = await Repository.GetAll<ProductDeliveryMethod>(pd => pd.Where(pdm => pdm.ProductId == entity.Id));
-            var dmToDelete = dmFetched.Where(a => !actualdm.Any(n => n.ProductId == a.ProductId && n.DeliveryId == a.DeliveryId)).ToList();
-            if (dmToDelete != null)
-            {
-                foreach (var item in dmToDelete)
-                {
+            //var dmFetched = await Repository.GetAll<ProductDeliveryMethod>(pd => pd.Where(pdm => pdm.ProductId == entity.Id));
+            //var dmToDelete = dmFetched.Where(a => !actualdm.Any(n => n.ProductId == a.ProductId && n.DeliveryId == a.DeliveryId)).ToList();
+            //if (dmToDelete != null)
+            //{
+            //    foreach (var item in dmToDelete)
+            //    {
                   
-                  //  Repository.Attach(item, EntityState.Deleted);
-                }
-              Repository.RemoveBatch(dmToDelete);
-            }
-            dmFetched = dmFetched.Where(a => actualdm.Any(n => n.ProductId == a.ProductId && n.DeliveryId == a.DeliveryId)).ToList();
-            foreach (var item in entity.DeliveryMethods)
-            {
-                var existing = dmFetched.FirstOrDefault(a => a.ProductId == item.ProductId && a.DeliveryId == item.DeliveryId);
+            //      //  Repository.Attach(item, EntityState.Deleted);
+            //    }
+            //  Repository.RemoveBatch(dmToDelete);
+            //}
+            //dmFetched = dmFetched.Where(a => actualdm.Any(n => n.ProductId == a.ProductId && n.DeliveryId == a.DeliveryId)).ToList();
+            //foreach (var item in entity.DeliveryMethods)
+            //{
+            //    var existing = dmFetched.FirstOrDefault(a => a.ProductId == item.ProductId && a.DeliveryId == item.DeliveryId);
 
-                if (existing != null)
-                {
-                    existing.MaxCountInPackage = item.MaxCountInPackage;
-                    existing.Price = item.Price;
-                   // Repository.Attach(existing, EntityState.Modified);
-                }
-                else
-                {
-                    dmFetched.Add(item);
-                    //Repository.Attach(item, EntityState.Added);
-                }
-            }
+            //    if (existing != null)
+            //    {
+            //        existing.MaxCountInPackage = item.MaxCountInPackage;
+            //        existing.Price = item.Price;
+            //       // Repository.Attach(existing, EntityState.Modified);
+            //    }
+            //    else
+            //    {
+            //        dmFetched.Add(item);
+            //        //Repository.Attach(item, EntityState.Added);
+            //    }
+            //}
 
-            entity.DeliveryMethods = dmFetched;
+            //entity.DeliveryMethods = dmFetched;
 
 
             Repository.Update(entity);

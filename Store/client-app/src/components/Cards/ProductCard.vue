@@ -1,6 +1,6 @@
 ﻿<template>
 
-    <v-card v-on:click="onClick" class="mx-auto my-12"
+    <v-card class="mx-auto my-12"
             min-width="300"
             max-width="374">
         <v-img v-if="item.images.length > 0" min-width="10" height="250"
@@ -9,33 +9,25 @@
         <v-divider class="mx-4"></v-divider>
         <v-card-text>
             <div class="my-4 subtitle-1">
-                 $ {{item.currentPrice}}zł
+                $ {{item.currentPrice}}zł
             </div>
-            <br/>
+            <br />
             <div>
-                <v-slider :disabled="item.count<1"
-                          
-                          
-                          label="Ilość"
-                          :max="item.count"
+                <v-slider label="Ilość"
+                          :max="200"
                           min="1"
-                           thumb-label="always"
+                          thumb-label="always"
                           :thumb-color="'cyan'"
-                          v-model="count"
-                          ></v-slider>              
+                          v-model="count"></v-slider>
             </div>
-
             <div>{{item.description}}</div>
         </v-card-text>
 
         <v-divider class="mx-4"></v-divider>
 
         <v-card-actions>
-            <v-spacer></v-spacer>  <v-btn
-                                          :disabled="item.count<1"
-                                           color="cyan lighten-4"
-                                           primary
-                                        
+            <v-spacer></v-spacer>  <v-btn color="cyan lighten-4"
+                                          primary
                                           @click.stop="addToBasket">
                 Dodaj do koszyka
             </v-btn>
@@ -61,9 +53,7 @@
         //];
 
 
-        onClick() {
-            console.log('test')
-        }
+    
 
         getImageUrl() {
             if (this.item.images.length > 0) {
@@ -72,7 +62,7 @@
         }
 
         async addToBasket() {
-            await cartModule.addToCard(this.item, this.count);
+            await cartModule.addToCard({ product :this.item,  count : this.count});
         }
     }
 

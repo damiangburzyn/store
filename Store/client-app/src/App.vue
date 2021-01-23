@@ -61,7 +61,7 @@
     import { Component, Vue } from 'vue-property-decorator';
     import AppNavbar from '@/components/AppNavbar.vue';
     import users from "@/store/Modules/Users";
-   
+    import cart from "@/store/Modules/Cart";
     //import HelloWorld from './components/HelloWorld.vue';
 
     @Component({
@@ -70,11 +70,9 @@
         },
     })
     export default class App extends Vue {
-
-        async  beforeCreate() {
-            await users.getProfile();
+        async  beforeCreate() {       
+            await Promise.all([users.getProfile(), cart.loadCartCount()]);
         }
-
     }
 </script>
 
