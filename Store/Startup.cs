@@ -42,15 +42,6 @@ namespace Store
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
-            //services.AddCors(options =>
-            //{
-            //    options.AddPolicy(name: "MyAllowSpecificOrigins",
-            //                      builder =>
-            //                      {
-            //                          builder.WithOrigins("http://localhost:8080");
-            //                      });
-            //});
             services.Configure<Mailing>(Configuration.GetSection("Mailing"));
             services.AddAntiforgery(options =>
             {
@@ -66,33 +57,6 @@ namespace Store
             services.AddRazorPages();
             AddJWTAuthentication(services);
             services.AddSession();
-
-
-
-
-
-
-            //        services.Configure<IdentityOptions>(options =>
-            //{
-            //    // Password settings.
-            //    options.Password.RequireDigit = true;
-            //    options.Password.RequireLowercase = true;
-            //    options.Password.RequireNonAlphanumeric = true;
-            //    options.Password.RequireUppercase = true;
-            //    options.Password.RequiredLength = 6;
-            //    options.Password.RequiredUniqueChars = 1;
-
-            //    // Lockout settings.
-            //    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-            //    options.Lockout.MaxFailedAccessAttempts = 5;
-            //    options.Lockout.AllowedForNewUsers = true;
-
-            //    // User settings.
-            //    options.User.AllowedUserNameCharacters =
-            //    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-            //    options.User.RequireUniqueEmail = false;
-            //});
-
             services.ConfigureApplicationCookie(options =>
             {
                 // Cookie settings
@@ -142,36 +106,26 @@ namespace Store
           
             if (env.IsDevelopment())
             {
-                app.UseExceptionHandler("/error-local-development");
-               
+                app.UseExceptionHandler("/error-local-development");               
             }
             else
             {
-                app.UseExceptionHandler("/error");
-              
+                app.UseExceptionHandler("/error");     
             }
             app.UseHsts();
-
             app.UseMiddleware<JWTInHeaderMiddleware>();
             app.UseStaticFiles();
             SingleLogger.Factory = loggerFactory;
             app.UseSession();
-
-
-       
             app.UseHttpsRedirection();
             app.UseRouting();
-
             //app.UseCors();
-
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-
             // use middleware and launch server for Vue  
             app.UseSpaStaticFiles();
             app.UseSpa(spa =>
@@ -183,7 +137,6 @@ namespace Store
                     spa.UseVueDevelopmentServer();
                 }
             });
-
             //app.UseHttpMethodOverride();
             //app.UseEndpoints(endpoints =>
             //{
@@ -191,7 +144,6 @@ namespace Store
             //        name: "default",
             //        pattern: "{controller=Home}/{action=Index}/{id?}");
             //});
-
         }
     }
 }

@@ -54,16 +54,6 @@ namespace Store.Controllers
             _linkGenerator = linkGenerator;
         }
 
-
-        [HttpGet("test")]
-
-        public IActionResult Test()
-        {
-
-            return Ok("test ok");
-        }
-
-
         [HttpGet("getProfile")]
         [AllowAnonymous]
         public async Task<IActionResult> GetProfile()
@@ -93,99 +83,90 @@ namespace Store.Controllers
             return Ok();
         }
 
-        // [ValidateAntiForgeryToken]
         [HttpPost("login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] AuthenticationModel model)
         {
+            if (string.IsNullOrWhiteSpace(model.UserName) || string.IsNullOrWhiteSpace(model.Password))
+            {
+                return (IActionResult)Unauthorized("Nieprawidłowe dane do logowania");
+            }
+            var user = await _userManager.FindByEmailAsync(model.UserName);
 
+            if (user == null || (user.RemovalDateUtc.HasValue && user.RemovalDateUtc < DateTime.UtcNow))
+            {
+                return Unauthorized("Nieprawidłowe dane do logowania");
+            }
 
-                if (string.IsNullOrWhiteSpace(model.UserName) || string.IsNullOrWhiteSpace(model.Password))
-                    return (IActionResult)Unauthorized("Nieprawidłowe dane do logowania");
+            if (user.RemovalDateUtc.HasValue && user.RemovalDateUtc < DateTime.UtcNow)
+            {
+                return Unauthorized("Nieprawidłowe dane do logowania");
+            }
 
-                var user = await _userManager.FindByEmailAsync(model.UserName);
+            if (user.Status == EUserStatus.Blocked)
+            {
+                return Unauthorized("Nieprawidłowe dane do logowania");
+            }
 
-                if (user == null || (user.RemovalDateUtc.HasValue && user.RemovalDateUtc < DateTime.UtcNow))
-                    return Unauthorized("Nieprawidłowe dane do logowania");
+            var result = await _userManager.CheckPasswordAsync(user, model.Password);
 
-                if (user.RemovalDateUtc.HasValue && user.RemovalDateUtc < DateTime.UtcNow)
+            if (!result)
+            {
+                return Unauthorized("Nieprawidłowe dane do logowania");
+            }
+            else
+            {
+                var userRoles = await _userManager.GetRolesAsync(user);
+                var roleClaims = new List<Claim>();
+                foreach (var role in userRoles)
                 {
-                    return Unauthorized("Nieprawidłowe dane do logowania");
+                    roleClaims.Add(new Claim(ClaimTypes.Role, role));
                 }
-
-                if (user.Status == EUserStatus.Blocked)
+                var claims = new[]
                 {
-                    return Unauthorized("Nieprawidłowe dane do logowania");
-                }
-
-                var result = await _userManager.CheckPasswordAsync(user, model.Password);
-
-                if (!result)
-                {
-                    return Unauthorized("Nieprawidłowe dane do logowania");
-                }
-                else
-                {
-                    var userRoles = await _userManager.GetRolesAsync(user);
-                    var roleClaims = new List<Claim>();
-                    foreach (var role in userRoles)
-                    {
-                        roleClaims.Add(new Claim(ClaimTypes.Role, role));
-                    }
-
-                    var claims = new[]
-                    {
                         new Claim(ClaimTypes.Name, user.Email),
                         new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                    };
-
-                    claims = claims.Concat(roleClaims).ToArray();
-
-                    var tokenKey = Encoding.ASCII.GetBytes(base._appsettings.Secret);
-                    // authentication successful so generate jwt token
-                    var tokenHandler = new JwtSecurityTokenHandler();
-                    var tokenDescriptor = new SecurityTokenDescriptor
-                    {
-                        Subject = new ClaimsIdentity(claims),
-                        Expires = DateTime.UtcNow.AddDays(7),
-                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
-                    };
-                    SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
-                    var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-                    //HttpContext.Session.SetString("userId", user.Id.ToString());
-                    var acToken = new AccessToken()
-                    {
-                        TokenString = tokenString,
-                        ValidFrom = token.ValidFrom,
-                        ValidTo = token.ValidTo
-                    };
-
-                    Response.Cookies.Append(JWTInHeaderMiddleware.AuthenticationCookieName, JsonSerializer.Serialize(acToken), new CookieOptions() { HttpOnly = true }); ;
-
-                    var profile = new ProfileViewModel()
-                    {
-                        Roles = userRoles,
-                        UserName = user.Email,
-                        FirstName = user.FirstName,
-                        LastName = user.LastName,
-                        Id = user.Id
-                    };
-
-                    var identity = new System.Security.Principal.GenericIdentity(user.UserName);
-                    var principal = new GenericPrincipal(identity, new string[0]);
-                    Request.HttpContext.User = principal;
-                    Thread.CurrentPrincipal = principal;
-
-                    return Ok(profile);
-                }
-
+                };
+                claims = claims.Concat(roleClaims).ToArray();
+                var tokenKey = Encoding.ASCII.GetBytes(base._appsettings.Secret);
+                // authentication successful so generate jwt token
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(claims),
+                    Expires = DateTime.UtcNow.AddDays(7),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
+                };
+                SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+                var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
+                var acToken = new AccessToken()
+                {
+                    TokenString = tokenString,
+                    ValidFrom = token.ValidFrom,
+                    ValidTo = token.ValidTo
+                };
+                Response.Cookies.Append(JWTInHeaderMiddleware.AuthenticationCookieName, JsonSerializer.Serialize(acToken), new CookieOptions() { HttpOnly = true });
+                var profile = new ProfileViewModel()
+                {
+                    Roles = userRoles,
+                    UserName = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Id = user.Id
+                };
+                var identity = new System.Security.Principal.GenericIdentity(user.UserName);
+                var principal = new GenericPrincipal(identity, new string[0]);
+                Request.HttpContext.User = principal;
+                Thread.CurrentPrincipal = principal;
+                return Ok(profile);
+            }
         }
 
         [HttpGet("logOff")]
         public async Task<IActionResult> LogOff()
         {
-            var userId = (await _userManager.GetUserAsync(HttpContext.User)).Id;          
+            var userId = (await _userManager.GetUserAsync(HttpContext.User)).Id;
             Response.Cookies.Delete(JWTInHeaderMiddleware.AuthenticationCookieName);
             await _signInManager.SignOutAsync();
             return Ok();
@@ -194,7 +175,7 @@ namespace Store.Controllers
         //[HttpGet("VerifyAccountConfirmation/{userId}/{code}")] -- this route configuration couses double escape sequnece error
         //second solution: enable double escape sequnece in web config and   //code = Uri.UnescapeDataString(code) here
         [HttpGet("VerifyAccountConfirmation")]
-        [AllowAnonymous]     
+        [AllowAnonymous]
         public async Task<IActionResult> VerifyAccountConfirmation(long? userId, string code)
         {
             ViewBag.RobotsIndex = false;
@@ -214,7 +195,7 @@ namespace Store.Controllers
 
             //code = Uri.UnescapeDataString(code);
             var result = await _userManager.ConfirmEmailAsync(user, code);
-        
+
             if (!result.Succeeded)
             {
                 return BadRequest();
@@ -222,9 +203,6 @@ namespace Store.Controllers
 
             return Redirect("https://www.google.com");
         }
-
-
-
 
 
         [HttpPost("register")]
@@ -261,7 +239,7 @@ namespace Store.Controllers
                     }
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     //code = HttpUtility.UrlEncode(Encoding.UTF8.GetBytes(code));
-                     var callbackUrl = _linkGenerator.GetUriByAction("VerifyAccountConfirmation", "User", new { userId = user.Id, code = code }, scheme: HttpContext.Request.Scheme, HttpContext.Request.Host);                     
+                    var callbackUrl = _linkGenerator.GetUriByAction("VerifyAccountConfirmation", "User", new { userId = user.Id, code = code }, scheme: HttpContext.Request.Scheme, HttpContext.Request.Host);
                     //var callbackUrl = Url.Action("VerifyAccountConfirmation", "User", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
                     try
                     {
@@ -276,22 +254,23 @@ namespace Store.Controllers
                     return Ok();
                 }
 
-               var errors = new List<string>();
+                var errors = new List<string>();
 
                 foreach (var error in result.Errors)
                 {
                     errors.Add(error.Description);
                 }
 
-                if (errors.Count > 0) {
+                if (errors.Count > 0)
+                {
 
                     var det = string.Join("<br />", errors);
-                    return Problem(detail: det, statusCode:400 );
+                    return Problem(detail: det, statusCode: 400);
                 }
 
                 return BadRequest();
             };
-            return await fun(); 
+            return await fun();
         }
     }
 }
